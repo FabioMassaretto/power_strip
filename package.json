@@ -1,18 +1,22 @@
 {
   "name": "strip",
   "version": "1.0.0",
-  "description": "powerstrip node server",
+  "description": "strip project",
   "main": "index.js",
-  "dependencies": {
-    "connect": "^3.4.1"
-  },
-  "devDependencies": {},
   "scripts": {
-    "test": "npm start"
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krpeacock/power_strip.git"
   },
   "keywords": [
     "strip"
   ],
   "author": "Kyle Peacock",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/krpeacock/power_strip/issues"
+  },
+  "homepage": "https://github.com/krpeacock/power_strip#readme"
 }

@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/krpeacock/power_strip/issues"
   },
-  "homepage": "https://github.com/krpeacock/power_strip#readme"
+  "homepage": "https://github.com/krpeacock/power_strip#readme",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4"
+  }
 }

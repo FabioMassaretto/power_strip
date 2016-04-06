@@ -9,6 +9,16 @@ var jsonParser = bodyParser.json();
 
 var status = {lamp: 'off', heater: 'off'};
 
+PythonShell.run('./public/python/sw1_off.py', function (err) {
+  if (err) throw err;
+  console.log('lamp off');
+});
+PythonShell.run('./public/python/sw2_off.py', function (err) {
+  if (err) throw err;
+  console.log('lamp off');
+});
+
+
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
 
@@ -16,7 +26,7 @@ app.get('/', function(req, res){
   res.render('index', {pageData: 'hello'});
 })
 
-app.post('/submit', jsonParser, function (req, res) {
+app.post('/lamp', jsonParser, function (req, res) {
   if (req.body.lamp === 'on'){
     status.lamp = 'on';
     PythonShell.run('./public/python/sw1_on.py', function (err) {
@@ -31,7 +41,9 @@ app.post('/submit', jsonParser, function (req, res) {
       console.log('lamp off');
     });
   }
-  
+})
+
+app.post('/heater', jsonParser, function (req, res) {
 if (req.body.heater === 'on'){
     status.heater = 'on';
     PythonShell.run('./public/python/sw2_on.py', function (err) {
@@ -53,4 +65,3 @@ if (req.body.heater === 'on'){
 app.listen(3000, function(){
   console.log('Listening on port 3000');
 })
-

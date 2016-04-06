@@ -13,7 +13,7 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
 
 app.get('/', function(req, res){
-  res.render('index', {pageData: 'hello'});
+  res.render('index', {status});
 })
 
 app.post('/lamp', jsonParser, function (req, res) {

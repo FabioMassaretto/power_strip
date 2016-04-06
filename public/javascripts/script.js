@@ -37,7 +37,3 @@ $('#flip-checkbox-2').on('change', function(e){
   }
   })
 })
-
-function post(switch){
-
-}

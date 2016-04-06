@@ -5,11 +5,11 @@ var data = {lamp:'off', heater:'off'};
 $('#flip-checkbox-1').on('change', function(e){
   if (e.target.checked){
     data.lamp = 'on';
-    post(lamp);
+    post('lamp');
 
   } else {
     data.lamp = 'off';
-    post(lamp);
+    post('lamp');
   }
 }
 )
@@ -17,10 +17,10 @@ $('#flip-checkbox-1').on('change', function(e){
 $('#flip-checkbox-2').on('change', function(e){
   if (e.target.checked){
     data.heater = 'on';
-    post(heater);
+    post('heater');
   } else {
     data.heater = 'off';
-    post(heater);
+    post('heater');
   }
 })
 

@@ -6,16 +6,19 @@ $.ajax({
   url: 'http://10.0.1.23:3000/json',
   success: function(response) {
   console.log('success');
-  data = response;
+  data = JSON.parse(response);
 }
 })
 
-if (data.lamp === 'on'){
-  $('#flip-checkbox-1').attr('checked') = true;
-}
-if (data.heater === 'on'){
-  $('#flip-checkbox-2').attr('checked') = true;
-}
+$(document).ready(function(){
+  if (data.lamp === 'on'){
+    $('#flip-checkbox-1').attr('checked') = true;
+  }
+  if (data.heater === 'on'){
+    $('#flip-checkbox-2').attr('checked') = true;
+  }
+})
+
 
 
 $('#flip-checkbox-1').on('change', function(e){

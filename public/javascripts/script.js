@@ -6,17 +6,15 @@ $.ajax({
   url: 'http://10.0.1.23:3000/json',
   success: function(response) {
   console.log('success');
-  data = JSON.parse(response);
-}
-})
-
-$(document).ready(function(){
-  if (data.lamp === 'on'){
+  var res = JSON.parse(response);
+  console.log(res);
+  if (res.lamp === 'on'){
     $('#flip-checkbox-1').click();
   }
-  if (data.heater === 'on'){
+  if (res.heater === 'on'){
     $('#flip-checkbox-2').click();
   }
+}
 })
 
 

@@ -1,15 +1,21 @@
+var data = {lamp:'off', heater:'off'};
+
 $.ajax({
   type: 'GET',
   contentType: 'application/json',
   url: 'http://10.0.1.23:3000/json',
-  success: function(data) {
+  success: function(response) {
   console.log('success');
-  console.log(JSON.parse(data));
+  data = response;
 }
 })
 
-var data = {lamp:'off', heater:'off'};
-
+if (data.lamp === 'on'){
+  $('#flip-checkbox-1').attr('checked') = true;
+}
+if (data.heater === 'on'){
+  $('#flip-checkbox-2').attr('checked') = true;
+}
 
 
 $('#flip-checkbox-1').on('change', function(e){

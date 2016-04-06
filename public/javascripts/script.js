@@ -1,3 +1,13 @@
+$.ajax({
+  type: 'GET',
+  contentType: 'application/json',
+  url: 'http://10.0.1.23:3000/json',
+  success: function(data) {
+  console.log('success');
+  console.log(JSON.parse(data));
+}
+})
+
 var data = {lamp:'off', heater:'off'};
 
 

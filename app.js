@@ -16,6 +16,10 @@ app.get('/', function(req, res){
   res.render('index', {data: status});
 })
 
+app.get('/json', function(req, res){
+  res.send(JSON.stringify(status));
+})
+
 app.post('/lamp', jsonParser, function (req, res) {
   if (req.body.lamp === 'on'){
     status.lamp = 'on';

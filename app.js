@@ -31,7 +31,8 @@ app.post('/submit', jsonParser, function (req, res) {
       console.log('lamp off');
     });
   }
-  else if (req.body.heater === 'on'){
+  
+if (req.body.heater === 'on'){
     status.heater = 'on';
     PythonShell.run('./public/python/sw2_on.py', function (err) {
       if (err) throw err;
@@ -49,11 +50,7 @@ app.post('/submit', jsonParser, function (req, res) {
 })
 
 
-app.listen(8000, function(){
-  console.log('Listening on port 8000');
+app.listen(3000, function(){
+  console.log('Listening on port 3000');
 })
 
-module.exports={
-  app,
-  status
-}

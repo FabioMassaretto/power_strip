@@ -9,6 +9,16 @@ var jsonParser = bodyParser.json();
 
 var status = {lamp: 'off', heater: 'off'};
 
+
+PythonShell.run('./public/python/sw1_off.py', function (err) {
+  if (err) throw err;
+  console.log('lamp off');
+});
+PythonShell.run('./public/python/sw2_off.py', function (err) {
+  if (err) throw err;
+  console.log('lamp off');
+});
+
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'jade');
 

@@ -12,10 +12,10 @@ $.ajax({
 
 $(document).ready(function(){
   if (data.lamp === 'on'){
-    $('#flip-checkbox-1').attr('checked') = true;
+    $('#flip-checkbox-1').prop('checked') = true;
   }
   if (data.heater === 'on'){
-    $('#flip-checkbox-2').attr('checked') = true;
+    $('#flip-checkbox-2').prop('checked') = true;
   }
 })
 

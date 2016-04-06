@@ -9,7 +9,7 @@ html(lang="en")
   body
     div(data-role="page")
       div(data-role="header")
-        h1= data
+        h1 Raspberry Pi Power Strip
         
       div(role="main" class="ui-content")
         <form action = "/lamp" method = "POST">
@@ -21,4 +21,11 @@ html(lang="en")
         <input type="checkbox" data-role="flipswitch" name="flip-checkbox-2" id="flip-checkbox-2">
         </form>
     script(src="javascripts/script.js") 
+    script(type="text/javascript").
+      if (data.lamp === 'on'){
+        $('#flip-checkbox-1').attr('checked') = true;
+      }
+      if (data.heater === 'on'){
+        $('#flip-checkbox-2').attr('checked') = true;
+      }
     

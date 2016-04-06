@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8", name="viewport" content="width=device-width, initial-scale=1")
+    title Pi-Strip
+    link(rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css")
+    script(src="http://code.jquery.com/jquery-1.11.1.min.js")
+    script(src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js")
+  body
+    div(data-role="page")
+      div(data-role="header")
+        h1= pageData
+      div(role="main" class="ui-content")
+        <form action = "/lamp" method = "POST">
+        <label for="flip-checkbox-1">Lamp</label>
+        <input type="checkbox" data-role="flipswitch" name="flip-checkbox-1" id="flip-checkbox-1">
+        </form>
+        <form action = "/heater" method = "POST">
+        <label for="flip-checkbox-2">Heater</label>
+        <input type="checkbox" data-role="flipswitch" name="flip-checkbox-2" id="flip-checkbox-2">
+        </form>
+    script(src="javascripts/script.js") 
+    

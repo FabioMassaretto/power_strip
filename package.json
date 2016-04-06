@@ -1,0 +1,26 @@
+{
+  "name": "strip",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krpeacock/power_strip.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/krpeacock/power_strip/issues"
+  },
+  "homepage": "https://github.com/krpeacock/power_strip#readme",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "fs": "0.0.2",
+    "jade": "^1.11.0",
+    "python-shell": "^0.4.0"
+  }
+}

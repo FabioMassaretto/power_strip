@@ -11,7 +11,6 @@ def Index():
 @app.route('/api')
 def switch():
   state = request.args.get('state')
-  switch = request.args.get('switch')
   if state == "on":
     pins.Sw1On()
   if state == "off":

@@ -27,16 +27,14 @@ def Sw1Off():
   GPIO.setup(sw1, GPIO.OUT)
   GPIO.output(sw1, GPIO.LOW)
 
-def SetSwitch(state):
-  if state:
-    Sw1On()
-  else: Sw1Off()
+def DoNothing():
+  return ''
 
 if __name__ == "__main__":
   init()
   try:
     while(True):
-      SetSwitch(True)
+      DoNothing()
   except:
     Sw1Off()
     GPIO.cleanup()

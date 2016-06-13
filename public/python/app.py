@@ -13,9 +13,9 @@ def switch():
   state = request.args.get('state')
   switch = request.args.get('switch')
   if state =="on":
-    Pins.SwitchOn(switch)
+    pins.SwitchOn(switch)
   else:
-    Pins.SwitchOff(switch)
+    pins.SwitchOff(switch)
   return "success"
 
 

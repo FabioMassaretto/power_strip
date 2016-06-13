@@ -20,7 +20,7 @@ GPIO.setup(sw4, GPIO.OUT)
 GPIO.setup(sw5, GPIO.OUT)
 
 def Sw1On():
-  GPIO.output(sw1, GPIO.HIGH)
+  GPIO.setup(sw1, GPIO.OUT)
 
 def Sw1Off():
   GPIO.output(sw1, GPIO.LOW)

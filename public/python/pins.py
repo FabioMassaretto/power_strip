@@ -19,22 +19,23 @@ GPIO.setup(sw3, GPIO.OUT)
 GPIO.setup(sw4, GPIO.OUT)
 GPIO.setup(sw5, GPIO.OUT)
 
-def SwitchOn(switch):
-  GPIO.output(switch, GPIO.HIGH)
+def Sw1On():
+  GPIO.output(sw1, GPIO.HIGH)
 
-def SwitchOff(switch):
-  GPIO.output(switch, GPIO.LOW)
+def Sw1Off():
+  GPIO.output(sw1, GPIO.LOW)
 
-def SetSwitch(state, switch):
-  if switch:
-    SwitchOn(switch)
-  else: SwitchOff(switch)
+def SetSwitch(state):
+  if state:
+    Sw1On()
+  else: Sw1Off()
 
 if __name__ == "__main__":
   init()
   try:
     while(True):
-      SetLED(True)
+      SetSwitch(True)
   except:
+    Sw1Off()
     GPIO.cleanup()
     quit()

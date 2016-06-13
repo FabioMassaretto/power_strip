@@ -10,10 +10,10 @@ var jsonParser = bodyParser.json();
 var status = {lamp: 'off', heater: 'off'};
 
 
-PythonShell.run('./public/python/sw1_off.py', function (err) {
+PythonShell.run('./public/python/scripts/sw1_off.py', function (err) {
   if (err) throw err;
 });
-PythonShell.run('./public/python/sw2_off.py', function (err) {
+PythonShell.run('./public/python/scripts/sw2_off.py', function (err) {
   if (err) throw err;
 });
 

@@ -12,11 +12,11 @@ def Index():
 def switch():
   state = request.args.get('state')
   switch = request.args.get('switch')
-  if state =="on":
+  if state == "on":
     pins.Sw1On()
-  else:
+  if state == "off":
     pins.Sw1Off()
-  return "success"
+  return "sent"
 
 
 if __name__ == '__main__':

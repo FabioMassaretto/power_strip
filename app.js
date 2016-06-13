@@ -1,30 +1,29 @@
 const PythonShell = require('python-shell');
 const fs = require('fs');
-const jade = require('jade');
 const express = require('express');
 const bodyParser= require('body-parser');
 const app = express();
 
+const state = {};
+
 var jsonParser = bodyParser.json();
 
-var status = {lamp: 'off', heater: 'off'};
+// Python Script Syntax
 
+// PythonShell.run('./public/python/scripts/sw1_off.py', function (err) {
+//   if (err) throw err;
+// });
 
-PythonShell.run('./public/python/scripts/sw1_off.py', function (err) {
-  if (err) throw err;
-});
-PythonShell.run('./public/python/scripts/sw2_off.py', function (err) {
-  if (err) throw err;
-});
 
 app.use(express.static(__dirname + '/public'));
-app.set('view engine', 'jade');
 
 app.get('/', function(req, res){
-  res.render('index', {data: status});
+  res.sendFile('index');
 })
 
-app.get('/api')
+app.get('/api', function(req, res){
+  res.send(state);
+})
 
 
 app.listen(3000, function(){

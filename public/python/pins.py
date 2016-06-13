@@ -21,8 +21,10 @@ GPIO.setup(sw5, GPIO.OUT)
 
 def Sw1On():
   GPIO.setup(sw1, GPIO.OUT)
+  GPIO.output(sw1, GPIO.HIGH)
 
 def Sw1Off():
+  GPIO.setup(sw1, GPIO.OUT)
   GPIO.output(sw1, GPIO.LOW)
 
 def SetSwitch(state):

@@ -25,7 +25,7 @@ function offString(number){
   return './public/python/scripts/sw' + number + '_off.py'
 }
 
-function getSwitch(string){
+function getSwitch(element){
   return state.find(function(element){
     return element.id === string;
   })

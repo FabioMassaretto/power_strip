@@ -19,10 +19,10 @@ function init(){
 }
 
 function onString(number){
-  return './public/python/scripts/' + number + '_on.py'
+  return './public/python/scripts/sw' + number + '_on.py'
 }
 function offString(number){
-  return './public/python/scripts/' + number + '_off.py'
+  return './public/python/scripts/sw' + number + '_off.py'
 }
 
 function getSwitch(string){
@@ -36,7 +36,7 @@ function Switch(number){
   this.state = "off"
   this.toggle = function(){
     if (this.state === "off"){
-      var str = onString(this.id);
+      var str = onString(this.id[2]);
       PythonShell.run(str, function (err) {
         if (err) throw err;
       });
@@ -44,7 +44,7 @@ function Switch(number){
       console.log(this.state)
     }
     else {
-      var str = offString(this.id);
+      var str = offString(this.id[2]);
       PythonShell.run(str, function (err) {
         if (err) throw err;
       });

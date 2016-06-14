@@ -4,14 +4,15 @@
   <meta charset="UTF-8">
   <title>Power Strip</title>
   <link rel="stylesheet" href="stylesheets/style.css">
+  <script src="javascripts/react.js"></script>
+  <script src="javascripts/react-dom.js"></script>
+  <script src="javascripts/babel.js"></script>
 </head>
 <body>
   
-  <strip></strip>  
+  <div id="strip"></div>  
 
 
-  <script src="https://cdn.jsdelivr.net/riot/2.4/riot+compiler.min.js"></script>
-  <script src="javascripts/bundle.js"></script>
-  <script>riot.mount('strip', {title: "Power Strip", switches:[]})</script>
+  <script type="text/babel" src="javascripts/main.jsx"></script>
 </body>
 </html>

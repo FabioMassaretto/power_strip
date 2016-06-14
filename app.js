@@ -68,9 +68,16 @@ app.get('/api/switches', function(req, res){
 
 app.get('/api/switches/:id', function(req, res){
   var found = getSwitch(req.params.id);
+  res.json(found)
+})
+
+app.post('/api/switches/:id', function(req, res){
+  var found = getSwitch(req.params.id);
   found.toggle();
   res.json(found)
 })
+
+
 
 init();
 app.listen(3000, function(){

@@ -12,7 +12,7 @@ function init(){
   for (i=1;i<=5;i++){
     var str = offString(i);
     PythonShell.run(str, function (err) {
-      // if (err) throw err;
+      if (err) throw err;
     });
     state.push(new Switch(i))
   }
@@ -38,7 +38,7 @@ function Switch(number){
     if (this.state === "off"){
       var str = onString(this.id);
       PythonShell.run(str, function (err) {
-        // if (err) throw err;
+        if (err) throw err;
       });
       this.state = "on"
       console.log(this.state)
@@ -46,7 +46,7 @@ function Switch(number){
     else {
       var str = offString(this.id);
       PythonShell.run(str, function (err) {
-        // if (err) throw err;
+        if (err) throw err;
       });
       this.state = "off"
     }
@@ -69,8 +69,6 @@ app.get('/api/switches', function(req, res){
 app.get('/api/switches/:id', function(req, res){
   var found = getSwitch(req.params.id);
   found.toggle();
-  
-
   res.json(found)
 })
 

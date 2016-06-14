@@ -19,16 +19,16 @@ function init(){
 }
 
 function onString(number){
-  return './public/python/scripts/sw' + number + '_on.py'
+  return './public/python/scripts/' + number + '_on.py'
 }
 function offString(number){
-  return './public/python/scripts/sw' + number + '_off.py'
+  return './public/python/scripts/' + number + '_off.py'
 }
 
-function getSwitch(element){
-  return state.find(function(element){
+function getSwitch(string){
+  return state.filter(function(element){
     return element.id === string;
-  })
+  })[0]
 }
 
 function Switch(number){

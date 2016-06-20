@@ -60,11 +60,13 @@ var Switch = React.createClass({displayName: 'Switch',
       <div>
         <h4>Switch #{this.props.number}</h4>
           <p>{this.props.state === "on" ? "Switch is ON" : "Switch is OFF"}</p>
-          <button 
-            type="button"
+          <a
+            href="#" 
+            id={this.props.id}
+            className={"toggle " + (this.props.state === "on" ? "toggle--on" : "toggle--off")}
             onClick={()=>{this.props.toggleSwitch(this.props.id)}} 
-          >Toggle
-          </button>
+          >
+          </a>
       </div>
     )
   }

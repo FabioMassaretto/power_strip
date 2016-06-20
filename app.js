@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const PythonShell = require('python-shell');
 const fs = require('fs');
 const express = require('express');
@@ -8,14 +10,16 @@ const state = [];
 
 
 function init(){
-
   for (i=1;i<=5;i++){
     var str = offString(i);
     PythonShell.run(str, function (err) {
-      if (err) throw err;
+      if (!process.env.DEV){
+        if (err) throw err;
+      } 
     });
     state.push(new Switch(i))
   }
+
 }
 
 function onString(number){
@@ -38,7 +42,9 @@ function Switch(number){
     if (this.state === "off"){
       var str = onString(this.id[2]);
       PythonShell.run(str, function (err) {
-        if (err) throw err;
+        if (!process.env.DEV){
+          if (err) throw err;
+        } 
       });
       this.state = "on"
       console.log(this.state)
@@ -46,7 +52,9 @@ function Switch(number){
     else {
       var str = offString(this.id[2]);
       PythonShell.run(str, function (err) {
-        if (err) throw err;
+        if (!process.env.DEV){
+          if (err) throw err;
+        } 
       });
       this.state = "off"
     }

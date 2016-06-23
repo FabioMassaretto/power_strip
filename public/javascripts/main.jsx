@@ -28,6 +28,17 @@ var StripClient = React.createClass({
     )
   },
 
+  changeName: function changeName(id, name){
+    var route = "/api/switches/" + id + "/name";
+    $.post(route, name).then((data)=>{
+      this.state.switches[id[2] - 1] = data;
+      this.setState({
+        switches: this.state.switches
+      });
+      console.log(this.state.switches)
+    }.bind(this))
+  },
+
   render: function(){
     if (this.state.switches){
       var switchStates = this.state.switches.map((v,i)=>{
@@ -35,9 +46,13 @@ var StripClient = React.createClass({
           <div className="switch" key={i}>
             <Switch
               id={v.id}
+              name={v.name}
               number={i + 1}
               state={v.state}
+              showInput={false}
               toggleSwitch={this.toggleSwitch}
+              changeName={this.changeName}
+              nameInput={function(){this.showInput = true; }.bind(this)}
             />
           </div>
         )
@@ -56,19 +71,36 @@ var StripClient = React.createClass({
 
 var Switch = React.createClass({displayName: 'Switch',
   render: function(){
-    return (
-      <div>
-        <h4>Switch #{this.props.number}</h4>
-          <p>{this.props.state === "on" ? "Switch is ON" : "Switch is OFF"}</p>
-          <a
-            href="#" 
-            id={this.props.id}
-            className={"toggle " + (this.props.state === "on" ? "toggle--on" : "toggle--off")}
-            onClick={()=>{this.props.toggleSwitch(this.props.id)}} 
-          >
-          </a>
-      </div>
-    )
+      if (this.props.showInput){
+        return (
+          <div>
+            <input type="text"/>
+              <a
+                href="#" 
+                id={this.props.id}
+                className={"toggle " + (this.props.state === "on" ? "toggle--on" : "toggle--off")}
+                onClick={()=>{this.props.toggleSwitch(this.props.id)}} 
+              >
+              </a>
+          </div>
+        )
+      }
+      else {
+        return (
+        <div>
+          <h4
+            onClick={()=>{this.props.nameInput()}}
+          >{this.props.name}</h4>
+            <a
+              href="#" 
+              id={this.props.id}
+              className={"toggle " + (this.props.state === "on" ? "toggle--on" : "toggle--off")}
+              onClick={()=>{this.props.toggleSwitch(this.props.id)}} 
+            >
+            </a>
+        </div>
+        )
+      }
   }
 });
 

@@ -38,6 +38,7 @@ function getSwitch(string){
 function Switch(number){
   this.id = 'sw' + number
   this.state = "off"
+  this.name = "Switch #" + number
   this.toggle = function(){
     if (this.state === "off"){
       var str = onString(this.id[2]);

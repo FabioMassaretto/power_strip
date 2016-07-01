@@ -1,5 +1,6 @@
 import React from 'react'
 import $ from 'jquery'
+import NavBar from './navbar.jsx'
 
 export default React.createClass({
   displayName: 'StripClient',
@@ -63,6 +64,7 @@ export default React.createClass({
     }
     return (
       <div className="container">
+        <NavBar/>
         <h1>Power Strip</h1>
         {switchStates}
       </div>

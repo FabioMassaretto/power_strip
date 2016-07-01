@@ -1,4 +1,4 @@
-var Navbar = React.createClass ({
+export default React.createClass ({
     displayName: "Navbar",
 
     getInitialState : function getInitialState() {
@@ -90,8 +90,3 @@ var Navbar = React.createClass ({
       );
     }
 })
-
-ReactDOM.render(
-  React.createElement(Navbar, null),
-  document.getElementById('navbar')
-);

@@ -58,12 +58,20 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
+	var _About = __webpack_require__(233);
+
+	var _About2 = _interopRequireDefault(_About);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// Modules
+
 
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRouter.Router,
 	  { history: _reactRouter.hashHistory },
-	  _react2.default.createElement(_reactRouter.Route, { path: '/', component: _app2.default })
+	  _react2.default.createElement(_reactRouter.Route, { path: '/', component: _app2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: '/about', component: _About2.default })
 	), document.getElementById('app'));
 
 /***/ },
@@ -25958,7 +25966,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
-	  displayName: 'StripClient',
+	  displayName: 'HomeScreen',
 
 	  getInitialState: function getInitialState() {
 	    return {
@@ -36298,7 +36306,7 @@
 	          null,
 	          _react2.default.createElement(
 	            "a",
-	            { href: "#" },
+	            { href: "/#" },
 	            "Home"
 	          )
 	        ),
@@ -36307,10 +36315,46 @@
 	          null,
 	          _react2.default.createElement(
 	            "a",
-	            { href: "#" },
+	            { href: "/#/about" },
 	            "About"
 	          )
 	        )
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 233 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _navbar = __webpack_require__(232);
+
+	var _navbar2 = _interopRequireDefault(_navbar);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+	  displayName: 'About',
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(_navbar2.default, null),
+	      _react2.default.createElement(
+	        'div',
+	        null,
+	        'About'
 	      )
 	    );
 	  }

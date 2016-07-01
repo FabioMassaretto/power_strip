@@ -3,7 +3,7 @@ import $ from 'jquery'
 import NavBar from './navbar.jsx'
 
 export default React.createClass({
-  displayName: 'StripClient',
+  displayName: 'HomeScreen',
 
   getInitialState : function getInitialState() {
       return {

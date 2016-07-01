@@ -58,7 +58,7 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _About = __webpack_require__(233);
+	var _About = __webpack_require__(234);
 
 	var _About2 = _interopRequireDefault(_About);
 
@@ -70,8 +70,11 @@
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRouter.Router,
 	  { history: _reactRouter.hashHistory },
-	  _react2.default.createElement(_reactRouter.Route, { path: '/', component: _app2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/about', component: _About2.default })
+	  _react2.default.createElement(
+	    _reactRouter.Route,
+	    { path: '/', component: _app2.default },
+	    _react2.default.createElement(_reactRouter.Route, { path: '/about', component: _About2.default })
+	  )
 	), document.getElementById('app'));
 
 /***/ },
@@ -25963,6 +25966,10 @@
 
 	var _navbar2 = _interopRequireDefault(_navbar);
 
+	var _home = __webpack_require__(233);
+
+	var _home2 = _interopRequireDefault(_home);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
@@ -26053,28 +26060,6 @@
 	    }
 	  },
 	  render: function render() {
-	    var _this = this;
-
-	    if (this.state.switches) {
-	      var switchStates = this.state.switches.map(function (v, i) {
-	        return _react2.default.createElement(
-	          'div',
-	          { className: 'switch', key: i },
-	          _react2.default.createElement(Switch, {
-	            id: v.id,
-	            name: v.name,
-	            number: i + 1,
-	            state: v.state,
-	            showInput: false,
-	            toggleSwitch: _this.toggleSwitch,
-	            changeName: _this.changeName,
-	            nameInput: function () {
-	              this.showInput = true;
-	            }.bind(_this)
-	          })
-	        );
-	      });
-	    }
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'container' },
@@ -26087,58 +26072,13 @@
 	        menuToggle: this.menuToggle,
 	        isMenuOpen: this.state.isMenuOpen
 	      }),
-	      _react2.default.createElement(
-	        'h1',
-	        null,
-	        'Power Strip'
-	      ),
-	      switchStates
+	      _react2.default.createElement(_home2.default, {
+	        switches: this.state.switches,
+	        toggleSwitch: this.toggleSwitch,
+	        changeName: this.changeName,
+	        nameInput: this.nameInput
+	      })
 	    );
-	  }
-	});
-
-
-	var Switch = _react2.default.createClass({ displayName: 'Switch',
-	  render: function render() {
-	    var _this2 = this;
-
-	    if (this.props.showInput) {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement('input', { type: 'text' }),
-	        _react2.default.createElement('a', {
-	          href: '#',
-	          id: this.props.id,
-	          className: "toggle " + (this.props.state === "on" ? "toggle--on" : "toggle--off"),
-	          onClick: function onClick() {
-	            _this2.props.toggleSwitch(_this2.props.id);
-	          }
-	        })
-	      );
-	    } else {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'h4',
-	          {
-	            onClick: function onClick() {
-	              _this2.props.nameInput();
-	            }
-	          },
-	          this.props.name
-	        ),
-	        _react2.default.createElement('a', {
-	          href: '#',
-	          id: this.props.id,
-	          className: "toggle " + (this.props.state === "on" ? "toggle--on" : "toggle--off"),
-	          onClick: function onClick() {
-	            _this2.props.toggleSwitch(_this2.props.id);
-	          }
-	        })
-	      );
-	    }
 	  }
 	});
 
@@ -36334,9 +36274,104 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _navbar = __webpack_require__(232);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _navbar2 = _interopRequireDefault(_navbar);
+	exports.default = _react2.default.createClass({
+	  displayName: 'home',
+	  render: function render() {
+	    var _this = this;
+
+	    if (this.props.switches) {
+	      var switchStates = this.props.switches.map(function (v, i) {
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'switch', key: i },
+	          _react2.default.createElement(Switch, {
+	            id: v.id,
+	            name: v.name,
+	            number: i + 1,
+	            state: v.state,
+	            showInput: false,
+	            toggleSwitch: _this.props.toggleSwitch,
+	            changeName: _this.props.changeName,
+	            nameInput: function () {
+	              this.props.showInput = true;
+	            }.bind(_this)
+	          })
+	        );
+	      });
+	    }
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(
+	        'h1',
+	        null,
+	        'Power Strip'
+	      ),
+	      switchStates
+	    );
+	  }
+	});
+
+
+	var Switch = _react2.default.createClass({ displayName: 'Switch',
+	  render: function render() {
+	    var _this2 = this;
+
+	    if (this.props.showInput) {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement('input', { type: 'text' }),
+	        _react2.default.createElement('a', {
+	          href: '#',
+	          id: this.props.id,
+	          className: "toggle " + (this.props.state === "on" ? "toggle--on" : "toggle--off"),
+	          onClick: function onClick() {
+	            _this2.props.toggleSwitch(_this2.props.id);
+	          }
+	        })
+	      );
+	    } else {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h4',
+	          {
+	            onClick: function onClick() {
+	              _this2.props.nameInput();
+	            }
+	          },
+	          this.props.name
+	        ),
+	        _react2.default.createElement('a', {
+	          href: '#',
+	          id: this.props.id,
+	          className: "toggle " + (this.props.state === "on" ? "toggle--on" : "toggle--off"),
+	          onClick: function onClick() {
+	            _this2.props.toggleSwitch(_this2.props.id);
+	          }
+	        })
+	      );
+	    }
+	  }
+	});
+
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36346,7 +36381,6 @@
 	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      _react2.default.createElement(_navbar2.default, null),
 	      _react2.default.createElement(
 	        'div',
 	        null,

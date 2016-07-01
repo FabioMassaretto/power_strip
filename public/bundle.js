@@ -20371,6 +20371,10 @@
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
+	var _navbar = __webpack_require__(170);
+
+	var _navbar2 = _interopRequireDefault(_navbar);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
@@ -20378,7 +20382,8 @@
 
 	  getInitialState: function getInitialState() {
 	    return {
-	      switches: []
+	      switches: [],
+	      isMenuOpen: false
 	    };
 	  },
 
@@ -20417,6 +20422,52 @@
 	    }).bind(this);
 	  },
 
+	  // Functions for the NavBar
+
+	  openIconMenu: function openIconMenu() {
+	    (0, _jquery2.default)('.gn-menu-wrapper').addClass('gn-open-part');
+	  },
+
+	  closeIconMenu: function closeIconMenu() {
+	    (0, _jquery2.default)('.gn-menu-wrapper').removeClass('gn-open-part');
+	  },
+
+	  bodyClick: function bodyClick() {
+	    this.closeMenu();
+	    this.removeEventListener('click', this.bodyClick);
+	  },
+
+	  openMenu: function openMenu() {
+	    // trigger
+	    document.addEventListener('click', this.bodyClick);
+	    (0, _jquery2.default)('.gn-icon-menu').addClass('gn-selected');
+
+	    // menu
+	    (0, _jquery2.default)('.gn-menu-wrapper').addClass('gn-open-all');
+	    this.setState({ isMenuOpen: true });
+	    this.closeIconMenu();
+	  },
+
+	  closeMenu: function closeMenu() {
+	    if (this.isMenuOpen) return;
+
+	    document.removeEventListener('click', this.bodyClick);
+	    (0, _jquery2.default)('.gn-icon-menu').removeClass('gn-selected');
+	    this.setState({ isMenuOpen: false });
+	    (0, _jquery2.default)('.gn-menu-wrapper').removeClass('gn-open-all');
+
+	    this.closeIconMenu();
+	  },
+
+	  menuToggle: function menuToggle() {
+	    event.stopPropagation();
+	    event.preventDefault();
+	    if (this.state.isMenuOpen) {
+	      this.closeMenu();
+	    } else {
+	      this.openMenu();
+	    }
+	  },
 	  render: function render() {
 	    var _this3 = this;
 
@@ -20443,6 +20494,15 @@
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'container' },
+	      _react2.default.createElement(_navbar2.default, {
+	        openIconMenu: this.openIconMenu,
+	        closeIconMenu: this.closeIconMenu,
+	        bodyClick: this.bodyClick,
+	        openMenu: this.openMenu,
+	        closeMenu: this.closeMenu,
+	        menuToggle: this.menuToggle,
+	        isMenuOpen: this.state.isMenuOpen
+	      }),
 	      _react2.default.createElement(
 	        'h1',
 	        null,
@@ -30540,6 +30600,141 @@
 	return jQuery;
 	} ) );
 
+
+/***/ },
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+	  displayName: "Navbar",
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { className: "navbar", fluid: true },
+	      _react2.default.createElement(
+	        "ul",
+	        { id: "gn-menu", className: "gn-menu-main" },
+	        _react2.default.createElement(
+	          "li",
+	          { className: "gn-trigger" },
+	          _react2.default.createElement(
+	            "a",
+	            {
+	              className: "gn-icon gn-icon-menu",
+	              onMouseEnter: this.props.openIconMenu,
+	              onMouseLeave: this.props.closeIconMenu,
+	              onClick: this.props.menuToggle
+	            },
+	            _react2.default.createElement(
+	              "span",
+	              null,
+	              "Menu"
+	            )
+	          ),
+	          _react2.default.createElement(
+	            "nav",
+	            {
+	              className: "gn-menu-wrapper",
+	              onMouseOver: this.props.openMenu
+	            },
+	            _react2.default.createElement(
+	              "div",
+	              { className: "gn-scroller" },
+	              _react2.default.createElement(
+	                "ul",
+	                { className: "gn-menu" },
+	                _react2.default.createElement(
+	                  "li",
+	                  null,
+	                  _react2.default.createElement(
+	                    "a",
+	                    { className: "gn-icon gn-icon-cog" },
+	                    "Settings"
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  "li",
+	                  null,
+	                  _react2.default.createElement(
+	                    "a",
+	                    { className: "gn-icon gn-icon-cog", href: "#" },
+	                    "Switch 1"
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  "li",
+	                  null,
+	                  _react2.default.createElement(
+	                    "a",
+	                    { className: "gn-icon gn-icon-cog", href: "#" },
+	                    "Switch 2"
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  "li",
+	                  null,
+	                  _react2.default.createElement(
+	                    "a",
+	                    { className: "gn-icon gn-icon-cog", href: "#" },
+	                    "Switch 3"
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  "li",
+	                  null,
+	                  _react2.default.createElement(
+	                    "a",
+	                    { className: "gn-icon gn-icon-cog", href: "#" },
+	                    "Switch 4"
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  "li",
+	                  null,
+	                  _react2.default.createElement(
+	                    "a",
+	                    { className: "gn-icon gn-icon-cog", href: "#" },
+	                    "Switch 5"
+	                  )
+	                )
+	              )
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "li",
+	          null,
+	          _react2.default.createElement(
+	            "a",
+	            { href: "#" },
+	            "Home"
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "li",
+	          null,
+	          _react2.default.createElement(
+	            "a",
+	            { href: "#" },
+	            "About"
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
 
 /***/ }
 /******/ ]);

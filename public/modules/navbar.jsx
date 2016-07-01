@@ -1,59 +1,7 @@
+import React from 'react'
+
 export default React.createClass ({
     displayName: "Navbar",
-
-    getInitialState : function getInitialState() {
-        return {
-          isMenuOpen: false,
-        };
-    },
-
-    openIconMenu: function openIconMenu(){
-      $('.gn-menu-wrapper').addClass('gn-open-part')
-    },
-
-    closeIconMenu: function closeIconMenu(){
-      $('.gn-menu-wrapper').removeClass('gn-open-part')
-    },
-
-    bodyClick: function bodyClick(){
-      this.closeMenu();
-      this.removeEventListener('click', this.bodyClick)
-    },
-
-    openMenu: function openMenu(){
-      // trigger
-      document.addEventListener('click', this.bodyClick)
-      $('.gn-icon-menu').addClass('gn-selected')
-      
-      // menu
-      $('.gn-menu-wrapper').addClass('gn-open-all')
-      this.setState({isMenuOpen: true})
-      this.closeIconMenu();
-    },
-
-    closeMenu: function(){
-      if (this.isMenuOpen) return;
-
-      document.removeEventListener('click', this.bodyClick)
-      $('.gn-icon-menu').removeClass('gn-selected')
-      this.setState({isMenuOpen: false})
-      $('.gn-menu-wrapper').removeClass('gn-open-all')
-
-      this.closeIconMenu();
-
-    },
-
-    menuToggle: function menuToggle(){
-      event.stopPropagation();
-      event.preventDefault();
-      if (this.state.isMenuOpen){
-        this.closeMenu();
-      }
-      else {
-        this.openMenu();
-      }
-    },
-
     render: function(){
       return (
         <div className="navbar" fluid>
@@ -61,15 +9,15 @@ export default React.createClass ({
             <li className="gn-trigger">
               <a 
                 className="gn-icon gn-icon-menu"
-                onMouseEnter={this.openIconMenu}
-                onMouseLeave={this.closeIconMenu}
-                onClick={this.menuToggle}
+                onMouseEnter={this.props.openIconMenu}
+                onMouseLeave={this.props.closeIconMenu}
+                onClick={this.props.menuToggle}
               >
                 <span>Menu</span>
               </a>
               <nav 
                 className="gn-menu-wrapper"
-                onMouseOver={this.openMenu}
+                onMouseOver={this.props.openMenu}
               >       
                 <div className="gn-scroller">
                   <ul className="gn-menu">

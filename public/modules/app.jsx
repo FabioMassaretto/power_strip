@@ -7,7 +7,8 @@ export default React.createClass({
 
   getInitialState : function getInitialState() {
       return {
-          switches : []  
+          switches : [],
+          isMenuOpen: false  
       };
   },
 
@@ -43,6 +44,54 @@ export default React.createClass({
     }).bind(this)
   },
 
+  // Functions for the NavBar
+
+  openIconMenu: function openIconMenu(){
+    $('.gn-menu-wrapper').addClass('gn-open-part')
+  },
+
+  closeIconMenu: function closeIconMenu(){
+    $('.gn-menu-wrapper').removeClass('gn-open-part')
+  },
+
+  bodyClick: function bodyClick(){
+    this.closeMenu();
+    this.removeEventListener('click', this.bodyClick)
+  },
+
+  openMenu: function openMenu(){
+    // trigger
+    document.addEventListener('click', this.bodyClick)
+    $('.gn-icon-menu').addClass('gn-selected')
+    
+    // menu
+    $('.gn-menu-wrapper').addClass('gn-open-all')
+    this.setState({isMenuOpen: true})
+    this.closeIconMenu();
+  },
+
+  closeMenu: function(){
+    if (this.isMenuOpen) return;
+
+    document.removeEventListener('click', this.bodyClick)
+    $('.gn-icon-menu').removeClass('gn-selected')
+    this.setState({isMenuOpen: false})
+    $('.gn-menu-wrapper').removeClass('gn-open-all')
+
+    this.closeIconMenu();
+
+  },
+
+  menuToggle: function menuToggle(){
+    event.stopPropagation();
+    event.preventDefault();
+    if (this.state.isMenuOpen){
+      this.closeMenu();
+    }
+    else {
+      this.openMenu();
+    }
+  },
   render: function(){
     if (this.state.switches){
       var switchStates = this.state.switches.map((v,i)=>{
@@ -64,7 +113,15 @@ export default React.createClass({
     }
     return (
       <div className="container">
-        <NavBar/>
+        <NavBar
+          openIconMenu={this.openIconMenu}
+          closeIconMenu={this.closeIconMenu}
+          bodyClick={this.bodyClick}
+          openMenu={this.openMenu}
+          closeMenu={this.closeMenu}
+          menuToggle={this.menuToggle}
+          isMenuOpen={this.state.isMenuOpen}
+        />
         <h1>Power Strip</h1>
         {switchStates}
       </div>

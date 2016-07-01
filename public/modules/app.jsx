@@ -17,31 +17,31 @@ export default React.createClass({
       this.setState({
         switches: switches
       });
-    }).bind(this));
+    }.bind(this)));
   },
 
 //ID is formatted as "sw1"
   toggleSwitch: function toggleSwitch(id) {
     var route = "/api/switches/" + id;
-    $.post(route).then((data)=>{
+    $.post(route).then(function (data){
       this.state.switches[id[2] - 1] = data;
       this.setState({
            switches: this.state.switches
         });
         console.log(this.state.switches)
-      }
-    ).bind(this)
+      }.bind(this)
+    )
   },
 
   changeName: function changeName(id, name){
     var route = "/api/switches/" + id + "/name";
-    $.post(route, name).then((data)=>{
+    $.post(route, name).then(function (data){
       this.state.switches[id[2] - 1] = data;
       this.setState({
         switches: this.state.switches
       });
       console.log(this.state.switches)
-    }).bind(this)
+    }.bind(this))
   },
 
   // Functions for the NavBar

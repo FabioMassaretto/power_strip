@@ -25985,29 +25985,25 @@
 
 	  //ID is formatted as "sw1"
 	  toggleSwitch: function toggleSwitch(id) {
-	    var _this = this;
-
 	    var route = "/api/switches/" + id;
 	    _jquery2.default.post(route).then(function (data) {
-	      _this.state.switches[id[2] - 1] = data;
-	      _this.setState({
-	        switches: _this.state.switches
+	      this.state.switches[id[2] - 1] = data;
+	      this.setState({
+	        switches: this.state.switches
 	      });
-	      console.log(_this.state.switches);
-	    }).bind(this);
+	      console.log(this.state.switches);
+	    }.bind(this));
 	  },
 
 	  changeName: function changeName(id, name) {
-	    var _this2 = this;
-
 	    var route = "/api/switches/" + id + "/name";
 	    _jquery2.default.post(route, name).then(function (data) {
-	      _this2.state.switches[id[2] - 1] = data;
-	      _this2.setState({
-	        switches: _this2.state.switches
+	      this.state.switches[id[2] - 1] = data;
+	      this.setState({
+	        switches: this.state.switches
 	      });
-	      console.log(_this2.state.switches);
-	    }).bind(this);
+	      console.log(this.state.switches);
+	    }.bind(this));
 	  },
 
 	  // Functions for the NavBar
@@ -26057,7 +26053,7 @@
 	    }
 	  },
 	  render: function render() {
-	    var _this3 = this;
+	    var _this = this;
 
 	    if (this.state.switches) {
 	      var switchStates = this.state.switches.map(function (v, i) {
@@ -26070,11 +26066,11 @@
 	            number: i + 1,
 	            state: v.state,
 	            showInput: false,
-	            toggleSwitch: _this3.toggleSwitch,
-	            changeName: _this3.changeName,
+	            toggleSwitch: _this.toggleSwitch,
+	            changeName: _this.changeName,
 	            nameInput: function () {
 	              this.showInput = true;
-	            }.bind(_this3)
+	            }.bind(_this)
 	          })
 	        );
 	      });
@@ -26104,7 +26100,7 @@
 
 	var Switch = _react2.default.createClass({ displayName: 'Switch',
 	  render: function render() {
-	    var _this4 = this;
+	    var _this2 = this;
 
 	    if (this.props.showInput) {
 	      return _react2.default.createElement(
@@ -26116,7 +26112,7 @@
 	          id: this.props.id,
 	          className: "toggle " + (this.props.state === "on" ? "toggle--on" : "toggle--off"),
 	          onClick: function onClick() {
-	            _this4.props.toggleSwitch(_this4.props.id);
+	            _this2.props.toggleSwitch(_this2.props.id);
 	          }
 	        })
 	      );
@@ -26128,7 +26124,7 @@
 	          'h4',
 	          {
 	            onClick: function onClick() {
-	              _this4.props.nameInput();
+	              _this2.props.nameInput();
 	            }
 	          },
 	          this.props.name
@@ -26138,7 +26134,7 @@
 	          id: this.props.id,
 	          className: "toggle " + (this.props.state === "on" ? "toggle--on" : "toggle--off"),
 	          onClick: function onClick() {
-	            _this4.props.toggleSwitch(_this4.props.id);
+	            _this2.props.toggleSwitch(_this2.props.id);
 	          }
 	        })
 	      );

@@ -1,5 +1,8 @@
 var webpack = require('webpack');
 
+// TODO sourcemaps with webpack
+
+
 module.exports = {
   entry: './public/index.js',
 

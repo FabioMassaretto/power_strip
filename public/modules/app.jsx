@@ -1,4 +1,5 @@
 import React from 'react'
+import $ from 'jquery'
 
 export default React.createClass({
   displayName: 'StripClient',
@@ -26,8 +27,8 @@ export default React.createClass({
            switches: this.state.switches
         });
         console.log(this.state.switches)
-      }.bind(this)
-    )
+      }
+    ).bind(this)
   },
 
   changeName: function changeName(id, name){
@@ -38,7 +39,7 @@ export default React.createClass({
         switches: this.state.switches
       });
       console.log(this.state.switches)
-    }.bind(this))
+    }).bind(this)
   },
 
   render: function(){
@@ -105,4 +106,3 @@ var Switch = React.createClass({displayName: 'Switch',
       }
   }
 });
-

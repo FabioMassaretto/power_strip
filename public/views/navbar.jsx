@@ -15,8 +15,14 @@ var Navbar = React.createClass ({
       $('.gn-menu-wrapper').removeClass('gn-open-part')
     },
 
+    bodyClick: function bodyClick(){
+      this.closeMenu();
+      this.removeEventListener('click', this.bodyClick)
+    },
+
     openMenu: function openMenu(){
       // trigger
+      document.addEventListener('click', this.bodyClick)
       $('.gn-icon-menu').addClass('gn-selected')
       
       // menu
@@ -28,6 +34,7 @@ var Navbar = React.createClass ({
     closeMenu: function(){
       if (this.isMenuOpen) return;
 
+      document.removeEventListener('click', this.bodyClick)
       $('.gn-icon-menu').removeClass('gn-selected')
       this.setState({isMenuOpen: false})
       $('.gn-menu-wrapper').removeClass('gn-open-all')
@@ -67,11 +74,11 @@ var Navbar = React.createClass ({
                 <div className="gn-scroller">
                   <ul className="gn-menu">
                     <li><a className="gn-icon gn-icon-cog">Settings</a></li>
-                    <li><a href="#">Switch 1</a></li>
-                    <li><a href="#">Switch 2</a></li>
-                    <li><a href="#">Switch 3</a></li>
-                    <li><a href="#">Switch 4</a></li>
-                    <li><a href="#">Switch 5</a></li>
+                    <li><a className="gn-icon gn-icon-cog" href="#">Switch 1</a></li>
+                    <li><a className="gn-icon gn-icon-cog" href="#">Switch 2</a></li>
+                    <li><a className="gn-icon gn-icon-cog" href="#">Switch 3</a></li>
+                    <li><a className="gn-icon gn-icon-cog" href="#">Switch 4</a></li>
+                    <li><a className="gn-icon gn-icon-cog" href="#">Switch 5</a></li>
                   </ul>
                 </div> 
               </nav>

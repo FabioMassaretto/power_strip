@@ -106,7 +106,24 @@ export default React.createClass({
       this.openMenu();
     }
   },
+
   render: function(){
+    var children = React.Children.map(this.props.children, function (child) {
+        if (this.state.switches){
+
+          if(child.props.location.pathname === '/'){
+            return React.cloneElement(child, {
+              switches: this.state.switches,
+              toggleSwitch: this.toggleSwitch
+            })
+          }
+          else {
+            return React.cloneElement(child, {
+              switches: this.state.switches
+            })
+          }
+        }
+    }.bind(this))
     return (
       <div className="container">
         <NavBar
@@ -118,10 +135,11 @@ export default React.createClass({
           menuToggle={this.menuToggle}
           isMenuOpen={this.state.isMenuOpen}
         />
-        { this.props.children }
+        { children }
       </div>
     )
     
 
   }
 });
+

@@ -26075,7 +26075,23 @@
 	      this.openMenu();
 	    }
 	  },
+
 	  render: function render() {
+	    var children = _react2.default.Children.map(this.props.children, function (child) {
+	      if (this.state.switches) {
+
+	        if (child.props.location.pathname === '/') {
+	          return _react2.default.cloneElement(child, {
+	            switches: this.state.switches,
+	            toggleSwitch: this.toggleSwitch
+	          });
+	        } else {
+	          return _react2.default.cloneElement(child, {
+	            switches: this.state.switches
+	          });
+	        }
+	      }
+	    }.bind(this));
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'container' },
@@ -26088,7 +26104,7 @@
 	        menuToggle: this.menuToggle,
 	        isMenuOpen: this.state.isMenuOpen
 	      }),
-	      this.props.children
+	      children
 	    );
 	  }
 	});
@@ -36196,17 +36212,8 @@
 	                  'li',
 	                  null,
 	                  _react2.default.createElement(
-	                    'a',
-	                    { className: 'gn-icon gn-icon-cog' },
-	                    'Settings'
-	                  )
-	                ),
-	                _react2.default.createElement(
-	                  'li',
-	                  null,
-	                  _react2.default.createElement(
-	                    'a',
-	                    { className: 'gn-icon gn-icon-cog', href: '#' },
+	                    _reactRouter.Link,
+	                    { to: '/switches/sw1', className: 'gn-icon gn-icon-cog' },
 	                    'Switch 1'
 	                  )
 	                ),
@@ -36214,8 +36221,8 @@
 	                  'li',
 	                  null,
 	                  _react2.default.createElement(
-	                    'a',
-	                    { className: 'gn-icon gn-icon-cog', href: '#' },
+	                    _reactRouter.Link,
+	                    { to: '/switches/sw2', className: 'gn-icon gn-icon-cog' },
 	                    'Switch 2'
 	                  )
 	                ),
@@ -36223,8 +36230,8 @@
 	                  'li',
 	                  null,
 	                  _react2.default.createElement(
-	                    'a',
-	                    { className: 'gn-icon gn-icon-cog', href: '#' },
+	                    _reactRouter.Link,
+	                    { to: '/switches/sw3', className: 'gn-icon gn-icon-cog' },
 	                    'Switch 3'
 	                  )
 	                ),
@@ -36232,8 +36239,8 @@
 	                  'li',
 	                  null,
 	                  _react2.default.createElement(
-	                    'a',
-	                    { className: 'gn-icon gn-icon-cog', href: '#' },
+	                    _reactRouter.Link,
+	                    { to: '/switches/sw4', className: 'gn-icon gn-icon-cog' },
 	                    'Switch 4'
 	                  )
 	                ),
@@ -36241,8 +36248,8 @@
 	                  'li',
 	                  null,
 	                  _react2.default.createElement(
-	                    'a',
-	                    { className: 'gn-icon gn-icon-cog', href: '#' },
+	                    _reactRouter.Link,
+	                    { to: '/switches/sw5', className: 'gn-icon gn-icon-cog' },
 	                    'Switch 5'
 	                  )
 	                )
@@ -36399,12 +36406,11 @@
 	exports.default = _react2.default.createClass({
 	  displayName: 'About',
 	  render: function render() {
-	    debugger;
 	    return _react2.default.createElement(
 	      'div',
 	      null,
 	      _react2.default.createElement(
-	        'h3',
+	        'h1',
 	        null,
 	        'About'
 	      )

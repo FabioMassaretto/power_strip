@@ -7,10 +7,37 @@ const bodyParser= require('body-parser');
 const path = require('path')
 const app = express();
 
+// local state
 const state = [];
 
+// saved JSON info
+var readableStream = fs.createReadStream('saveState.json');
+var data = ''
+
+readableStream.on('data', function(chunk) {
+    data+=chunk;
+});
+
+readableStream.on('end', function() {
+  var parsed = JSON.parse(data);
+
+  for (i=0;i<state.length;i++){
+    if(parsed[i].name) state[i].name = parsed[i].name;
+    if(parsed[i].state) state[i].state = parsed[i].state;
+  }
+});
+
+
 function saveState (){
-  fs.writeFile('./saveState.json', JSON.stringify(state) )
+  var parsed = JSON.parse(data);
+
+  for (i=0;i<state.length;i++){
+    if(parsed[i]) parsed[i].name = state[i].name;
+    if(parsed[i]) parsed[i].state = state[i].state;
+  }
+
+
+  fs.writeFile('./saveState.json', JSON.stringify(parsed) )
 }
 
 
@@ -90,6 +117,7 @@ app.get('/api/switches/:id', function(req, res){
 app.post('/api/switches/:id', function(req, res){
   var found = getSwitch(req.params.id);
   found.toggle();
+  saveState();
   res.json(found)
 })
 

@@ -9,8 +9,16 @@ const app = express();
 
 const state = [];
 
+function saveState (){
+  fs.writeFile('./saveState.json', JSON.stringify(state) )
+}
+
 
 function init(){
+  for (i=1;i<=5;i++){
+    state.push(new Switch(i));
+  }
+    
   for (i=1;i<=5;i++){
     var str = offString(i);
     PythonShell.run(str, function (err) {
@@ -18,9 +26,8 @@ function init(){
         if (err) throw err;
       } 
     });
-    state.push(new Switch(i))
   }
-
+  
 }
 
 function onString(number){
@@ -49,7 +56,6 @@ function Switch(number){
         } 
       });
       this.state = "on"
-      console.log(this.state)
     }
     else {
       var str = offString(this.id[2]);
@@ -93,7 +99,11 @@ app.get('*', function (req, res){
 })
 
 
-init();
-app.listen(process.env.PORT, function(){
-  console.log('Listening on port ' + process.env.PORT);
-})
+new Promise(function(resolve,reject){init()})
+  .then(
+    app.listen(process.env.PORT, function(){
+     console.log('Listening on port ' + process.env.PORT);
+    })
+  )
+
+

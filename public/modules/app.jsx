@@ -18,6 +18,7 @@ export default React.createClass({
         switches: switches
       });
     }.bind(this)));
+    if ()
   },
 
   componentDidMount: function componentDidMount(){
@@ -108,10 +109,18 @@ export default React.createClass({
   },
 
   render: function(){
+    // Configure which props different children interit
     var children = React.Children.map(this.props.children, function (child) {
         if (this.state.switches){
-
+          // If home route
           if(child.props.location.pathname === '/'){
+            return React.cloneElement(child, {
+              switches: this.state.switches,
+              toggleSwitch: this.toggleSwitch
+            })
+          }
+          // If custom switch page
+          else if (child.props.location.pathname.indexOf('switches') > -1){
             return React.cloneElement(child, {
               switches: this.state.switches,
               toggleSwitch: this.toggleSwitch

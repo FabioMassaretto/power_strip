@@ -72,16 +72,6 @@ app.get('/', function(req, res){
   res.sendFile('index');
 })
 
-app.get('/switches/:id', function(req, res){
-  var found = getSwitch(req.params.id);
-  res.send(found)
-})
-
-
-
-
-
-
 app.get('/api/switches', function(req, res){
   res.send(state);
 })
@@ -98,8 +88,8 @@ app.post('/api/switches/:id', function(req, res){
 })
 
 
-app.get('*', function (request, response){
-  response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+app.get('*', function (req, res){
+  res.redirect('/');
 })
 
 

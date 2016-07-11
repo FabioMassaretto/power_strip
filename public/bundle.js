@@ -62,11 +62,18 @@
 
 	var _home2 = _interopRequireDefault(_home);
 
-	var _About = __webpack_require__(234);
+	var _About = __webpack_require__(235);
 
 	var _About2 = _interopRequireDefault(_About);
 
+	var _SwitchView = __webpack_require__(236);
+
+	var _SwitchView2 = _interopRequireDefault(_SwitchView);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// Modules
+
 
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRouter.Router,
@@ -75,11 +82,10 @@
 	    _reactRouter.Route,
 	    { path: '/', component: _app2.default },
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _home2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _About2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _About2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'switches/:id', component: _SwitchView2.default })
 	  )
 	), document.getElementById('app'));
-
-	// Modules
 
 /***/ },
 /* 1 */
@@ -26077,19 +26083,27 @@
 	  },
 
 	  render: function render() {
+	    // Configure which props different children interit
 	    var children = _react2.default.Children.map(this.props.children, function (child) {
 	      if (this.state.switches) {
-
+	        // If home route
 	        if (child.props.location.pathname === '/') {
 	          return _react2.default.cloneElement(child, {
 	            switches: this.state.switches,
 	            toggleSwitch: this.toggleSwitch
 	          });
-	        } else {
-	          return _react2.default.cloneElement(child, {
-	            switches: this.state.switches
-	          });
 	        }
+	        // If custom switch page
+	        else if (child.props.location.pathname.indexOf('switches') > -1) {
+	            return _react2.default.cloneElement(child, {
+	              switches: this.state.switches,
+	              toggleSwitch: this.toggleSwitch
+	            });
+	          } else {
+	            return _react2.default.cloneElement(child, {
+	              switches: this.state.switches
+	            });
+	          }
 	      }
 	    }.bind(this));
 	    return _react2.default.createElement(
@@ -36294,9 +36308,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _app = __webpack_require__(230);
+	var _Switch = __webpack_require__(234);
 
-	var _app2 = _interopRequireDefault(_app);
+	var _Switch2 = _interopRequireDefault(_Switch);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36314,7 +36328,7 @@
 	        return _react2.default.createElement(
 	          'div',
 	          { className: 'switch', key: i },
-	          _react2.default.createElement(Switch, {
+	          _react2.default.createElement(_Switch2.default, {
 	            id: v.id,
 	            name: v.name,
 	            number: i + 1,
@@ -36342,10 +36356,25 @@
 	  }
 	});
 
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
 
-	var Switch = _react2.default.createClass({ displayName: 'Switch',
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({ displayName: 'Switch',
 	  render: function render() {
-	    var _this2 = this;
+	    var _this = this;
 
 	    if (this.props.showInput) {
 	      return _react2.default.createElement(
@@ -36357,7 +36386,7 @@
 	          id: this.props.id,
 	          className: "toggle " + (this.props.state === "on" ? "toggle--on" : "toggle--off"),
 	          onClick: function onClick() {
-	            _this2.props.toggleSwitch(_this2.props.id);
+	            _this.props.toggleSwitch(_this.props.id);
 	          }
 	        })
 	      );
@@ -36369,7 +36398,7 @@
 	          'h4',
 	          {
 	            onClick: function onClick() {
-	              _this2.props.nameInput();
+	              _this.props.nameInput();
 	            }
 	          },
 	          this.props.name
@@ -36379,7 +36408,7 @@
 	          id: this.props.id,
 	          className: "toggle " + (this.props.state === "on" ? "toggle--on" : "toggle--off"),
 	          onClick: function onClick() {
-	            _this2.props.toggleSwitch(_this2.props.id);
+	            _this.props.toggleSwitch(_this.props.id);
 	          }
 	        })
 	      );
@@ -36388,7 +36417,7 @@
 	});
 
 /***/ },
-/* 234 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36413,7 +36442,58 @@
 	        'h1',
 	        null,
 	        'About'
+	      ),
+	      _react2.default.createElement(
+	        'h4',
+	        null,
+	        'Raspi Smart-Strip is an open-source hardware and software project. By running a Node.js server on a Raspberry Pi Zero and following my hardware guide, you should be able to control each of the outlets from your device using this website on your local wifi.'
 	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Switch = __webpack_require__(234);
+
+	var _Switch2 = _interopRequireDefault(_Switch);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+	  displayName: 'SwitchView',
+	  render: function render() {
+
+	    var id = this.props.params.id;
+	    var currSwitch = this.props.switches.filter(function (val) {
+	      return val.id === id;
+	    })[0];
+
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(
+	        'h1',
+	        null,
+	        currSwitch.name
+	      ),
+	      _react2.default.createElement(_Switch2.default, {
+	        id: id,
+	        state: currSwitch.state,
+	        toggleSwitch: this.props.toggleSwitch
+	      })
 	    );
 	  }
 	});

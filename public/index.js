@@ -6,6 +6,7 @@ import { browserHistory, Router, Route, IndexRoute } from 'react-router'
 import App from './modules/app.jsx'
 import Home from './modules/home.jsx'
 import About from './modules/About.jsx'
+import SwitchView from './modules/SwitchView.jsx'
 
 
 
@@ -15,6 +16,7 @@ render((
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
       <Route path="about" component={About}/>
+      <Route path="switches/:id" component={SwitchView}/>
     </Route>
   </Router>
   ), document.getElementById('app'))

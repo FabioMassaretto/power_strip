@@ -1,6 +1,12 @@
 import React from 'react'
+import App from './app.jsx'
 
 export default React.createClass({
+
+  componentWillMount: function componentWillMount() {
+    
+  },
+
   render(){
     if (this.props.switches){
       var switchStates = this.props.switches.map((v,i)=>{
@@ -21,7 +27,7 @@ export default React.createClass({
       })
     }
     return (
-      <div>
+      <div className="HomeScreen">
         <h1>Power Strip</h1>
         {switchStates}
       </div>

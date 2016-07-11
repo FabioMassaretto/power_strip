@@ -4,6 +4,7 @@ const PythonShell = require('python-shell');
 const fs = require('fs');
 const express = require('express');
 const bodyParser= require('body-parser');
+const path = require('path')
 const app = express();
 
 const state = [];
@@ -96,6 +97,10 @@ app.post('/api/switches/:id', function(req, res){
   res.json(found)
 })
 
+
+app.get('*', function (request, response){
+  response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+})
 
 
 init();

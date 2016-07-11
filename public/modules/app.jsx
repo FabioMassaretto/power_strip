@@ -1,10 +1,9 @@
 import React from 'react'
 import $ from 'jquery'
 import NavBar from './navbar.jsx'
-import Home from './home.jsx'
 
 export default React.createClass({
-  displayName: 'HomeScreen',
+  displayName: 'App',
 
   getInitialState : function getInitialState() {
       return {
@@ -119,13 +118,7 @@ export default React.createClass({
           menuToggle={this.menuToggle}
           isMenuOpen={this.state.isMenuOpen}
         />
-        <Home
-          switches={this.state.switches}
-          toggleSwitch={this.toggleSwitch}
-          changeName={this.changeName}
-          nameInput={this.nameInput}
-          checkServerState={this.checkServerState}
-        />
+        { this.props.children }
       </div>
     )
     

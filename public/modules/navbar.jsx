@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { Link } from 'react-router'
+
 export default React.createClass ({
     displayName: "Navbar",
     render: function(){
@@ -31,8 +33,8 @@ export default React.createClass ({
                 </div> 
               </nav>
             </li>
-            <li><a href="/#">Home</a></li>
-            <li><a href="/#/about">About</a></li>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/about">About</Link></li>
           </ul>
         </div>
       );

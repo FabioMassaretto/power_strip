@@ -58,24 +58,28 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
+	var _home = __webpack_require__(233);
+
+	var _home2 = _interopRequireDefault(_home);
+
 	var _About = __webpack_require__(234);
 
 	var _About2 = _interopRequireDefault(_About);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// Modules
-
-
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRouter.Router,
-	  { history: _reactRouter.hashHistory },
+	  { history: _reactRouter.browserHistory },
 	  _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: '/', component: _app2.default },
-	    _react2.default.createElement(_reactRouter.Route, { path: '/about', component: _About2.default })
+	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _home2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _About2.default })
 	  )
 	), document.getElementById('app'));
+
+	// Modules
 
 /***/ },
 /* 1 */
@@ -25966,14 +25970,10 @@
 
 	var _navbar2 = _interopRequireDefault(_navbar);
 
-	var _home = __webpack_require__(233);
-
-	var _home2 = _interopRequireDefault(_home);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
-	  displayName: 'HomeScreen',
+	  displayName: 'App',
 
 	  getInitialState: function getInitialState() {
 	    return {
@@ -26088,13 +26088,7 @@
 	        menuToggle: this.menuToggle,
 	        isMenuOpen: this.state.isMenuOpen
 	      }),
-	      _react2.default.createElement(_home2.default, {
-	        switches: this.state.switches,
-	        toggleSwitch: this.toggleSwitch,
-	        changeName: this.changeName,
-	        nameInput: this.nameInput,
-	        checkServerState: this.checkServerState
-	      })
+	      this.props.children
 	    );
 	  }
 	});
@@ -36146,7 +36140,7 @@
 /* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -36156,98 +36150,100 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(168);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
 	  displayName: "Navbar",
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "div",
-	      { className: "navbar", fluid: true },
+	      'div',
+	      { className: 'navbar', fluid: true },
 	      _react2.default.createElement(
-	        "ul",
-	        { id: "gn-menu", className: "gn-menu-main" },
+	        'ul',
+	        { id: 'gn-menu', className: 'gn-menu-main' },
 	        _react2.default.createElement(
-	          "li",
-	          { className: "gn-trigger" },
+	          'li',
+	          { className: 'gn-trigger' },
 	          _react2.default.createElement(
-	            "a",
+	            'a',
 	            {
-	              className: "gn-icon gn-icon-menu",
+	              className: 'gn-icon gn-icon-menu',
 	              onMouseEnter: this.props.openIconMenu,
 	              onMouseLeave: this.props.closeIconMenu,
 	              onClick: this.props.menuToggle
 	            },
 	            _react2.default.createElement(
-	              "span",
+	              'span',
 	              null,
-	              "Menu"
+	              'Menu'
 	            )
 	          ),
 	          _react2.default.createElement(
-	            "nav",
+	            'nav',
 	            {
-	              className: "gn-menu-wrapper",
+	              className: 'gn-menu-wrapper',
 	              onMouseOver: this.props.openMenu
 	            },
 	            _react2.default.createElement(
-	              "div",
-	              { className: "gn-scroller" },
+	              'div',
+	              { className: 'gn-scroller' },
 	              _react2.default.createElement(
-	                "ul",
-	                { className: "gn-menu" },
+	                'ul',
+	                { className: 'gn-menu' },
 	                _react2.default.createElement(
-	                  "li",
+	                  'li',
 	                  null,
 	                  _react2.default.createElement(
-	                    "a",
-	                    { className: "gn-icon gn-icon-cog" },
-	                    "Settings"
+	                    'a',
+	                    { className: 'gn-icon gn-icon-cog' },
+	                    'Settings'
 	                  )
 	                ),
 	                _react2.default.createElement(
-	                  "li",
+	                  'li',
 	                  null,
 	                  _react2.default.createElement(
-	                    "a",
-	                    { className: "gn-icon gn-icon-cog", href: "#" },
-	                    "Switch 1"
+	                    'a',
+	                    { className: 'gn-icon gn-icon-cog', href: '#' },
+	                    'Switch 1'
 	                  )
 	                ),
 	                _react2.default.createElement(
-	                  "li",
+	                  'li',
 	                  null,
 	                  _react2.default.createElement(
-	                    "a",
-	                    { className: "gn-icon gn-icon-cog", href: "#" },
-	                    "Switch 2"
+	                    'a',
+	                    { className: 'gn-icon gn-icon-cog', href: '#' },
+	                    'Switch 2'
 	                  )
 	                ),
 	                _react2.default.createElement(
-	                  "li",
+	                  'li',
 	                  null,
 	                  _react2.default.createElement(
-	                    "a",
-	                    { className: "gn-icon gn-icon-cog", href: "#" },
-	                    "Switch 3"
+	                    'a',
+	                    { className: 'gn-icon gn-icon-cog', href: '#' },
+	                    'Switch 3'
 	                  )
 	                ),
 	                _react2.default.createElement(
-	                  "li",
+	                  'li',
 	                  null,
 	                  _react2.default.createElement(
-	                    "a",
-	                    { className: "gn-icon gn-icon-cog", href: "#" },
-	                    "Switch 4"
+	                    'a',
+	                    { className: 'gn-icon gn-icon-cog', href: '#' },
+	                    'Switch 4'
 	                  )
 	                ),
 	                _react2.default.createElement(
-	                  "li",
+	                  'li',
 	                  null,
 	                  _react2.default.createElement(
-	                    "a",
-	                    { className: "gn-icon gn-icon-cog", href: "#" },
-	                    "Switch 5"
+	                    'a',
+	                    { className: 'gn-icon gn-icon-cog', href: '#' },
+	                    'Switch 5'
 	                  )
 	                )
 	              )
@@ -36255,21 +36251,21 @@
 	          )
 	        ),
 	        _react2.default.createElement(
-	          "li",
+	          'li',
 	          null,
 	          _react2.default.createElement(
-	            "a",
-	            { href: "/#" },
-	            "Home"
+	            _reactRouter.Link,
+	            { to: '/' },
+	            'Home'
 	          )
 	        ),
 	        _react2.default.createElement(
-	          "li",
+	          'li',
 	          null,
 	          _react2.default.createElement(
-	            "a",
-	            { href: "/#/about" },
-	            "About"
+	            _reactRouter.Link,
+	            { to: '/about' },
+	            'About'
 	          )
 	        )
 	      )
@@ -36291,10 +36287,18 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _app = __webpack_require__(230);
+
+	var _app2 = _interopRequireDefault(_app);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
 	  displayName: 'home',
+
+
+	  componentWillMount: function componentWillMount() {},
+
 	  render: function render() {
 	    var _this = this;
 
@@ -36320,7 +36324,7 @@
 	    }
 	    return _react2.default.createElement(
 	      'div',
-	      null,
+	      { className: 'HomeScreen' },
 	      _react2.default.createElement(
 	        'h1',
 	        null,
@@ -36395,11 +36399,12 @@
 	exports.default = _react2.default.createClass({
 	  displayName: 'About',
 	  render: function render() {
+	    debugger;
 	    return _react2.default.createElement(
 	      'div',
 	      null,
 	      _react2.default.createElement(
-	        'div',
+	        'h3',
 	        null,
 	        'About'
 	      )

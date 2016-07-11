@@ -21,6 +21,13 @@ export default React.createClass({
     }.bind(this)));
   },
 
+  componentDidMount: function componentDidMount(){
+
+  },
+
+  checkServerState: function checkServerState(){
+  },
+
 //ID is formatted as "sw1"
   toggleSwitch: function toggleSwitch(id) {
     var route = "/api/switches/" + id;
@@ -29,7 +36,6 @@ export default React.createClass({
       this.setState({
            switches: this.state.switches
         });
-        console.log(this.state.switches)
       }.bind(this)
     )
   },
@@ -41,7 +47,6 @@ export default React.createClass({
       this.setState({
         switches: this.state.switches
       });
-      console.log(this.state.switches)
     }.bind(this))
   },
 
@@ -57,7 +62,7 @@ export default React.createClass({
 
   bodyClick: function bodyClick(){
     this.closeMenu();
-    this.removeEventListener('click', this.bodyClick)
+    // this.removeEventListener('click', this.bodyClick)
   },
 
   openMenu: function openMenu(){
@@ -110,6 +115,7 @@ export default React.createClass({
           toggleSwitch={this.toggleSwitch}
           changeName={this.changeName}
           nameInput={this.nameInput}
+          checkServerState={this.checkServerState}
         />
       </div>
     )

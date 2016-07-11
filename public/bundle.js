@@ -25990,9 +25990,23 @@
 	    }.bind(this));
 	  },
 
-	  componentDidMount: function componentDidMount() {},
+	  componentDidMount: function componentDidMount() {
+	    var _this = this;
 
-	  checkServerState: function checkServerState() {},
+	    setInterval(function () {
+	      if (document.hasFocus()) {
+	        _this.checkServerState();
+	      }
+	    }, 10000);
+	  },
+
+	  checkServerState: function checkServerState() {
+	    _jquery2.default.getJSON("/api/switches").then(function (switches) {
+	      this.setState({
+	        switches: switches
+	      });
+	    }.bind(this));
+	  },
 
 	  //ID is formatted as "sw1"
 	  toggleSwitch: function toggleSwitch(id) {

@@ -22,10 +22,19 @@ export default React.createClass({
   },
 
   componentDidMount: function componentDidMount(){
-
+    setInterval(()=>{
+      if (document.hasFocus()){
+        this.checkServerState();
+      }
+    }, 10000)
   },
 
   checkServerState: function checkServerState(){
+    $.getJSON("/api/switches").then((function (switches) {
+      this.setState({
+        switches: switches
+      });
+    }.bind(this)));
   },
 
 //ID is formatted as "sw1"

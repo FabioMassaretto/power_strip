@@ -3,7 +3,7 @@
 Hi, and thanks for looking at my project! This is an open source project, so feel free to adapt anything you see for your own applications.
 
 
-<img src="https://imgur.com/a/WE5k9"/>
+<img src="http://i.imgur.com/rFQqPcX.png?1"/>
 
 ### What this is: 
 A Node.js server that controls a smart power strip. By wiring a Raspberry Pi Zero to five relays housed inside a power strip, this software runs a server on the local network with an API and website to switch each of the outlets on or off. 

@@ -1,5 +1,6 @@
 import React from 'react'
 import Switch from './Switch.jsx'
+import Schedule from './Schedule.jsx'
 
 export default React.createClass({
   
@@ -16,6 +17,11 @@ export default React.createClass({
           id={id}
           state={currSwitch.state}
           toggleSwitch={this.props.toggleSwitch}
+        />
+        <br/>
+        <Schedule
+          id={id}
+          currSwitch={currSwitch}
         />
       </div>
     )

@@ -13,7 +13,7 @@ import Home from './modules/home.jsx'
 import About from './modules/About.jsx'
 import SwitchView from './modules/SwitchView.jsx'
 
-import Test from './modules/test.jsx'
+
 
 
 
@@ -24,7 +24,6 @@ render((
       <IndexRoute component={Home} />
       <Route path="about" component={About}/>
       <Route path="switches/:id" component={SwitchView}/>
-      <Route path="test" component={Test}/>
     </Route>
   </Router>
   ), document.getElementById('app'))

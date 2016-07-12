@@ -74,10 +74,6 @@
 
 	var _SwitchView2 = _interopRequireDefault(_SwitchView);
 
-	var _test = __webpack_require__(243);
-
-	var _test2 = _interopRequireDefault(_test);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// Needed for onTouchTap
@@ -95,8 +91,7 @@
 	    { path: '/', component: _app2.default },
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _home2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _About2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'switches/:id', component: _SwitchView2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'test', component: _test2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: 'switches/:id', component: _SwitchView2.default })
 	  )
 	), document.getElementById('app'));
 
@@ -36603,15 +36598,6 @@
 	                  null,
 	                  _react2.default.createElement(
 	                    _reactRouter.Link,
-	                    { to: '/test', className: 'gn-icon gn-icon-cog' },
-	                    'Test'
-	                  )
-	                ),
-	                _react2.default.createElement(
-	                  'li',
-	                  null,
-	                  _react2.default.createElement(
-	                    _reactRouter.Link,
 	                    { to: '/switches/sw1', className: 'gn-icon gn-icon-cog' },
 	                    'Switch 1'
 	                  )
@@ -36855,6 +36841,10 @@
 
 	var _Switch2 = _interopRequireDefault(_Switch);
 
+	var _Schedule = __webpack_require__(501);
+
+	var _Schedule2 = _interopRequireDefault(_Schedule);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
@@ -36877,270 +36867,18 @@
 	        id: id,
 	        state: currSwitch.state,
 	        toggleSwitch: this.props.toggleSwitch
+	      }),
+	      _react2.default.createElement('br', null),
+	      _react2.default.createElement(_Schedule2.default, {
+	        id: id,
+	        currSwitch: currSwitch
 	      })
 	    );
 	  }
 	});
 
 /***/ },
-/* 243 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Dialog = __webpack_require__(244);
-
-	var _Dialog2 = _interopRequireDefault(_Dialog);
-
-	var _FlatButton = __webpack_require__(419);
-
-	var _FlatButton2 = _interopRequireDefault(_FlatButton);
-
-	var _RaisedButton = __webpack_require__(435);
-
-	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
-
-	var _DatePicker = __webpack_require__(437);
-
-	var _DatePicker2 = _interopRequireDefault(_DatePicker);
-
-	var _TimePicker = __webpack_require__(491);
-
-	var _TimePicker2 = _interopRequireDefault(_TimePicker);
-
-	var _Stepper = __webpack_require__(481);
-
-	var _getMuiTheme = __webpack_require__(255);
-
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-
-	var _MuiThemeProvider = __webpack_require__(254);
-
-	var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createClass({
-	  displayName: 'test',
-
-	  render: function render() {
-
-	    return _react2.default.createElement(
-	      _MuiThemeProvider2.default,
-	      { muiTheme: (0, _getMuiTheme2.default)() },
-	      _react2.default.createElement(CustomDialog, null)
-	    );
-	  }
-	});
-
-
-	var CustomDialog = _react2.default.createClass({
-	  displayName: 'CustomDialog',
-
-	  getInitialState: function getInitialState() {
-	    return {
-	      open: false,
-	      stepIndex: 0,
-	      start_time: null,
-	      stop_time: null,
-	      selected_day: null
-	    };
-	  },
-
-	  // Dialog open and close
-	  handleOpen: function handleOpen() {
-	    this.setState({ open: true });
-	  },
-
-	  handleClose: function handleClose() {
-	    this.setState({ open: false });
-	  },
-
-	  // Handle Stepper Rendering
-	  handleNext: function handleNext() {
-	    if (this.state.stepIndex < 2) {
-	      this.setState({ stepIndex: this.state.stepIndex + 1 });
-	    }
-	  },
-
-	  handlePrev: function handlePrev() {
-	    if (this.state.stepIndex > 0) {
-	      this.setState({ stepIndex: this.state.stepIndex - 1 });
-	    }
-	  },
-
-	  setStep: function setStep(newIndex) {
-	    if (newIndex > -1 && newIndex <= 2) {
-	      this.setState({ stepIndex: newIndex });
-	    }
-	  },
-
-	  // Handle Time and Date State
-	  handleStartTime: function handleStartTime(event, date) {
-	    this.setState({ start_time: date });
-	  },
-
-	  handleStopTime: function handleStopTime(event, date) {
-	    this.setState({ stop_time: date });
-	  },
-
-	  handleSelectDate: function handleSelectDate(event, date) {
-	    this.setState({ selected_day: date });
-	  },
-
-	  getStepContent: function getStepContent(stepIndex) {
-	    switch (stepIndex) {
-	      case 0:
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            'Choose the day for this activity'
-	          ),
-	          _react2.default.createElement(_DatePicker2.default, {
-	            hintText: 'Start Day',
-	            value: this.state.selected_day,
-	            onChange: this.handleSelectDate
-	          })
-	        );
-	      case 1:
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            'What time should the outlet turn on?'
-	          ),
-	          _react2.default.createElement(_TimePicker2.default, {
-	            format: 'ampm',
-	            hintText: '12hr Format',
-	            value: this.state.start_time,
-	            onChange: this.handleStartTime
-	          })
-	        );
-	      case 2:
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            'What time should the outlet turn off?'
-	          ),
-	          _react2.default.createElement(_TimePicker2.default, {
-	            format: 'ampm',
-	            hintText: '12hr Format',
-	            value: this.state.stop_time,
-	            onChange: this.handleStopTime
-	          })
-	        );
-	    }
-	  },
-
-	  render: function render() {
-	    var _this = this;
-
-	    var actions = [_react2.default.createElement(_FlatButton2.default, {
-	      label: 'Ok',
-	      primary: true,
-	      keyboardFocused: true,
-	      onTouchTap: this.handleClose
-	    })];
-
-	    return _react2.default.createElement(
-	      'div',
-	      { style: { width: '100%', margin: 'auto' } },
-	      _react2.default.createElement(_RaisedButton2.default, { label: 'Schedule New Event', onTouchTap: this.handleOpen }),
-	      _react2.default.createElement(
-	        _Dialog2.default,
-	        {
-	          title: 'Schedule New Event',
-	          actions: actions,
-	          modal: false,
-	          open: this.state.open,
-	          onRequestClose: this.handleClose,
-	          autoScrollBodyContent: true
-	        },
-	        _react2.default.createElement(
-	          _Stepper.Stepper,
-	          { linear: false, activeStep: this.state.stepIndex },
-	          _react2.default.createElement(
-	            _Stepper.Step,
-	            null,
-	            _react2.default.createElement(
-	              _Stepper.StepButton,
-	              { onClick: function onClick() {
-	                  return _this.setStep(0);
-	                } },
-	              'Select a day'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            _Stepper.Step,
-	            null,
-	            _react2.default.createElement(
-	              _Stepper.StepButton,
-	              { onClick: function onClick() {
-	                  return _this.setStep(1);
-	                } },
-	              'Time on'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            _Stepper.Step,
-	            null,
-	            _react2.default.createElement(
-	              _Stepper.StepButton,
-	              { onClick: function onClick() {
-	                  return _this.setStep(2);
-	                } },
-	              'Time off'
-	            )
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(
-	            'div',
-	            null,
-	            this.getStepContent(this.state.stepIndex)
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { style: { marginTop: 12 } },
-	            _react2.default.createElement(_FlatButton2.default, {
-	              label: 'Back',
-	              disabled: this.state.stepIndex === 0,
-	              onTouchTap: this.handlePrev,
-	              style: { marginRight: 12 }
-	            }),
-	            _react2.default.createElement(_RaisedButton2.default, {
-	              label: 'Next',
-	              disabled: this.state.stepIndex === 2,
-	              primary: true,
-	              onTouchTap: this.handleNext
-	            })
-	          )
-	        )
-	      )
-	    );
-	  }
-
-	});
-
-/***/ },
+/* 243 */,
 /* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -57795,6 +57533,264 @@
 	  muiTheme: _react.PropTypes.object.isRequired
 	};
 	exports.default = ClockMinutes;
+
+/***/ },
+/* 501 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Dialog = __webpack_require__(244);
+
+	var _Dialog2 = _interopRequireDefault(_Dialog);
+
+	var _FlatButton = __webpack_require__(419);
+
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+
+	var _RaisedButton = __webpack_require__(435);
+
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+
+	var _DatePicker = __webpack_require__(437);
+
+	var _DatePicker2 = _interopRequireDefault(_DatePicker);
+
+	var _TimePicker = __webpack_require__(491);
+
+	var _TimePicker2 = _interopRequireDefault(_TimePicker);
+
+	var _Stepper = __webpack_require__(481);
+
+	var _getMuiTheme = __webpack_require__(255);
+
+	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+	var _MuiThemeProvider = __webpack_require__(254);
+
+	var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+	  displayName: 'Schedule',
+
+	  render: function render() {
+
+	    return _react2.default.createElement(
+	      _MuiThemeProvider2.default,
+	      { muiTheme: (0, _getMuiTheme2.default)() },
+	      _react2.default.createElement(CustomDialog, null)
+	    );
+	  }
+	});
+
+
+	var CustomDialog = _react2.default.createClass({
+	  displayName: 'CustomDialog',
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      open: false,
+	      stepIndex: 0,
+	      start_time: null,
+	      stop_time: null,
+	      selected_day: null
+	    };
+	  },
+
+	  // Dialog open and close
+	  handleOpen: function handleOpen() {
+	    this.setState({ open: true });
+	  },
+
+	  handleClose: function handleClose() {
+	    this.setState({ open: false });
+	  },
+
+	  // Handle Stepper Rendering
+	  handleNext: function handleNext() {
+	    if (this.state.stepIndex < 2) {
+	      this.setState({ stepIndex: this.state.stepIndex + 1 });
+	    }
+	  },
+
+	  handlePrev: function handlePrev() {
+	    if (this.state.stepIndex > 0) {
+	      this.setState({ stepIndex: this.state.stepIndex - 1 });
+	    }
+	  },
+
+	  setStep: function setStep(newIndex) {
+	    if (newIndex > -1 && newIndex <= 2) {
+	      this.setState({ stepIndex: newIndex });
+	    }
+	  },
+
+	  // Handle Time and Date State
+	  handleStartTime: function handleStartTime(event, date) {
+	    this.setState({ start_time: date });
+	  },
+
+	  handleStopTime: function handleStopTime(event, date) {
+	    this.setState({ stop_time: date });
+	  },
+
+	  handleSelectDate: function handleSelectDate(event, date) {
+	    this.setState({ selected_day: date });
+	  },
+
+	  getStepContent: function getStepContent(stepIndex) {
+	    switch (stepIndex) {
+	      case 0:
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Choose the day for this activity'
+	          ),
+	          _react2.default.createElement(_DatePicker2.default, {
+	            hintText: 'Start Day',
+	            value: this.state.selected_day,
+	            onChange: this.handleSelectDate
+	          })
+	        );
+	      case 1:
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'What time should the outlet turn on?'
+	          ),
+	          _react2.default.createElement(_TimePicker2.default, {
+	            format: 'ampm',
+	            hintText: '12hr Format',
+	            value: this.state.start_time,
+	            onChange: this.handleStartTime
+	          })
+	        );
+	      case 2:
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'What time should the outlet turn off?'
+	          ),
+	          _react2.default.createElement(_TimePicker2.default, {
+	            format: 'ampm',
+	            hintText: '12hr Format',
+	            value: this.state.stop_time,
+	            onChange: this.handleStopTime
+	          })
+	        );
+	    }
+	  },
+
+	  render: function render() {
+	    var _this = this;
+
+	    var actions = [_react2.default.createElement(_FlatButton2.default, {
+	      label: 'Ok',
+	      primary: true,
+	      keyboardFocused: true,
+	      onTouchTap: this.handleClose
+	    })];
+
+	    return _react2.default.createElement(
+	      'div',
+	      { style: { width: '100%', margin: 'auto' } },
+	      _react2.default.createElement(_RaisedButton2.default, { label: 'Schedule New Event', onTouchTap: this.handleOpen }),
+	      _react2.default.createElement(
+	        _Dialog2.default,
+	        {
+	          title: 'Schedule New Event',
+	          actions: actions,
+	          modal: false,
+	          open: this.state.open,
+	          onRequestClose: this.handleClose,
+	          autoScrollBodyContent: true
+	        },
+	        _react2.default.createElement(
+	          _Stepper.Stepper,
+	          { linear: false, activeStep: this.state.stepIndex },
+	          _react2.default.createElement(
+	            _Stepper.Step,
+	            null,
+	            _react2.default.createElement(
+	              _Stepper.StepButton,
+	              { onClick: function onClick() {
+	                  return _this.setStep(0);
+	                } },
+	              'Select a day'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            _Stepper.Step,
+	            null,
+	            _react2.default.createElement(
+	              _Stepper.StepButton,
+	              { onClick: function onClick() {
+	                  return _this.setStep(1);
+	                } },
+	              'Time on'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            _Stepper.Step,
+	            null,
+	            _react2.default.createElement(
+	              _Stepper.StepButton,
+	              { onClick: function onClick() {
+	                  return _this.setStep(2);
+	                } },
+	              'Time off'
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            this.getStepContent(this.state.stepIndex)
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { style: { marginTop: 12 } },
+	            _react2.default.createElement(_FlatButton2.default, {
+	              label: 'Back',
+	              disabled: this.state.stepIndex === 0,
+	              onTouchTap: this.handlePrev,
+	              style: { marginRight: 12 }
+	            }),
+	            _react2.default.createElement(_RaisedButton2.default, {
+	              label: 'Next',
+	              disabled: this.state.stepIndex === 2,
+	              primary: true,
+	              onTouchTap: this.handleNext
+	            })
+	          )
+	        )
+	      )
+	    );
+	  }
+
+	});
 
 /***/ }
 /******/ ]);

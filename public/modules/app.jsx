@@ -135,6 +135,7 @@ export default React.createClass({
     return (
       <div className="container">
             <NavBar
+              switches={this.state.switches}
               openIconMenu={this.openIconMenu}
               closeIconMenu={this.closeIconMenu}
               bodyClick={this.bodyClick}

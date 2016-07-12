@@ -86,6 +86,20 @@ h1 {
   padding:10px;
 }
 
+.about {
+  text-align: left;
+  max-width: 75vw;
+  text-indent: 2em;
+}
+.about li a, .about a {
+  color:white;
+}
+
+.wrapper {
+  height: 100%;
+  margin-top: 10vh;
+}
+
 /*iPhone and tablet*/
 @media only screen and (max-device-width: 1024px) {
   h1{

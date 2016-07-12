@@ -19,7 +19,9 @@ export default React.createClass({
 
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <CustomDialog/>
+        <CustomDialog
+          currSwitch={this.props.currSwitch}
+        />
       </MuiThemeProvider>  
     );
   }
@@ -128,12 +130,11 @@ var CustomDialog = React.createClass({
         onTouchTap={this.handleClose}
       />,
     ];
-
     return (
       <div style={{width: '100%', margin: 'auto'}}>
         <RaisedButton label="Schedule New Event" onTouchTap={this.handleOpen} />
         <Dialog
-          title="Schedule New Event"
+          title={"New Event For " + this.props.currSwitch.name}
           actions={actions}
           modal={false}
           open={this.state.open}

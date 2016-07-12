@@ -26481,6 +26481,7 @@
 	      'div',
 	      { className: 'container' },
 	      _react2.default.createElement(_navbar2.default, {
+	        switches: this.state.switches,
 	        openIconMenu: this.openIconMenu,
 	        closeIconMenu: this.closeIconMenu,
 	        bodyClick: this.bodyClick,
@@ -36599,7 +36600,7 @@
 	                  _react2.default.createElement(
 	                    _reactRouter.Link,
 	                    { to: '/switches/sw1', className: 'gn-icon gn-icon-cog' },
-	                    'Switch 1'
+	                    this.props.switches[0] ? this.props.switches[0].name : "Switch 1"
 	                  )
 	                ),
 	                _react2.default.createElement(
@@ -36608,7 +36609,7 @@
 	                  _react2.default.createElement(
 	                    _reactRouter.Link,
 	                    { to: '/switches/sw2', className: 'gn-icon gn-icon-cog' },
-	                    'Switch 2'
+	                    this.props.switches[1] ? this.props.switches[1].name : "Switch 2"
 	                  )
 	                ),
 	                _react2.default.createElement(
@@ -36617,7 +36618,7 @@
 	                  _react2.default.createElement(
 	                    _reactRouter.Link,
 	                    { to: '/switches/sw3', className: 'gn-icon gn-icon-cog' },
-	                    'Switch 3'
+	                    this.props.switches[2] ? this.props.switches[2].name : "Switch 3"
 	                  )
 	                ),
 	                _react2.default.createElement(
@@ -36626,7 +36627,7 @@
 	                  _react2.default.createElement(
 	                    _reactRouter.Link,
 	                    { to: '/switches/sw4', className: 'gn-icon gn-icon-cog' },
-	                    'Switch 4'
+	                    this.props.switches[3] ? this.props.switches[3].name : "Switch 4"
 	                  )
 	                ),
 	                _react2.default.createElement(
@@ -36635,7 +36636,7 @@
 	                  _react2.default.createElement(
 	                    _reactRouter.Link,
 	                    { to: '/switches/sw5', className: 'gn-icon gn-icon-cog' },
-	                    'Switch 5'
+	                    this.props.switches[4] ? this.props.switches[4].name : "Switch 5"
 	                  )
 	                )
 	              )
@@ -36791,7 +36792,7 @@
 /* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -36804,20 +36805,127 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
-	  displayName: 'About',
+	  displayName: "About",
 	  render: function render() {
 	    return _react2.default.createElement(
-	      'div',
-	      null,
+	      "div",
+	      { className: "wrapper" },
 	      _react2.default.createElement(
-	        'h1',
+	        "h1",
 	        null,
-	        'About'
+	        "About"
 	      ),
 	      _react2.default.createElement(
-	        'h4',
+	        "p",
 	        null,
-	        'Raspi Smart-Strip is an open-source hardware and software project. By running a Node.js server on a Raspberry Pi Zero and following my hardware guide, you should be able to control each of the outlets from your device using this website on your local wifi.'
+	        "Raspi Smart-Strip is a DIY solution for dumb electronics."
+	      ),
+	      _react2.default.createElement(
+	        "p",
+	        { className: "about" },
+	        "My name is Kyle Peacock, and I refuse to get out of bed to turn off my lamp or space heater. It's 2016, people! Everything you see here is open source. You can see all the code online at ",
+	        _react2.default.createElement(
+	          "a",
+	          { href: "https://github.com/krpeacock/power_strip" },
+	          "github.com/krpeacock/power_strip"
+	        ),
+	        ". I am also working on a hardware guide for people who may be interested in building their own power strip or using my interface."
+	      ),
+	      _react2.default.createElement(
+	        "p",
+	        { className: "about" },
+	        "Most likely, the page you're looking at is my demo. Currently, the server is designed to run only on a local network, where it will be visible to computers sharing the wifi. So, don't worry, you're not causing me any trouble by clicking on things."
+	      ),
+	      _react2.default.createElement(
+	        "p",
+	        { className: "about" },
+	        "Many thanks to the following Open-Source technologies that made this project possible!"
+	      ),
+	      _react2.default.createElement(
+	        "ul",
+	        { className: "about" },
+	        _react2.default.createElement(
+	          "li",
+	          null,
+	          _react2.default.createElement(
+	            "a",
+	            { href: "https://facebook.github.io/react/index.html" },
+	            "React.js"
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "li",
+	          null,
+	          _react2.default.createElement(
+	            "a",
+	            { href: "https://github.com/reactjs/react-router" },
+	            "React-router"
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "li",
+	          null,
+	          _react2.default.createElement(
+	            "a",
+	            { href: "https://nodejs.org/en/" },
+	            "Node.js"
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "li",
+	          null,
+	          _react2.default.createElement(
+	            "a",
+	            { href: "http://expressjs.com/" },
+	            "Express.js"
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "li",
+	          null,
+	          _react2.default.createElement(
+	            "a",
+	            { href: "https://www.raspbian.org/" },
+	            "Raspbian"
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "li",
+	          null,
+	          _react2.default.createElement(
+	            "a",
+	            { href: "https://github.com/" },
+	            "Github"
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "li",
+	          null,
+	          _react2.default.createElement(
+	            "a",
+	            { href: "http://www.material-ui.com/#/" },
+	            "Material-UI"
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "li",
+	          null,
+	          _react2.default.createElement(
+	            "a",
+	            { href: "https://codepen.io/keithpickering/" },
+	            "Keith Pickering's "
+	          ),
+	          " Toggle Switch"
+	        ),
+	        _react2.default.createElement(
+	          "li",
+	          null,
+	          _react2.default.createElement(
+	            "a",
+	            { href: "http://tympanus.net/codrops/2013/07/30/google-nexus-website-menu/" },
+	            "Navbar Menu"
+	          )
+	        )
 	      )
 	    );
 	  }
@@ -57588,7 +57696,9 @@
 	    return _react2.default.createElement(
 	      _MuiThemeProvider2.default,
 	      { muiTheme: (0, _getMuiTheme2.default)() },
-	      _react2.default.createElement(CustomDialog, null)
+	      _react2.default.createElement(CustomDialog, {
+	        currSwitch: this.props.currSwitch
+	      })
 	    );
 	  }
 	});
@@ -57709,7 +57819,6 @@
 	      keyboardFocused: true,
 	      onTouchTap: this.handleClose
 	    })];
-
 	    return _react2.default.createElement(
 	      'div',
 	      { style: { width: '100%', margin: 'auto' } },
@@ -57717,7 +57826,7 @@
 	      _react2.default.createElement(
 	        _Dialog2.default,
 	        {
-	          title: 'Schedule New Event',
+	          title: "New Event For " + this.props.currSwitch.name,
 	          actions: actions,
 	          modal: false,
 	          open: this.state.open,

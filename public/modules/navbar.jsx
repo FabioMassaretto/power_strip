@@ -23,11 +23,11 @@ export default React.createClass ({
               >       
                 <div className="gn-scroller">
                   <ul className="gn-menu">
-                    <li><Link to="/switches/sw1" className="gn-icon gn-icon-cog">Switch 1</Link></li>
-                    <li><Link to="/switches/sw2" className="gn-icon gn-icon-cog">Switch 2</Link></li>
-                    <li><Link to="/switches/sw3" className="gn-icon gn-icon-cog">Switch 3</Link></li>
-                    <li><Link to="/switches/sw4" className="gn-icon gn-icon-cog">Switch 4</Link></li>
-                    <li><Link to="/switches/sw5" className="gn-icon gn-icon-cog">Switch 5</Link></li>
+                    <li><Link to="/switches/sw1" className="gn-icon gn-icon-cog">{this.props.switches[0] ? this.props.switches[0].name : "Switch 1"}</Link></li>
+                    <li><Link to="/switches/sw2" className="gn-icon gn-icon-cog">{this.props.switches[1] ? this.props.switches[1].name : "Switch 2"}</Link></li>
+                    <li><Link to="/switches/sw3" className="gn-icon gn-icon-cog">{this.props.switches[2] ? this.props.switches[2].name : "Switch 3"}</Link></li>
+                    <li><Link to="/switches/sw4" className="gn-icon gn-icon-cog">{this.props.switches[3] ? this.props.switches[3].name : "Switch 4"}</Link></li>
+                    <li><Link to="/switches/sw5" className="gn-icon gn-icon-cog">{this.props.switches[4] ? this.props.switches[4].name : "Switch 5"}</Link></li>
                   </ul>
                 </div> 
               </nav>

@@ -23,7 +23,18 @@ readableStream.on('end', function() {
 
   for (i=0;i<state.length;i++){
     if(parsed[i].name) state[i].name = parsed[i].name;
-    if(parsed[i].state) state[i].state = parsed[i].state;
+    
+    if(parsed[i].state) {
+      state[i].state = parsed[i].state;
+      
+      var str = state[i].state === "on" ? onString(i) : offString(i);
+      PythonShell.run(str, function (err) {
+        if (!process.env.DEV){
+          if (err) throw err;
+        } 
+      });
+    }
+
   }
 });
 
@@ -34,6 +45,7 @@ function saveState (){
   for (i=0;i<state.length;i++){
     if(parsed[i]) parsed[i].name = state[i].name;
     if(parsed[i]) parsed[i].state = state[i].state;
+
   }
 
 
@@ -45,7 +57,6 @@ function init(){
   for (i=1;i<=5;i++){
     state.push(new Switch(i));
   }
-    
   for (i=1;i<=5;i++){
     var str = offString(i);
     PythonShell.run(str, function (err) {

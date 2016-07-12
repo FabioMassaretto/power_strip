@@ -18,7 +18,6 @@ export default React.createClass({
         switches: switches
       });
     }.bind(this)));
-    if ()
   },
 
   componentDidMount: function componentDidMount(){
@@ -135,16 +134,16 @@ export default React.createClass({
     }.bind(this))
     return (
       <div className="container">
-        <NavBar
-          openIconMenu={this.openIconMenu}
-          closeIconMenu={this.closeIconMenu}
-          bodyClick={this.bodyClick}
-          openMenu={this.openMenu}
-          closeMenu={this.closeMenu}
-          menuToggle={this.menuToggle}
-          isMenuOpen={this.state.isMenuOpen}
-        />
-        { children }
+            <NavBar
+              openIconMenu={this.openIconMenu}
+              closeIconMenu={this.closeIconMenu}
+              bodyClick={this.bodyClick}
+              openMenu={this.openMenu}
+              closeMenu={this.closeMenu}
+              menuToggle={this.menuToggle}
+              isMenuOpen={this.state.isMenuOpen}
+            />
+            { children }
       </div>
     )
     

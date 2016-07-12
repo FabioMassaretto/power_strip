@@ -23,6 +23,7 @@ export default React.createClass ({
               >       
                 <div className="gn-scroller">
                   <ul className="gn-menu">
+                    <li><Link to="/test" className="gn-icon gn-icon-cog">Test</Link></li>
                     <li><Link to="/switches/sw1" className="gn-icon gn-icon-cog">Switch 1</Link></li>
                     <li><Link to="/switches/sw2" className="gn-icon gn-icon-cog">Switch 2</Link></li>
                     <li><Link to="/switches/sw3" className="gn-icon gn-icon-cog">Switch 3</Link></li>

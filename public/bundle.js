@@ -37096,7 +37096,7 @@
 	    };
 
 	    _jquery2.default.post('/api/switches/' + this.props.currSwitch.id, submittedEvent, function (data) {
-	      debugger;
+	      console.log(data);
 	    });
 	  },
 

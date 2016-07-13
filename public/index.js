@@ -14,10 +14,6 @@ import About from './modules/About.jsx'
 import SwitchView from './modules/SwitchView.jsx'
 
 
-
-
-
-
 render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>

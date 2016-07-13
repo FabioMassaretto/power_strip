@@ -11,6 +11,8 @@ const app = express();
 // local state
 const state = [];
 const eventQueue = [];
+const pendingEvents = {};
+var uniqueEvents = 0;
 
 
 function saveState (){
@@ -24,7 +26,8 @@ function saveState (){
 
   var formattedState = {
     switches: parsed.switches,
-    events: eventQueue
+    events: eventQueue,
+    uniqueEvents: uniqueEvents
   }
 
 
@@ -60,6 +63,22 @@ readableStream.on('data', function(chunk) {
 
 readableStream.on('end', function() {
   var parsed = JSON.parse(data);
+  uniqueEvents = parsed.uniqueEvents;
+
+  for (i=0; i<parsed.events.length;i++){
+    if (parsed.events[i].start_date){
+      var checkDate = new Date(parsed.events[i].start_date); 
+      var now = new Date();
+      if (checkDate > now){
+        scheduleEvent(parsed.events[i]);
+        
+        var foundSwitch = getSwitch(parsed.events[i].switchId);
+        var checkedEvent = new Event(parsed.events[i], foundSwitch);
+
+        eventQueue.push(parsed.events[i]);
+      }
+    }
+  }
 
   for (i=0;i<state.length;i++){
     if(parsed.switches[i].name) state[i].name = parsed.switches[i].name;
@@ -124,23 +143,17 @@ function Switch(number){
   }
 }
 
+// Event constructor
 function Event(eventObject, foundSwitch){
+  this.id = uniqueEvents;
   this.switchId = foundSwitch.id;
+
+  uniqueEvents ++;
 
   if (eventObject.start_date){
     this.start_date = {
       date: eventObject.start_date,
       switchId: foundSwitch.id,
-      schedule: function(){
-        return (function(){
-          var start_date = new Date(this.date)
-          var job = schedule.scheduleJob(start_date, function(){
-            if(state.switches[this.switchId[2]].state === "off"){ 
-              state.switches[this.switchId[2]].toggle();
-            }
-          })()
-        })
-      }.bind(this)
     };
   }
 
@@ -148,24 +161,54 @@ function Event(eventObject, foundSwitch){
     this.stop_date = {
       date: eventObject.stop_date,
       switchId: foundSwitch.id,
-      schedule: function(){
-        return (function(){
-          var stop_date = new Date(this.date)
-          var job = schedule.scheduleJob(stop_date, function(){
-            if(state.switches[this.switchId[2]].state === "on") {
-              state.switches[this.switchId[2]].toggle();
-            }
-          })()
-        })
-      }.bind(this)
     };
   }
+}
 
-  this.schedule = function(){
-    if (this.start_date) this.start_date.schedule();
-    if (this.stop_date) this.stop_date.schedule();
-  }.bind(this)
+function scheduleEvent(eventObject){
+  var foundSwitch = getSwitch(eventObject.switchId);
+  pendingEvents[eventObject.id] = {};
 
+
+
+  if (eventObject.start_date){
+    var start_date = new Date(eventObject.start_date.date);
+
+  
+
+    var job = schedule.scheduleJob(start_date, function(){
+      if(foundSwitch.state === "off"){ 
+        foundSwitch.toggle();
+        saveState();
+      }
+    });
+
+    pendingEvents[eventObject.id].on = job;
+
+
+    pendingEvents[eventObject.id].cancelOn = function(){
+      pendingEvents[eventObject.id].on.cancel();
+    }
+
+  }
+
+  if (eventObject.stop_date){
+    var stop_date = new Date(eventObject.stop_date.date);
+ 
+
+    var j = schedule.scheduleJob(stop_date, function(){
+      if(foundSwitch.state === "on"){ 
+        foundSwitch.toggle();
+        saveState();
+      }
+    });
+
+    pendingEvents[eventObject.id].off = j;
+
+    pendingEvents[eventObject.id].cancelOff = function(){
+      pendingEvents[eventObject.id].off.cancel();
+    }
+  }
 }
 
 
@@ -189,20 +232,21 @@ app.get('/api/switches/:id', function(req, res){
 
 app.post('/api/switches/:id', function(req, res){
   var foundSwitch = getSwitch(req.params.id);
-  
 
   if (req.body.event){
     var newEvent = new Event(req.body.event, foundSwitch);
-    newEvent.schedule();
+    scheduleEvent(newEvent);
+    eventQueue.push(newEvent);
 
-    res.json(newEvent)
+    saveState();
+    res.json(newEvent);
+
   }
   else {
     foundSwitch.toggle();
+    saveState();
+    res.json(foundSwitch)
   }
-
-  saveState();
-  res.json(foundSwitch)
 })
 
 

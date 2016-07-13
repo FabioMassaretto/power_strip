@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const PythonShell = require('python-shell');
 const fs = require('fs');
+const schedule = require('node-schedule');
 const express = require('express');
 const bodyParser= require('body-parser');
 const path = require('path')
@@ -9,19 +10,25 @@ const app = express();
 
 // local state
 const state = [];
+const eventQueue = [];
 
 
 function saveState (){
   var parsed = JSON.parse(data);
 
   for (i=0;i<state.length;i++){
-    if(parsed[i]) parsed[i].name = state[i].name;
-    if(parsed[i]) parsed[i].state = state[i].state;
+    if(parsed.switches[i]) parsed.switches[i].name = state[i].name;
+    if(parsed.switches[i]) parsed.switches[i].state = state[i].state;
 
   }
 
+  var formattedState = {
+    switches: parsed.switches,
+    events: eventQueue
+  }
 
-  fs.writeFile('./saveState.json', JSON.stringify(parsed) )
+
+  fs.writeFile('./saveState.json', JSON.stringify(formattedState) )
 }
 
 
@@ -55,10 +62,10 @@ readableStream.on('end', function() {
   var parsed = JSON.parse(data);
 
   for (i=0;i<state.length;i++){
-    if(parsed[i].name) state[i].name = parsed[i].name;
+    if(parsed.switches[i].name) state[i].name = parsed.switches[i].name;
     
-    if(parsed[i].state) {
-      state[i].state = parsed[i].state;
+    if(parsed.switches[i].state) {
+      state[i].state = parsed.switches[i].state;
       
       var str = state[i].state === "on" ? onString(i) : offString(i);
       PythonShell.run(str, function (err) {
@@ -117,6 +124,50 @@ function Switch(number){
   }
 }
 
+function Event(eventObject, foundSwitch){
+  this.switchId = foundSwitch.id;
+
+  if (eventObject.start_date){
+    this.start_date = {
+      date: eventObject.start_date,
+      switchId: foundSwitch.id,
+      schedule: function(){
+        return (function(){
+          var start_date = new Date(this.date)
+          var job = schedule.scheduleJob(start_date, function(){
+            if(state.switches[this.switchId[2]].state === "off"){ 
+              state.switches[this.switchId[2]].toggle();
+            }
+          })()
+        })
+      }.bind(this)
+    };
+  }
+
+  if (eventObject.stop_date){
+    this.stop_date = {
+      date: eventObject.stop_date,
+      switchId: foundSwitch.id,
+      schedule: function(){
+        return (function(){
+          var stop_date = new Date(this.date)
+          var job = schedule.scheduleJob(stop_date, function(){
+            if(state.switches[this.switchId[2]].state === "on") {
+              state.switches[this.switchId[2]].toggle();
+            }
+          })()
+        })
+      }.bind(this)
+    };
+  }
+
+  this.schedule = function(){
+    if (this.start_date) this.start_date.schedule();
+    if (this.stop_date) this.stop_date.schedule();
+  }.bind(this)
+
+}
+
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -137,20 +188,21 @@ app.get('/api/switches/:id', function(req, res){
 })
 
 app.post('/api/switches/:id', function(req, res){
-  var found = getSwitch(req.params.id);
+  var foundSwitch = getSwitch(req.params.id);
   
 
-  eval(require('locus'))
-  if (req.query.event){
-    var event = JSON.parse(req.query.event);
-    res.json(event)
+  if (req.body.event){
+    var newEvent = new Event(req.body.event, foundSwitch);
+    newEvent.schedule();
+
+    res.json(newEvent)
   }
   else {
-    found.toggle();
+    foundSwitch.toggle();
   }
 
   saveState();
-  res.json(found)
+  res.json(foundSwitch)
 })
 
 

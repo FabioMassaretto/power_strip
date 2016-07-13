@@ -12,7 +12,7 @@ import {
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-
+import $ from 'jquery';
 
 export default React.createClass({
   render: function() {
@@ -46,15 +46,32 @@ var CustomDialog = React.createClass({
 
   handleClose : function handleClose(){
     this.setState({open:false});
-    if (this.state.start_time && this.state.stop_time && this.state.selected_day){
+    if (this.state.start_time && this.state.selected_day || this.state.stop_time && this.state.selected_day){
       this.handleEventSubmit();
     }
   },
 
   handleEventSubmit: function handleEventSubmit(){
-    var submittedEvent;
-    $.post( `/api/switches/${this.props.currSwitch.id}?event=${JSON.submittedEvent}`, function( data ) {
-      $( ".result" ).html( data );
+    var selected_day = this.state.selected_day;
+    var start_time = this.state.start_time;
+    var stop_time = this.state.stop_time;
+
+    if (start_time){
+      var start_date = new Date(selected_day.getFullYear(), selected_day.getMonth(), selected_day.getDate(), start_time.getHours(), start_time.getMinutes())
+    }
+    if (stop_time){
+      var stop_date = new Date(selected_day.getFullYear(), selected_day.getMonth(), selected_day.getDate(), stop_time.getHours(), stop_time.getMinutes())
+    }
+
+    var submittedEvent = {
+      event: {
+        start_date: start_date || null,
+        stop_date: stop_date || null
+      }
+    }
+
+    $.post( `/api/switches/${this.props.currSwitch.id}`, submittedEvent, function( data ) {
+      debugger;
     });
   },
 
@@ -108,7 +125,6 @@ var CustomDialog = React.createClass({
             <div>
               <p>What time should the outlet turn on?</p>
               <TimePicker
-                format="ampm"
                 hintText="12hr Format"
                 value={this.state.start_time}
                 onChange={this.handleStartTime}
@@ -120,7 +136,6 @@ var CustomDialog = React.createClass({
             <div>
               <p>What time should the outlet turn off?</p>
               <TimePicker
-                format="ampm"
                 hintText="12hr Format"
                 value={this.state.stop_time}
                 onChange={this.handleStopTime}

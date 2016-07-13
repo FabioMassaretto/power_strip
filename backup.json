@@ -1,0 +1,32 @@
+{  
+   "switches":[  
+      {  
+         "id":"sw1",
+         "state":"on",
+         "name":"Lamp"
+      },
+      {  
+         "id":"sw2",
+         "state":"on",
+         "name":"Switch #2"
+      },
+      {  
+         "id":"sw3",
+         "state":"off",
+         "name":"Switch #3"
+      },
+      {  
+         "id":"sw4",
+         "state":"off",
+         "name":"Switch #4"
+      },
+      {  
+         "id":"sw5",
+         "state":"on",
+         "name":"Monitor"
+      }
+   ],
+   "events":[  
+
+   ]
+}

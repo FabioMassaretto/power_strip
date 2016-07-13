@@ -38,6 +38,7 @@ var CustomDialog = React.createClass({
     }
   },
 
+
   // Dialog open and close
   handleOpen : function handleOpen(){
     this.setState({open: true});
@@ -45,8 +46,17 @@ var CustomDialog = React.createClass({
 
   handleClose : function handleClose(){
     this.setState({open:false});
+    if (this.state.start_time && this.state.stop_time && this.state.selected_day){
+      this.handleEventSubmit();
+    }
   },
 
+  handleEventSubmit: function handleEventSubmit(){
+    var submittedEvent;
+    $.post( `/api/switches/${this.props.currSwitch.id}?event=${JSON.submittedEvent}`, function( data ) {
+      $( ".result" ).html( data );
+    });
+  },
 
   // Handle Stepper Rendering
   handleNext : function handleNext (){
@@ -140,6 +150,7 @@ var CustomDialog = React.createClass({
           open={this.state.open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
+
         >
           <Stepper linear={false} activeStep={this.state.stepIndex}>
             <Step>

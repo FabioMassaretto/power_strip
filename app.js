@@ -10,13 +10,46 @@ const app = express();
 // local state
 const state = [];
 
-// saved JSON info
+
+function saveState (){
+  var parsed = JSON.parse(data);
+
+  for (i=0;i<state.length;i++){
+    if(parsed[i]) parsed[i].name = state[i].name;
+    if(parsed[i]) parsed[i].state = state[i].state;
+
+  }
+
+
+  fs.writeFile('./saveState.json', JSON.stringify(parsed) )
+}
+
+
+
+// Create switch objects for the state
+function init(){
+  for (i=1;i<=5;i++){
+    state.push(new Switch(i));
+  }
+  for (i=1;i<=5;i++){
+    var str = offString(i);
+    PythonShell.run(str, function (err) {
+      if (!process.env.DEV){
+        if (err) throw err;
+      } 
+    });
+  }
+  
+}
+
+// Update switch objects in state with saved data
 var readableStream = fs.createReadStream('saveState.json');
 var data = ''
 
 readableStream.on('data', function(chunk) {
     data+=chunk;
 });
+
 
 readableStream.on('end', function() {
   var parsed = JSON.parse(data);
@@ -39,35 +72,8 @@ readableStream.on('end', function() {
 });
 
 
-function saveState (){
-  var parsed = JSON.parse(data);
 
-  for (i=0;i<state.length;i++){
-    if(parsed[i]) parsed[i].name = state[i].name;
-    if(parsed[i]) parsed[i].state = state[i].state;
-
-  }
-
-
-  fs.writeFile('./saveState.json', JSON.stringify(parsed) )
-}
-
-
-function init(){
-  for (i=1;i<=5;i++){
-    state.push(new Switch(i));
-  }
-  for (i=1;i<=5;i++){
-    var str = offString(i);
-    PythonShell.run(str, function (err) {
-      if (!process.env.DEV){
-        if (err) throw err;
-      } 
-    });
-  }
-  
-}
-
+// needed due to a quirk with PythonShell
 function onString(number){
   return './public/python/scripts/sw' + number + '_on.py'
 }
@@ -75,12 +81,16 @@ function offString(number){
   return './public/python/scripts/sw' + number + '_off.py'
 }
 
+
+
 function getSwitch(string){
   return state.filter(function(element){
     return element.id === string;
   })[0]
 }
 
+
+// Switch constructor
 function Switch(number){
   this.id = 'sw' + number
   this.state = "off"
@@ -107,7 +117,8 @@ function Switch(number){
   }
 }
 
-var jsonParser = bodyParser.json();
+
+app.use(bodyParser.urlencoded({ extended: true }))
 
 
 app.use(express.static(__dirname + '/public'));
@@ -127,7 +138,17 @@ app.get('/api/switches/:id', function(req, res){
 
 app.post('/api/switches/:id', function(req, res){
   var found = getSwitch(req.params.id);
-  found.toggle();
+  
+
+  eval(require('locus'))
+  if (req.query.event){
+    var event = JSON.parse(req.query.event);
+    res.json(event)
+  }
+  else {
+    found.toggle();
+  }
+
   saveState();
   res.json(found)
 })

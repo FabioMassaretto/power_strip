@@ -1,6 +1,8 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { browserHistory, Router, Route, IndexRoute } from 'react-router'
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 // Needed for onTouchTap
@@ -11,15 +13,21 @@ injectTapEventPlugin();
 import App from './modules/app.jsx'
 import Home from './modules/home.jsx'
 import About from './modules/About.jsx'
-import SwitchView from './modules/SwitchView.jsx'
+import Schedule from './modules/tempSchedule.jsx'
 
 
 render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      <IndexRoute component={Home} />
-      <Route path="about" component={About}/>
-      <Route path="switches/:id" component={SwitchView}/>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <IndexRoute component={Home} />
+      </MuiThemeProvider>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Route path="about" component={About}/>
+      </MuiThemeProvider>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Route path="schedule" component={Schedule}/>
+      </MuiThemeProvider>
     </Route>
   </Router>
   ), document.getElementById('app'))

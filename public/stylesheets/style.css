@@ -95,6 +95,10 @@ h1 {
   color:white;
 }
 
+#Schedule {
+  margin-top: 20px;
+}
+
 .wrapper {
   height: 100%;
   margin-top: 10vh;

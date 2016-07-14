@@ -4,30 +4,9 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
-import {
-  Step,
-  Stepper,
-  StepButton,
-} from 'material-ui/Stepper';
-
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import $ from 'jquery';
 
 export default React.createClass({
-  render: function() {
-
-    return (
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <CustomDialog
-          currSwitch={this.props.currSwitch}
-        />
-      </MuiThemeProvider>  
-    );
-  }
-})
-
-var CustomDialog = React.createClass({
   getInitialState : function getInitialState(){
     return {
       open: false,
@@ -37,7 +16,6 @@ var CustomDialog = React.createClass({
       selected_day: null,
     }
   },
-
 
   // Dialog open and close
   handleOpen : function handleOpen(){
@@ -107,43 +85,43 @@ var CustomDialog = React.createClass({
     this.setState({selected_day: date})
   },
 
-  getStepContent: function (stepIndex) {
-      switch (stepIndex) {
-        case 0:
-          return (
-            <div>
-              <p>Choose the day for this activity</p>
-              <DatePicker 
-                hintText="Start Day"
-                value={this.state.selected_day}
-                onChange={this.handleSelectDate}
-              />
-            </div>
-          );
-        case 1:
-          return (
-            <div>
-              <p>What time should the outlet turn on?</p>
-              <TimePicker
-                hintText="12hr Format"
-                value={this.state.start_time}
-                onChange={this.handleStartTime}
-              />
-            </div>
-          );
-        case 2:
-          return (
-            <div>
-              <p>What time should the outlet turn off?</p>
-              <TimePicker
-                hintText="12hr Format"
-                value={this.state.stop_time}
-                onChange={this.handleStopTime}
-              />
-            </div>
-          );
-      }
-  },
+  // getStepContent: function (stepIndex) {
+  //     switch (stepIndex) {
+  //       case 0:
+  //         return (
+  //           <div>
+  //             <p>Choose the day for this activity</p>
+  //             <DatePicker 
+  //               hintText="Start Day"
+  //               value={this.state.selected_day}
+  //               onChange={this.handleSelectDate}
+  //             />
+  //           </div>
+  //         );
+  //       case 1:
+  //         return (
+  //           <div>
+  //             <p>What time should the outlet turn on?</p>
+  //             <TimePicker
+  //               hintText="12hr Format"
+  //               value={this.state.start_time}
+  //               onChange={this.handleStartTime}
+  //             />
+  //           </div>
+  //         );
+  //       case 2:
+  //         return (
+  //           <div>
+  //             <p>What time should the outlet turn off?</p>
+  //             <TimePicker
+  //               hintText="12hr Format"
+  //               value={this.state.stop_time}
+  //               onChange={this.handleStopTime}
+  //             />
+  //           </div>
+  //         );
+  //     }
+  // },
 
   render: function(){
 
@@ -165,25 +143,7 @@ var CustomDialog = React.createClass({
           open={this.state.open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
-
         >
-          <Stepper linear={false} activeStep={this.state.stepIndex}>
-            <Step>
-              <StepButton onClick={()=>this.setStep(0)}> 
-                Select a day
-              </StepButton>
-            </Step>
-            <Step>
-              <StepButton onClick={()=>this.setStep(1)}>
-                Time on
-              </StepButton>
-            </Step>
-            <Step>
-              <StepButton onClick={()=>this.setStep(2)}>
-                Time off
-              </StepButton>
-            </Step>
-          </Stepper>
           <div>
             <div>{this.getStepContent(this.state.stepIndex)}</div>
             <div style={{marginTop:12}}>

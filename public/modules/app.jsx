@@ -149,7 +149,9 @@ export default React.createClass({
             />
             { children }
             <MuiThemeProvider muiTheme={getMuiTheme()}>
-              <Schedule/>
+              <Schedule
+                switches={this.state.switches}
+              />
             </MuiThemeProvider>
       </div>
     )

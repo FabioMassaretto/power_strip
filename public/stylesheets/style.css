@@ -108,6 +108,10 @@ h1 {
 #Schedule {
   margin-top: 20px;
 }
+.eventContent {
+  display:inline-block;
+  margin:15px;
+}
 
 .wrapper {
   height: 100%;

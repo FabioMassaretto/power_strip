@@ -25,7 +25,7 @@ export default React.createClass({
       if (document.hasFocus()){
         this.checkServerState();
       }
-    }, 10000)
+    }, 1000)
   },
 
   checkServerState: function checkServerState(){

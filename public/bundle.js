@@ -26374,7 +26374,7 @@
 	      if (document.hasFocus()) {
 	        _this.checkServerState();
 	      }
-	    }, 10000);
+	    }, 1000);
 	  },
 
 	  checkServerState: function checkServerState() {

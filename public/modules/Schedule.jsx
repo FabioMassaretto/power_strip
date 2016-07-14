@@ -46,7 +46,7 @@ var CustomDialog = React.createClass({
 
   handleClose : function handleClose(){
     this.setState({open:false});
-    if (this.state.start_time && this.state.selected_day || this.state.stop_time && this.state.selected_day){
+    if ( (this.state.start_time && this.state.selected_day) || (this.state.stop_time && this.state.selected_day) ){
       this.handleEventSubmit();
     }
   },

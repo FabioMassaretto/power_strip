@@ -8,13 +8,13 @@ const bodyParser= require('body-parser');
 const path = require('path')
 const app = express();
 
-// local state
+// Information held in server memory
 const state = [];
 const eventQueue = [];
 const pendingEvents = {};
 var uniqueEvents = 0;
 
-
+// makes sure that name and state are 
 function saveState (){
   var parsed = JSON.parse(data);
 

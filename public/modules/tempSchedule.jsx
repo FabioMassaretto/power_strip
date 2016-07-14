@@ -8,6 +8,7 @@ import TimePicker from 'material-ui/TimePicker';
 import $ from 'jquery';
 
 import EventTile from './EventTile.jsx';
+import DialogScreen from './DialogScreen.jsx'
 
 const IntlPolyfill = require('intl');
 var DateTimeFormat = global.Intl.DateTimeFormat || IntlPolyfill.DateTimeFormat;
@@ -35,7 +36,8 @@ export default React.createClass({
       open: false,
       default_day: default_day,
       dialog_title:"Schedule an Event",
-      step:'start',
+      step:'switch_select',
+      next_step: "decide_recurring",
       prior_step: null,
       close_label: 'cancel',
       dialog_button_focused: false,
@@ -103,44 +105,66 @@ export default React.createClass({
 
     this.setState({event_content: updated_event});
   },
+  
+  decideRecurring: function decideRecurring(input){
+    this.state.event_content.event_type = input;
+    
+    var next = (input === "single") ? "single_date" : "recurring";
+    this.handleStep(next);
+  },
 
-  setStep: function setStep(input){
+  handleStep: function handleStep(input){
+
+    var prior = this.state.step;
 
     switch (input){
-      case "start":
+
+      case "switch_select":
+        if (this.state.event_content.event_type){
+          return this.setState({
+            step:"switch_select",
+            prior_step: null,
+            next_step: "decide_recurring",
+            dialog_title: "Select Switches"
+          })
+        }
+
+      case "decide_recurring":
         return this.setState({
-            step:"start", 
-            prior_step:null, 
+            step:"decide_recurring", 
+            prior_step:"switch_select",
+            next_step: ( (this.state.event_content.event_type === "single") ? "single" : "recurring") || null,
             dialog_title: "Schedule an Event", 
           }
         );
 
       // Single Event Branch 
+
       case "single_date":
         this.updateEventContent("event_type", "single")
+        
         return this.setState({
-            step:"single_date", 
-            prior_step:"start",
-            dialog_title:"Single Event", 
-           }
-        );
-      case 'single_start_time':
-        return this.setState({
-          step:"single_start_time",
-          prior_step:"single_date",
+          step:"single_date", 
+          prior_step:"switch_select",
+          next_step:"single_time",
+          dialog_title:"Date Select", 
         });
-      case "switch_select":
+
+      case 'single_time':
         return this.setState({
-          step:"switch_select"
-        })
+          step:"single_time",
+          prior_step:"single_date",
+          next_step:null,
+          dialog_title:"Time Select"
+        });
 
       // Recurring Event Branch
       case "recurring":
-        this.updateEventContent("event_type", "single")
+        this.updateEventContent("event_type", "recurring")
         return this.setState({
-            step:"recurring_days", 
-            prior_step:"start",
-            dialog_title:"Recurring Event", 
+            step:"recurring", 
+            prior_step:"switch_select",
+            dialog_title:"Days Select", 
            }
         );
       
@@ -153,70 +177,65 @@ export default React.createClass({
     };
 
     switch(step){
-      case "start":
-        return (
-          <div>
-            <p>Is your new event single, or recurring?</p>
-            <RaisedButton label="Single" style={style} onTouchTap={()=>this.setStep('single_date')}/>
-            <RaisedButton label="Recurring" style={style} onTouchTap={()=>this.setStep('recurring_days')}/>
-          </div>
+      case "switch_select":
+        return(
+          <DialogScreen 
+            default_day={this.state.default_day}
+            prompt={"Which switches are this event for?"}
+            prior_step={this.state.prior_step}
+            next_step={this.state.next_step}
+            event_content={this.state.event_content}
+            show_event_content={false}
+            handleStep={this.handleStep}
+            back_disabled={true}
+          />
         );
+
+      case "decide_recurring":
+        return(
+          <DialogScreen 
+            prompt={"Will your event be single, or recurring?"}
+            prior_step={this.state.prior_step}
+            next_step={this.state.next_step}
+            nextDiabled={this.state.event_content.event_type}
+            handleStep={this.handleStep}
+            event_content={this.state.event_content}
+            decideRecurring={this.decideRecurring}
+          />
+        );
+
+      // Single Event Tree  
       case "single_date":
         return (
-          <div>
-            <EventTile 
-              event_content={this.state.event_content}
-            />
-            <hr/>
-            <p>What day will the event occur?</p>
-            <DatePicker 
-              hintText="Start Day"
-              value={this.state.event_content.selected_day}
-              onChange={this.handleSelectDate}
-              formatDate={new DateTimeFormat('en-US', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric',
-              }).format}
-            />
-            <RaisedButton
-              label={"back"}
-              keyboardFocused={false}
-              onTouchTap={()=>this.setStep(this.state.prior_step)}
-            />
-            <RaisedButton
-              label={"next"}
-              primary={true}
-              onTouchTap={()=>this.setStep(this.setStep('single_start_time'))}
-            />
-          </div>
+          <DialogScreen 
+            pickerType="DatePicker"
+            default_day={this.state.default_day}
+            prompt={"What day will the event occur?"}
+            prior_step={this.state.prior_step}
+            next_step={this.state.next_step}
+            event_content={this.state.event_content}
+            show_event_content={true}
+            handleSelectDate={this.handleSelectDate}
+            handleStep={this.handleStep}
+          />
         );
-      case "single_start_time":
+      case "single_time":
         return (
-          <div>
-            <EventTile 
-              event_content={this.state.event_content}
-            />
-            <p>What time should the event begin?</p>
-            <TimePicker
-              hintText="Select Time"
-              keyboardFocused={true}
-              value={this.state.event_content.start_time}
-              defaultTime={this.state.default_day}
-              onChange={this.handleStartTime}
-            />
-            <RaisedButton
-              label={"back"}
-              keyboardFocused={false}
-              onTouchTap={()=>this.setStep(this.state.prior_step)}
-            />
-            <RaisedButton
-              label={"next"}
-              primary={true}
-              onTouchTap={()=>this.setStep(this.setStep('switch_select'))}
-            />
-          </div>
+          <DialogScreen 
+            pickerType="TimePicker"
+            default_day={this.state.default_day}
+            prompt={"Add a time to turn the switch on or off"}
+            prior_step={this.state.prior_step}
+            next_step={this.state.next_step}
+            event_content={this.state.event_content}
+            show_event_content={true}
+            handleStartTime={this.handleStartTime}
+            handleStopTime={this.handleStopTime}
+            handleStep={this.handleStep}
+          />
         );
+
+      // Recurring event tree
       case "recurring":
         return (
           <div>

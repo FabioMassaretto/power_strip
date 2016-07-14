@@ -6,27 +6,6 @@ var  DateTimeFormat = IntlPolyfill.DateTimeFormat;
 
 export default React.createClass({
   
-  // revealContent: function revealContent(reveal){
-  //   switch(reveal){
-  //     case "none":
-  //       return (
-  //         <div></div>
-  //       );
-  //     case "event_type":
-  //       return (
-  //         <div>
-  //           <p>{"Event type: " + this.props.content.event_type}</p>
-  //         </div>
-  //       );
-  //     case "date":
-  //       return (
-  //         <div>
-  //           <p>{"Event type: " + this.props.content.event_type}</p>
-  //           <p>{"Day for event: " + this.props.content.selected_date}</p>
-  //         </div>
-  //       );
-  //   }
-  // },
   formatDay: function formatDay(){
     var options = {
       month:"long",

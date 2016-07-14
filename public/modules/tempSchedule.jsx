@@ -2,9 +2,12 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import $ from 'jquery';
+
+import EventTile from './EventTile.jsx';
 
 
 const customContentStyle = {
@@ -17,12 +20,15 @@ export default React.createClass({
   getInitialState : function getInitialState(){
     return {
       open: false,
+      dialog_title:"Schedule an Event",
       step:'start',
+      prior_step: null,
       start_time: null,
       stop_time: null,
       selected_day: null,
       close_label: 'cancel',
-      dialog_button_focused: false
+      dialog_button_focused: false,
+      event_content: {}
     }
   },
 
@@ -76,11 +82,11 @@ export default React.createClass({
   setStep: function setStep(input){
     switch (input){
       case "single":
-        return this.setState({step:"single"});
+        return this.setState({step:"single", prior_step:"start", dialog_title:"Single Event"});
       case "recurring":
-        return this.setState({step:"recurring"});
+        return this.setState({step:"recurring", prior_step:"start", dialog_title:"Recurring Event"});
       case "start":
-        return this.setState({step:"start"});
+        return this.setState({step:"start", prior_step:null, dialog_title:"Schedule an Event"});
     }
   },
 
@@ -93,7 +99,7 @@ export default React.createClass({
       case "start":
         return (
           <div>
-            <p>Is this event single, or recurring?</p>
+            <p>Is your new event single, or recurring?</p>
             <RaisedButton label="Single" style={style} onTouchTap={()=>this.setStep('single')}/>
             <RaisedButton label="Recurring" style={style} onTouchTap={()=>this.setStep('recurring')}/>
           </div>
@@ -101,7 +107,22 @@ export default React.createClass({
       case "single":
         return (
           <div>
-            <p>Single-time event</p>
+            <EventTile content={this.props.event_content}/>
+            <hr/>
+            <p>What day will the event occur?</p>
+            <DatePicker 
+              hintText="Start Day"
+              value={this.state.selected_day}
+              onChange={this.handleSelectDate}
+            />
+          </div>
+        );
+      case "recurring":
+        return (
+          <div>
+            <EventTile content={this.props.event_content}/>
+            <hr/>
+            <p>Which Days will this repeat on? </p>
           </div>
         );
     }
@@ -110,6 +131,12 @@ export default React.createClass({
   render: function() {
 
     const actions = [
+      <FlatButton
+        label={"back"}
+        disabled={!this.state.prior_step}
+        keyboardFocused={false}
+        onTouchTap={()=>this.setStep(this.state.prior_step)}
+      />,
       <FlatButton
         label={this.state.close_label}
         primary={true}
@@ -122,7 +149,7 @@ export default React.createClass({
       <div style={{width: '100%', margin: 'auto'}}>
         <RaisedButton label="Schedule New Event" onTouchTap={this.handleOpen}/>
         <Dialog
-          title={'Schedule an Event'}
+          title={this.state.dialog_title}
           actions={actions}
           modal={false}
           open={this.state.open}

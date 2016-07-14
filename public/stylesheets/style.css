@@ -86,6 +86,16 @@ h1 {
   padding:10px;
 }
 
+.eventCreator {
+  float:left;
+  clear: all;
+}
+
+.eventTile {
+  text-align: left;
+  margin: 20px;
+}
+
 .about {
   text-align: left;
   max-width: 75vw;

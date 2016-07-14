@@ -43758,6 +43758,10 @@
 
 	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
 
+	var _IconButton = __webpack_require__(447);
+
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+
 	var _DatePicker = __webpack_require__(436);
 
 	var _DatePicker2 = _interopRequireDefault(_DatePicker);
@@ -43769,6 +43773,10 @@
 	var _jquery = __webpack_require__(396);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _EventTile = __webpack_require__(490);
+
+	var _EventTile2 = _interopRequireDefault(_EventTile);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43784,12 +43792,15 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      open: false,
+	      dialog_title: "Schedule an Event",
 	      step: 'start',
+	      prior_step: null,
 	      start_time: null,
 	      stop_time: null,
 	      selected_day: null,
 	      close_label: 'cancel',
-	      dialog_button_focused: false
+	      dialog_button_focused: false,
+	      event_content: {}
 	    };
 	  },
 
@@ -43843,11 +43854,11 @@
 	  setStep: function setStep(input) {
 	    switch (input) {
 	      case "single":
-	        return this.setState({ step: "single" });
+	        return this.setState({ step: "single", prior_step: "start", dialog_title: "Single Event" });
 	      case "recurring":
-	        return this.setState({ step: "recurring" });
+	        return this.setState({ step: "recurring", prior_step: "start", dialog_title: "Recurring Event" });
 	      case "start":
-	        return this.setState({ step: "start" });
+	        return this.setState({ step: "start", prior_step: null, dialog_title: "Schedule an Event" });
 	    }
 	  },
 
@@ -43866,7 +43877,7 @@
 	          _react2.default.createElement(
 	            'p',
 	            null,
-	            'Is this event single, or recurring?'
+	            'Is your new event single, or recurring?'
 	          ),
 	          _react2.default.createElement(_RaisedButton2.default, { label: 'Single', style: style, onTouchTap: function onTouchTap() {
 	              return _this.setStep('single');
@@ -43879,18 +43890,45 @@
 	        return _react2.default.createElement(
 	          'div',
 	          null,
+	          _react2.default.createElement(_EventTile2.default, { content: this.props.event_content }),
+	          _react2.default.createElement('hr', null),
 	          _react2.default.createElement(
 	            'p',
 	            null,
-	            'Single-time event'
+	            'What day will the event occur?'
+	          ),
+	          _react2.default.createElement(_DatePicker2.default, {
+	            hintText: 'Start Day',
+	            value: this.state.selected_day,
+	            onChange: this.handleSelectDate
+	          })
+	        );
+	      case "recurring":
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(_EventTile2.default, { content: this.props.event_content }),
+	          _react2.default.createElement('hr', null),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Which Days will this repeat on? '
 	          )
 	        );
 	    }
 	  },
 
 	  render: function render() {
+	    var _this2 = this;
 
 	    var actions = [_react2.default.createElement(_FlatButton2.default, {
+	      label: "back",
+	      disabled: !this.state.prior_step,
+	      keyboardFocused: false,
+	      onTouchTap: function onTouchTap() {
+	        return _this2.setStep(_this2.state.prior_step);
+	      }
+	    }), _react2.default.createElement(_FlatButton2.default, {
 	      label: this.state.close_label,
 	      primary: true,
 	      keyboardFocused: this.state.dialog_button_focused,
@@ -43904,7 +43942,7 @@
 	      _react2.default.createElement(
 	        _Dialog2.default,
 	        {
-	          title: 'Schedule an Event',
+	          title: this.state.dialog_title,
 	          actions: actions,
 	          modal: false,
 	          open: this.state.open,
@@ -56452,6 +56490,39 @@
 	  muiTheme: _react.PropTypes.object.isRequired
 	};
 	exports.default = ClockMinutes;
+
+/***/ },
+/* 490 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+	  displayName: "EventTile",
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { className: "eventTile" },
+	      _react2.default.createElement(
+	        "p",
+	        null,
+	        "Event type:"
+	      ),
+	      this.props.content
+	    );
+	  }
+	});
 
 /***/ }
 /******/ ]);

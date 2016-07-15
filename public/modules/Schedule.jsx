@@ -265,6 +265,7 @@ export default React.createClass({
             next_step={this.state.next_step}
             event_content={this.state.event_content}
             show_event_content={false}
+            decideRecurring={false}
             handleStep={this.handleStep}
             back_disabled={true}
             use_stuff_selector={true}

@@ -133,7 +133,10 @@ export default React.createClass({
       return (
         <RaisedButton 
           label={"back"}
-          onTouchTap={()=>this.props.handleStep(this.props.prior_step)}
+          onTouchTap={()=>{
+            console.log(this.props.prior_step)
+            this.props.handleStep(this.props.prior_step)
+          }}
           disabled={this.props.back_disabled}
         />
       )

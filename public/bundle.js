@@ -44034,6 +44034,7 @@
 	          next_step: this.state.next_step,
 	          event_content: this.state.event_content,
 	          show_event_content: false,
+	          decideRecurring: false,
 	          handleStep: this.handleStep,
 	          back_disabled: true,
 	          use_stuff_selector: true,
@@ -60759,7 +60760,8 @@
 	      return _react2.default.createElement(_RaisedButton2.default, {
 	        label: "back",
 	        onTouchTap: function onTouchTap() {
-	          return _this2.props.handleStep(_this2.props.prior_step);
+	          console.log(_this2.props.prior_step);
+	          _this2.props.handleStep(_this2.props.prior_step);
 	        },
 	        disabled: this.props.back_disabled
 	      });

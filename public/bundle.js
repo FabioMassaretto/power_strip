@@ -43899,7 +43899,7 @@
 	                  start_date: start_time || null,
 	                  stop_date: stop_time || null,
 	                  switches: selected_switches || null,
-	                  weekDays: week_days
+	                  weekDays: weekDays
 	                }
 	              };
 	            }

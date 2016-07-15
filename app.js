@@ -81,6 +81,21 @@ readableStream.on('end', function() {
         eventQueue.push(parsed.events[i]);
       }
     }
+    if (parsed.events[i].stop_date){
+      var checkDate = new Date(parsed.events[i].stop_date); 
+      var now = new Date();
+      if (checkDate > now){
+        var checkedEvent = new Event(parsed.events[i]);
+        if (checkedEvent.recurring) {
+          scheduleRecurringEvent;
+        }
+        else {
+          scheduleSingleEvent(checkedEvent);
+        }
+
+        eventQueue.push(parsed.events[i]);
+      }
+    }
   }
 
   for (i=0;i<state.length;i++){
@@ -200,10 +215,10 @@ function scheduleOff(rule, eventObject){
     for (i=0;i<eventObject.switches.length;i++){
       var foundSwitch = getSwitch(eventObject.switches[i]);
       if(foundSwitch.state === "on"){ 
-        foundSwitch.toggle();
+        foundSwitch.toggle(); 
       }
     }
-    saveState();
+    saveState()
   });
 
   pendingEvents[eventObject.id].off = job;

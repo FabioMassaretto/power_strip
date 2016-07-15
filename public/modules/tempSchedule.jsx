@@ -19,7 +19,6 @@ const customContentStyle = {
   maxWidth: 'none',
 };
 
-
 export default React.createClass({
 
   getInitialState : function getInitialState(){
@@ -42,11 +41,12 @@ export default React.createClass({
       close_label: 'cancel',
       dialog_button_focused: false,
       event_content: {
+        selected_switches: ['sw1'],
         selected_day: default_day,
-        start_time: null,
+        start_time: default_day,
         stop_time: null,
       }
-    }
+    };
   },
 
   handleOpen : function handleOpen(){
@@ -55,41 +55,83 @@ export default React.createClass({
 
   handleClose : function handleClose(){
     this.setState({open:false});
-    if ( (this.state.start_time && this.state.selected_day) || (this.state.stop_time && this.state.selected_day) ){
-      this.handleEventSubmit();
-    }
   },
 
-  handleEventSubmit: function handleEventSubmit(){
-    var selected_day = this.state.event_content.selected_day;
-    var start_time = this.state.event_content.start_time;
-    var stop_time = this.state.event_content.stop_time;
-
-    if (start_time){
-      var start_date = new Date(selected_day.getFullYear(), selected_day.getMonth(), selected_day.getDate(), start_time.getHours(), start_time.getMinutes())
-    }
-    if (stop_time){
-      var stop_date = new Date(selected_day.getFullYear(), selected_day.getMonth(), selected_day.getDate(), stop_time.getHours(), stop_time.getMinutes())
+  resetState : function resetState(){
+    var default_day = new Date();
+    
+    if (default_day.getHours()>=12) {
+      default_day.setDate(default_day.getDate()+1)
     }
 
-    var submittedEvent = {
-      event: {
-        start_date: start_date || null,
-        stop_date: stop_date || null
+    default_day.setHours(12,0,0,0);
+
+    this.setState({
+      open: false,
+      default_day: default_day,
+      dialog_title:"Schedule an Event",
+      step:'switch_select',
+      next_step: "decide_recurring",
+      prior_step: null,
+      close_label: 'cancel',
+      dialog_button_focused: false,
+      event_content: {
+        selected_switches: ['sw1'],
+        selected_day: default_day,
+        start_time: null,
+        stop_time: null,
       }
-    }
-
-    $.post( `/api/switches/${this.props.currSwitch.id}`, submittedEvent, function( data ) {
-      console.log(data);
     });
   },
 
+  handleEventSubmit: function handleEventSubmit(){
+
+    if (this.state.event_content.selected_switches.length > 0){
+      if (this.state.event_content.event_type === "single"){
+        if (this.state.event_content.selected_day){
+          if (this.state.event_content.start_time || this.state.event_content.stop_time){
+            this.setState({open:false});
+
+            var selected_day = this.state.event_content.selected_day;
+            var start_time = this.state.event_content.start_time;
+            var stop_time = this.state.event_content.stop_time;
+
+            if (start_time){
+              var start_date = new Date(selected_day.getFullYear(), selected_day.getMonth(), selected_day.getDate(), start_time.getHours(), start_time.getMinutes())
+            }
+            if (stop_time){
+              var stop_date = new Date(selected_day.getFullYear(), selected_day.getMonth(), selected_day.getDate(), stop_time.getHours(), stop_time.getMinutes())
+            }
+
+            var submittedEvent = {
+              event: {
+                start_date: start_date || null,
+                stop_date: stop_date || null,
+                switches: this.state.event_content.selected_switches || null
+              }
+            }
+
+            $.post( '/api/events/single', submittedEvent, function( data ) {
+              console.log(data);
+            });
+
+            this.resetState();
+          }
+        }
+      }
+      else {
+        console.log('Feature in progress...')
+      }
+    }
+  },
+
   handleStartTime: function handleStartTime(event, date){
-    this.updateEventContent("start_date", date);
+    debugger;
+    this.updateEventContent("start_time", date);
   },
 
   handleStopTime: function handleStopTime(event, date){
-    this.updateEventContent("stop_date", date);
+    this.updateEventContent("stop_time", date);
   },
 
   handleSelectDate: function handleSelectDate(event, date){
@@ -229,9 +271,11 @@ export default React.createClass({
             next_step={this.state.next_step}
             event_content={this.state.event_content}
             show_event_content={true}
+            hide_next_button={true}
             handleStartTime={this.handleStartTime}
             handleStopTime={this.handleStopTime}
             handleStep={this.handleStep}
+            handleEventSubmit={this.handleEventSubmit}
           />
         );
 
@@ -243,7 +287,7 @@ export default React.createClass({
               event_content={this.state.event_content}
             />
             <hr/>
-            <p>Which Days will this repeat on? </p>
+            <p>Which Days will this repeat on?</p>
           </div>
         );
     }

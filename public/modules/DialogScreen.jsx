@@ -3,6 +3,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import EventTile from './EventTile.jsx';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 /*
 Expected Props:
@@ -31,27 +33,72 @@ var DateTimeFormat = global.Intl.DateTimeFormat || IntlPolyfill.DateTimeFormat;
 
 export default React.createClass({
 
+  getInitialState: function getInitialState(){
+    return {
+      selectValue: "on",
+      submitReady: false
+    }
+  },
+
+  componentDidMount: function componentDidMount(){
+    this.handleTime()
+  },
+
+  handleSelectChange: function handleSelectChange(){
+    ( this.state.selectValue === "on" ) ? this.setState({selectValue: "off"}) : this.setState({selectValue: "on"})
+  },
+
+  handleTime: function handleTime(){
+    ( this.state.selectValue === "on" ) ? ()=>this.props.handleStartTime() : ()=>this.props.handleStopTime()
+  },
+
+  checkTimeValue: function checkTimeValue(){
+    if (this.state.selectValue === "on"){
+      return this.props.event_content.start_time;
+    }
+    else {
+      return this.props.event_content.stop_time;
+    }
+  },
+
   showPicker: function showPicker(){
     switch(this.props.pickerType){
       case "TimePicker":
-        if (this.props.handleStartTime){
+        if (this.state.selectValue === "on"){
           return (
-            <TimePicker 
-              hintText="Select Time"
-              value={this.props.event_content.start_time}
-              defaultTime={this.props.default_day}
-              onChange={this.props.handleStartTime}
-            />
-          )
+            <div>
+              <p>Turn selected switches </p>
+              <SelectField value={this.state.selectValue} onChange={this.handleSelectChange}>
+                <MenuItem value={'on'} primaryText="on" />
+                <MenuItem value={'off'} primaryText="off" />
+              </SelectField>
+              <p>at time: </p>
+              <TimePicker 
+                hintText="Select Time"
+                value={this.props.event_content.start_time}
+                defaultTime={this.props.default_day}
+                onChange={this.props.handleStartTime}
+              />
+            </div>
+          );
+        } else {
+          return (
+            <div>
+              <p>Turn selected switches </p>
+              <SelectField value={this.state.selectValue} onChange={this.handleSelectChange}>
+                <MenuItem value={'on'} primaryText="on" />
+                <MenuItem value={'off'} primaryText="off" />
+              </SelectField>
+              <p>at time: </p>
+              <TimePicker 
+                hintText="Select Time"
+                value={this.props.event_content.stop_time}
+                defaultTime={this.props.default_day}
+                onChange={this.props.handleStopTime}
+              />
+            </div>
+          );
         }
-        else return (
-          <TimePicker 
-            hintText="Select Time"
-            value={this.props.event_content.stop_time}
-            defaultTime={this.props.default_day}
-            onChange={this.props.handleStopTime}
-          />
-        );
       case "DatePicker":
         return (
           <DatePicker 
@@ -102,6 +149,16 @@ export default React.createClass({
           disabled={this.props.next_disabled}        
         />
       )
+    }
+    else {
+      return (
+        <RaisedButton 
+          label="Submit!"
+          primary={true}
+          onTouchTap={()=>this.props.handleEventSubmit()}
+          keyboardFocused={this.state.submitReady}
+        />
+      );
     }
   },
 

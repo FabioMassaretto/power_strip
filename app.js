@@ -70,10 +70,8 @@ readableStream.on('end', function() {
       var checkDate = new Date(parsed.events[i].start_date); 
       var now = new Date();
       if (checkDate > now){
-        scheduleEvent(parsed.events[i]);
-        
-        var foundSwitch = getSwitch(parsed.events[i].switchId);
-        var checkedEvent = new Event(parsed.events[i], foundSwitch);
+        scheduleSingleEvent(parsed.events[i]);
+        var checkedEvent = new SingleEvent(parsed.events[i]);
 
         eventQueue.push(parsed.events[i]);
       }
@@ -114,6 +112,11 @@ function getSwitch(string){
     return element.id === string;
   })[0]
 }
+function getEvent(string){
+  return state.filter(function(currEvent){
+    return currEvent.id == string;
+  })[0]
+}
 
 
 // Switch constructor
@@ -144,43 +147,38 @@ function Switch(number){
 }
 
 // Event constructor
-function Event(eventObject, foundSwitch){
+function SingleEvent(eventObject){
   this.id = uniqueEvents;
-  this.switchId = foundSwitch.id;
+  this.switches = eventObject.switches;
 
   uniqueEvents ++;
 
   if (eventObject.start_date){
-    this.start_date = {
-      date: eventObject.start_date,
-      switchId: foundSwitch.id,
-    };
-  }
+    this.start_date = eventObject.start_date
+  };
 
   if (eventObject.stop_date){
-    this.stop_date = {
-      date: eventObject.stop_date,
-      switchId: foundSwitch.id,
-    };
+    this.stop_date = eventObject.stop_date
   }
 }
 
-function scheduleEvent(eventObject){
-  var foundSwitch = getSwitch(eventObject.switchId);
+function scheduleSingleEvent(eventObject){
+
   pendingEvents[eventObject.id] = {};
 
 
-
   if (eventObject.start_date){
-    var start_date = new Date(eventObject.start_date.date);
 
-  
+    var start_date = new Date(eventObject.start_date);
 
     var job = schedule.scheduleJob(start_date, function(){
-      if(foundSwitch.state === "off"){ 
-        foundSwitch.toggle();
-        saveState();
+      for (i=0;i<eventObject.switches.length;i++){
+        var foundSwitch = getSwitch(eventObject.switches[i]);
+        if(foundSwitch.state === "off"){ 
+          foundSwitch.toggle();
+        }
       }
+      saveState();
     });
 
     pendingEvents[eventObject.id].on = job;
@@ -193,14 +191,17 @@ function scheduleEvent(eventObject){
   }
 
   if (eventObject.stop_date){
-    var stop_date = new Date(eventObject.stop_date.date);
- 
 
+    var stop_date = new Date(eventObject.stop_date);
+ 
     var j = schedule.scheduleJob(stop_date, function(){
-      if(foundSwitch.state === "on"){ 
-        foundSwitch.toggle();
-        saveState();
+      for (i=0;i<eventObject.switches.length;i++){
+        var foundSwitch = getSwitch(eventObject.switches[i]);
+        if(foundSwitch.state === "on"){ 
+          foundSwitch.toggle();
+        }
       }
+      saveState();
     });
 
     pendingEvents[eventObject.id].off = j;
@@ -221,32 +222,42 @@ app.get('/', function(req, res){
   res.sendFile('index');
 })
 
+
+// Switch Routes
 app.get('/api/switches', function(req, res){
   res.send(state);
 })
 
 app.get('/api/switches/:id', function(req, res){
   var found = getSwitch(req.params.id);
-  res.json(found)
+  res.json(found);
 })
 
 app.post('/api/switches/:id', function(req, res){
   var foundSwitch = getSwitch(req.params.id);
+  foundSwitch.toggle();
+  saveState();
+  res.json(foundSwitch);
+})
 
-  if (req.body.event){
-    var newEvent = new Event(req.body.event, foundSwitch);
-    scheduleEvent(newEvent);
+// Event Routes
+app.get('/api/events', function(req, res){
+  res.send(eventQueue);
+})
+
+app.get('/api/events/:id', function(req,res){
+  var foundEvent = getEvent(req.params.id);
+  res.json(foundEvent);
+})
+
+app.post('/api/events/single', function(req, res){
+    var newEvent = new SingleEvent(req.body.event);
+    scheduleSingleEvent(newEvent);
+    
     eventQueue.push(newEvent);
 
     saveState();
     res.json(newEvent);
-
-  }
-  else {
-    foundSwitch.toggle();
-    saveState();
-    res.json(foundSwitch)
-  }
 })
 
 

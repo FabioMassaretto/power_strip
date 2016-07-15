@@ -70,14 +70,13 @@ readableStream.on('end', function() {
       var checkDate = new Date(parsed.events[i].start_date); 
       var now = new Date();
       if (checkDate > now){
-        if (newEvent.recurring) {
+        var checkedEvent = new Event(parsed.events[i]);
+        if (checkedEvent.recurring) {
           scheduleRecurringEvent;
         }
         else {
-          scheduleSingleEvent(newEvent);
+          scheduleSingleEvent(checkedEvent);
         }
-
-        var checkedEvent = new Event(parsed.events[i]);
 
         eventQueue.push(parsed.events[i]);
       }
@@ -156,8 +155,9 @@ function Switch(number){
 function Event(eventObject){
   this.id = uniqueEvents;
   this.switches = eventObject.switches;
+  this.recurring = null;
 
-  if (eventObject.weekDays.length > 0){
+  if (eventObject.weekDays){
     this.recurring = true;
     this.weekDays = [];
     for (i=0;i<eventObject.weekDays.length;i++){
@@ -176,45 +176,41 @@ function Event(eventObject){
   }
 }
 
-function scheduleOn(rule){
-  return (
-    var j = schedule.scheduleJob(rule, function(){
-      var job = schedule.scheduleJob(start_date, function(){
-        for (i=0;i<eventObject.switches.length;i++){
-          var foundSwitch = getSwitch(eventObject.switches[i]);
-          if(foundSwitch.state === "off"){ 
-            foundSwitch.toggle();
-          }
-        }
-        saveState();
-      });
-
-      pendingEvents[eventObject.id].on = job;
-
-      pendingEvents[eventObject.id].cancelOn = function(){
-        pendingEvents[eventObject.id].on.cancel();
+function scheduleOn(rule, eventObject){
+  var job = schedule.scheduleJob(rule, function(){
+    for (i=0;i<eventObject.switches.length;i++){
+      var foundSwitch = getSwitch(eventObject.switches[i]);
+      if(foundSwitch.state === "off"){ 
+        foundSwitch.toggle();
       }
-    });
-  )
+    }
+    saveState();
+  });
+
+  pendingEvents[eventObject.id].on = job;
+
+  pendingEvents[eventObject.id].cancelOn = function(){
+    pendingEvents[eventObject.id].on.cancel();
+  }
 }
 
-function scheduleOff(rule){
-  return (
-    var j = schedule.scheduleJob(stop_date, function(){
-      for (i=0;i<eventObject.switches.length;i++){
-        var foundSwitch = getSwitch(eventObject.switches[i]);
-        if(foundSwitch.state === "on"){ 
-          foundSwitch.toggle();
-        }
+
+function scheduleOff(rule, eventObject){
+  var job = schedule.scheduleJob(rule, function(){
+    for (i=0;i<eventObject.switches.length;i++){
+      var foundSwitch = getSwitch(eventObject.switches[i]);
+      if(foundSwitch.state === "on"){ 
+        foundSwitch.toggle();
       }
-      saveState();
-    });
+    }
+    saveState();
+  });
 
-    pendingEvents[eventObject.id].off = j;
+  pendingEvents[eventObject.id].off = job;
 
-    pendingEvents[eventObject.id].cancelOff = function(){
-      pendingEvents[eventObject.id].off.cancel();
-    });
+  pendingEvents[eventObject.id].cancelOff = function(){
+    pendingEvents[eventObject.id].off.cancel();
+  }
 }
 
 
@@ -228,7 +224,7 @@ function scheduleRecurringEvent(eventObject){
     rule.hour = start_time.getHours();
     rule.minute = start_time.getMinutes();
 
-    scheduleOn(rule);
+    scheduleOn(rule, eventObject);
   }
   
   if (eventObject.stop_date){
@@ -238,7 +234,7 @@ function scheduleRecurringEvent(eventObject){
     rule.hour = start_time.getHours();
     rule.minute = start_time.getMinutes();
 
-    scheduleOff(rule);
+    scheduleOff(rule, eventObject);
   }
 
 
@@ -250,18 +246,17 @@ function scheduleSingleEvent(eventObject){
 
   pendingEvents[eventObject.id] = {};
 
-
   if (eventObject.start_date){
 
     var start_date = new Date(eventObject.start_date);
-    scheduleOn(start_date);
+    scheduleOn(start_date, eventObject);
 
   }
 
   if (eventObject.stop_date){
 
     var stop_date = new Date(eventObject.stop_date);
-    schedule_Off(stop_date);
+    scheduleOff(stop_date, eventObject);
 
   }
 }

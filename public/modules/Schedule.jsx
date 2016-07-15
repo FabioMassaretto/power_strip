@@ -90,6 +90,7 @@ export default React.createClass({
     var start_time = this.state.event_content.start_time;
     var stop_time = this.state.event_content.stop_time;
     var selected_switches = this.state.event_content.selected_switches;
+    var submittedEvent;
 
     if (this.state.event_content.selected_switches.length > 0){
       if (this.state.event_content.event_type === "single"){
@@ -104,19 +105,13 @@ export default React.createClass({
               var stop_date = new Date(selected_day.getFullYear(), selected_day.getMonth(), selected_day.getDate(), stop_time.getHours(), stop_time.getMinutes())
             }
 
-            var submittedEvent = {
+            submittedEvent = {
               event: {
                 start_date: start_date || null,
                 stop_date: stop_date || null,
                 switches: selected_switches || null
               }
             }
-
-            $.post( '/api/events/single', submittedEvent, function( data ) {
-              console.log(data);
-            });
-
-            this.resetState();
           }
         }
       }
@@ -126,7 +121,7 @@ export default React.createClass({
             if (this.state.event_content.start_time || this.state.event_content.stop_time){
               this.setState({open:false});
 
-              var submittedEvent = {
+              submittedEvent = {
                 event: {
                   start_date: start_time || null,
                   stop_date: stop_time || null,
@@ -140,6 +135,11 @@ export default React.createClass({
         }
 
       }
+      $.post( '/api/events', submittedEvent, function( data ) {
+        console.log(data);
+      });
+
+      this.resetState();
     }
   },
 

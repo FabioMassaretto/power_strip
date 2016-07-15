@@ -13,7 +13,7 @@ injectTapEventPlugin();
 import App from './modules/app.jsx'
 import Home from './modules/home.jsx'
 import About from './modules/About.jsx'
-import Schedule from './modules/tempSchedule.jsx'
+import Schedule from './modules/Schedule.jsx'
 
 
 render((

@@ -70,8 +70,14 @@ readableStream.on('end', function() {
       var checkDate = new Date(parsed.events[i].start_date); 
       var now = new Date();
       if (checkDate > now){
-        scheduleSingleEvent(parsed.events[i]);
-        var checkedEvent = new SingleEvent(parsed.events[i]);
+        if (newEvent.recurring) {
+          scheduleRecurringEvent;
+        }
+        else {
+          scheduleSingleEvent(newEvent);
+        }
+
+        var checkedEvent = new Event(parsed.events[i]);
 
         eventQueue.push(parsed.events[i]);
       }
@@ -147,9 +153,17 @@ function Switch(number){
 }
 
 // Event constructor
-function SingleEvent(eventObject){
+function Event(eventObject){
   this.id = uniqueEvents;
   this.switches = eventObject.switches;
+
+  if (eventObject.weekDays.length > 0){
+    this.recurring = true;
+    this.weekDays = [];
+    for (i=0;i<eventObject.weekDays.length;i++){
+      this.weekDays.push(eventObject.weekDays[i]);
+    }
+  } else this.recurring = false;
 
   uniqueEvents ++;
 
@@ -162,38 +176,30 @@ function SingleEvent(eventObject){
   }
 }
 
-function scheduleSingleEvent(eventObject){
-
-  pendingEvents[eventObject.id] = {};
-
-
-  if (eventObject.start_date){
-
-    var start_date = new Date(eventObject.start_date);
-
-    var job = schedule.scheduleJob(start_date, function(){
-      for (i=0;i<eventObject.switches.length;i++){
-        var foundSwitch = getSwitch(eventObject.switches[i]);
-        if(foundSwitch.state === "off"){ 
-          foundSwitch.toggle();
+function scheduleOn(rule){
+  return (
+    var j = schedule.scheduleJob(rule, function(){
+      var job = schedule.scheduleJob(start_date, function(){
+        for (i=0;i<eventObject.switches.length;i++){
+          var foundSwitch = getSwitch(eventObject.switches[i]);
+          if(foundSwitch.state === "off"){ 
+            foundSwitch.toggle();
+          }
         }
+        saveState();
+      });
+
+      pendingEvents[eventObject.id].on = job;
+
+      pendingEvents[eventObject.id].cancelOn = function(){
+        pendingEvents[eventObject.id].on.cancel();
       }
-      saveState();
     });
+  )
+}
 
-    pendingEvents[eventObject.id].on = job;
-
-
-    pendingEvents[eventObject.id].cancelOn = function(){
-      pendingEvents[eventObject.id].on.cancel();
-    }
-
-  }
-
-  if (eventObject.stop_date){
-
-    var stop_date = new Date(eventObject.stop_date);
- 
+function scheduleOff(rule){
+  return (
     var j = schedule.scheduleJob(stop_date, function(){
       for (i=0;i<eventObject.switches.length;i++){
         var foundSwitch = getSwitch(eventObject.switches[i]);
@@ -208,7 +214,55 @@ function scheduleSingleEvent(eventObject){
 
     pendingEvents[eventObject.id].cancelOff = function(){
       pendingEvents[eventObject.id].off.cancel();
-    }
+    });
+}
+
+
+function scheduleRecurringEvent(eventObject){
+  pendingEvents[eventObject.id] = {};
+
+  if (eventObject.start_date){
+    var start_date = new Date(eventObject.start_date);
+
+    var rule = new Schedule.RecurenceRule(); 
+    rule.hour = start_time.getHours();
+    rule.minute = start_time.getMinutes();
+
+    scheduleOn(rule);
+  }
+  
+  if (eventObject.stop_date){
+    var stop_date = new Date(eventObject.start_date);
+
+    var rule = new Schedule.RecurrenceRule();
+    rule.hour = start_time.getHours();
+    rule.minute = start_time.getMinutes();
+
+    scheduleOff(rule);
+  }
+
+
+
+}
+
+
+function scheduleSingleEvent(eventObject){
+
+  pendingEvents[eventObject.id] = {};
+
+
+  if (eventObject.start_date){
+
+    var start_date = new Date(eventObject.start_date);
+    scheduleOn(start_date);
+
+  }
+
+  if (eventObject.stop_date){
+
+    var stop_date = new Date(eventObject.stop_date);
+    schedule_Off(stop_date);
+
   }
 }
 
@@ -250,9 +304,10 @@ app.get('/api/events/:id', function(req,res){
   res.json(foundEvent);
 })
 
-app.post('/api/events/single', function(req, res){
-    var newEvent = new SingleEvent(req.body.event);
-    scheduleSingleEvent(newEvent);
+app.post('/api/events', function(req, res){
+    var newEvent = new Event(req.body.event);
+    if (newEvent.recurring) scheduleRecurringEvent;
+    else scheduleSingleEvent(newEvent);
     
     eventQueue.push(newEvent);
 

@@ -33432,9 +33432,9 @@
 
 	var _navbar2 = _interopRequireDefault(_navbar);
 
-	var _tempSchedule = __webpack_require__(398);
+	var _Schedule = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./Schedule.jsx\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
-	var _tempSchedule2 = _interopRequireDefault(_tempSchedule);
+	var _Schedule2 = _interopRequireDefault(_Schedule);
 
 	var _getMuiTheme = __webpack_require__(230);
 
@@ -33591,7 +33591,7 @@
 	      _react2.default.createElement(
 	        _MuiThemeProvider2.default,
 	        { muiTheme: (0, _getMuiTheme2.default)() },
-	        _react2.default.createElement(_tempSchedule2.default, {
+	        _react2.default.createElement(_Schedule2.default, {
 	          switches: this.state.switches
 	        })
 	      )
@@ -43861,16 +43861,17 @@
 	  },
 
 	  handleEventSubmit: function handleEventSubmit() {
+	    var weekDays = this.state.event_content.weekDays;
+	    var selected_day = this.state.event_content.selected_day;
+	    var start_time = this.state.event_content.start_time;
+	    var stop_time = this.state.event_content.stop_time;
+	    var selected_switches = this.state.event_content.selected_switches;
 
 	    if (this.state.event_content.selected_switches.length > 0) {
 	      if (this.state.event_content.event_type === "single") {
 	        if (this.state.event_content.selected_day) {
 	          if (this.state.event_content.start_time || this.state.event_content.stop_time) {
 	            this.setState({ open: false });
-
-	            var selected_day = this.state.event_content.selected_day;
-	            var start_time = this.state.event_content.start_time;
-	            var stop_time = this.state.event_content.stop_time;
 
 	            if (start_time) {
 	              var start_date = new Date(selected_day.getFullYear(), selected_day.getMonth(), selected_day.getDate(), start_time.getHours(), start_time.getMinutes());
@@ -43883,7 +43884,7 @@
 	              event: {
 	                start_date: start_date || null,
 	                stop_date: stop_date || null,
-	                switches: this.state.event_content.selected_switches || null
+	                switches: selected_switches || null
 	              }
 	            };
 
@@ -43895,7 +43896,22 @@
 	          }
 	        }
 	      } else {
-	        console.log('Feature in progress...');
+	        if (this.state.event_content.start_time || this.state.event_content.stop_time) {
+	          if (this.state.event_content.weekDays.length > 0) {
+	            if (this.state.event_content.start_time || this.state.event_content.stop_time) {
+	              this.setState({ open: false });
+
+	              var submittedEvent = {
+	                event: {
+	                  start_date: start_time || null,
+	                  stop_date: stop_time || null,
+	                  switches: selected_switches || null,
+	                  weekDays: week_days
+	                }
+	              };
+	            }
+	          }
+	        }
 	      }
 	    }
 	  },

@@ -1,7 +1,7 @@
 import React from 'react'
 import $ from 'jquery'
 import NavBar from './navbar.jsx'
-import Schedule from './tempSchedule.jsx'
+import Schedule from './Schedule.jsx'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 

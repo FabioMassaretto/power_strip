@@ -85,16 +85,17 @@ export default React.createClass({
   },
 
   handleEventSubmit: function handleEventSubmit(){
+    var weekDays = this.state.event_content.weekDays;
+    var selected_day = this.state.event_content.selected_day;
+    var start_time = this.state.event_content.start_time;
+    var stop_time = this.state.event_content.stop_time;
+    var selected_switches = this.state.event_content.selected_switches;
 
     if (this.state.event_content.selected_switches.length > 0){
       if (this.state.event_content.event_type === "single"){
         if (this.state.event_content.selected_day){
           if (this.state.event_content.start_time || this.state.event_content.stop_time){
             this.setState({open:false});
-
-            var selected_day = this.state.event_content.selected_day;
-            var start_time = this.state.event_content.start_time;
-            var stop_time = this.state.event_content.stop_time;
 
             if (start_time){
               var start_date = new Date(selected_day.getFullYear(), selected_day.getMonth(), selected_day.getDate(), start_time.getHours(), start_time.getMinutes())
@@ -107,7 +108,7 @@ export default React.createClass({
               event: {
                 start_date: start_date || null,
                 stop_date: stop_date || null,
-                switches: this.state.event_content.selected_switches || null
+                switches: selected_switches || null
               }
             }
 
@@ -120,7 +121,24 @@ export default React.createClass({
         }
       }
       else {
-        console.log('Feature in progress...')
+        if (this.state.event_content.start_time || this.state.event_content.stop_time){
+          if (this.state.event_content.weekDays.length > 0){
+            if (this.state.event_content.start_time || this.state.event_content.stop_time){
+              this.setState({open:false});
+
+              var submittedEvent = {
+                event: {
+                  start_date: start_time || null,
+                  stop_date: stop_time || null,
+                  switches: selected_switches || null,
+                  weekDays: week_days
+                }
+              }
+
+            }
+          }
+        }
+
       }
     }
   },

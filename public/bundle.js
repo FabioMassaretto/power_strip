@@ -43799,14 +43799,7 @@
 
 
 	  getInitialState: function getInitialState() {
-	    var default_day = new Date();
-
-	    if (default_day.getHours() >= 12) {
-	      default_day.setDate(default_day.getDate() + 1);
-	    }
-
-	    default_day.setHours(12, 0, 0, 0);
-
+	    var default_day = this.getDefaultDay();
 	    return {
 	      open: false,
 	      default_day: default_day,
@@ -43817,9 +43810,9 @@
 	      close_label: 'cancel',
 	      dialog_button_focused: false,
 	      event_content: {
-	        selected_switches: ['sw1'],
+	        selected_switches: [],
 	        selected_day: default_day,
-	        start_time: default_day,
+	        start_time: null,
 	        stop_time: null
 	      }
 	    };
@@ -43830,20 +43823,25 @@
 	  },
 
 	  handleClose: function handleClose() {
+	    this.resetState();
 	    this.setState({ open: false });
 	  },
 
-	  resetState: function resetState() {
+	  getDefaultDay: function getDefaultDay() {
 	    var default_day = new Date();
 
 	    if (default_day.getHours() >= 12) {
-	      default_day.setDate(default_day.getDate() + 1);
+	      default_day.setHours(12, 0, 0, 0);
+	    } else {
+	      default_day.setHours(0, 0, 0, 0);
 	    }
+	    return default_day;
+	  },
 
-	    default_day.setHours(12, 0, 0, 0);
+	  resetState: function resetState() {
+	    var default_day = this.getDefaultDay();
 
 	    this.setState({
-	      open: false,
 	      default_day: default_day,
 	      dialog_title: "Schedule an Event",
 	      step: 'switch_select',
@@ -43852,7 +43850,7 @@
 	      close_label: 'cancel',
 	      dialog_button_focused: false,
 	      event_content: {
-	        selected_switches: ['sw1'],
+	        selected_switches: [],
 	        selected_day: default_day,
 	        start_time: null,
 	        stop_time: null

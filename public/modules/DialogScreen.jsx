@@ -5,6 +5,7 @@ import TimePicker from 'material-ui/TimePicker';
 import EventTile from './EventTile.jsx';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import StuffSelector from './StuffSelector.jsx'
 
 /*
 Expected Props:
@@ -178,7 +179,19 @@ export default React.createClass({
         </div>
       )
     }
+  },
 
+  showStuffSelector: function showStuffSelector(){
+    if (this.props.use_stuff_selector){
+      return (
+        <StuffSelector 
+          stuff={this.props.stuff_to_select}
+          event_content={this.props.event_content}
+          addToSelectedSwitches={this.props.addToSelectedSwitches}
+          removeFromSelectedSwitches={this.props.removeFromSelectedSwitches}
+        />
+      );
+    }
   },
 
   render: function(){
@@ -188,6 +201,7 @@ export default React.createClass({
         <p>{this.props.prompt}</p>
         { this.showPicker() }
         { this.showRecurringChoice() }
+        { this.showStuffSelector() }
         { this.hideBackButton() }
         { this.hideNextButton() }
       </div>

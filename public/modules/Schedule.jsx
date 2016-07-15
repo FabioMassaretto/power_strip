@@ -166,9 +166,30 @@ export default React.createClass({
   decideRecurring: function decideRecurring(input){
     this.state.event_content.event_type = input;
     
-    var next = (input === "single") ? "single_date" : "recurring";
+    var next = (input === "single") ? "single_date" : "recurring_days";
     this.handleStep(next);
   },
+
+  addToSelectedSwitches: function addToSelectedSwitches(added_switch){
+    var switchState = [];
+    for (var i=0;i<this.state.event_content.selected_switches.length;i++){
+      switchState.push(this.state.event_content.selected_switches[i]);
+    }
+    switchState.push(added_switch)
+
+    this.updateEventContent('selected_switches', switchState);
+  },
+
+  removeFromSelectedSwitches: function removeFromSelectedSwitches(removed_switch){
+    var switchState = [];
+    for (var i=0;i<this.state.event_content.selected_switches.length;i++){
+      switchState.push(this.state.event_content.selected_switches[i]);
+    }
+    var updatedSwitches = switchState.splice(switchState.indexOf(removed_switch), 1);
+
+    this.updateEventContent('selected_switches', updatedSwitches);
+  },
+
 
   handleStep: function handleStep(input){
 
@@ -216,14 +237,15 @@ export default React.createClass({
         });
 
       // Recurring Event Branch
-      case "recurring":
+      case "recurring_days":
         this.updateEventContent("event_type", "recurring")
         return this.setState({
-            step:"recurring", 
+            step:"recurring_days", 
             prior_step:"switch_select",
             dialog_title:"Days Select", 
            }
         );
+
       
     }
   },
@@ -245,6 +267,10 @@ export default React.createClass({
             show_event_content={false}
             handleStep={this.handleStep}
             back_disabled={true}
+            use_stuff_selector={true}
+            stuff_to_select={"switches"}
+            addToSelectedSwitches={this.addToSelectedSwitches}
+            removeFromSelectedSwitches={this.removeFromSelectedSwitches}
           />
         );
 

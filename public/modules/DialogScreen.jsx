@@ -186,12 +186,22 @@ export default React.createClass({
 
   showStuffSelector: function showStuffSelector(){
     if (this.props.use_stuff_selector){
-      return (
+      if (this.props.stuff_to_select === "switches") {
+        return (
+          <StuffSelector 
+            stuff={this.props.stuff_to_select}
+            event_content={this.props.event_content}
+            addToSelectedSwitches={this.props.addToSelectedSwitches}
+            removeFromSelectedSwitches={this.props.removeFromSelectedSwitches}
+          />
+        );
+      }
+      else return (
         <StuffSelector 
           stuff={this.props.stuff_to_select}
           event_content={this.props.event_content}
-          addToSelectedSwitches={this.props.addToSelectedSwitches}
-          removeFromSelectedSwitches={this.props.removeFromSelectedSwitches}
+          addToSelectedDays={this.props.addToSelectedDays}
+          removeFromSelectedDays={this.props.removeFromSelectedDays}
         />
       );
     }

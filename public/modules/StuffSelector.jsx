@@ -35,6 +35,11 @@ export default React.createClass({
         this.props.removeFromSelectedSwitches(label)
       }
       else this.props.addToSelectedSwitches(label)
+    } else {
+      if (this.props.event_content.weekDays.indexOf(label) > -1){
+        this.props.removeFromSelectedDays(label)
+      }
+      else this.props.addToSelectedDays(label)
     }
   },
 

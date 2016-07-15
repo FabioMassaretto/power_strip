@@ -43940,6 +43940,7 @@
 	    this.state.event_content.event_type = input;
 
 	    var next = input === "single" ? "single_date" : "recurring_days";
+
 	    this.handleStep(next);
 	  },
 
@@ -43961,6 +43962,26 @@
 	    var updatedSwitches = switchState.splice(switchState.indexOf(removed_switch), 1);
 
 	    this.updateEventContent('selected_switches', updatedSwitches);
+	  },
+
+	  addToSelectedDays: function addToSelectedDays(added_day) {
+	    var dayState = [];
+	    for (var i = 0; i < this.state.event_content.weekDays.length; i++) {
+	      dayState.push(this.state.event_content.weekDays[i]);
+	    }
+	    dayState.push(added_day);
+
+	    this.updateEventContent('weekDays', dayState);
+	  },
+
+	  removeFromSelectedDays: function removeFromSelectedDays(removed_day) {
+	    var dayState = [];
+	    for (var i = 0; i < this.state.event_content.weekDays.length; i++) {
+	      dayState.push(this.state.event_content.weekDays[i]);
+	    }
+	    var updatedDays = dayState.splice(dayState.indexOf(removed_day), 1);
+
+	    this.updateEventContent('weekDays', updatedDays);
 	  },
 
 	  handleStep: function handleStep(input) {
@@ -44010,10 +44031,22 @@
 	      // Recurring Event Branch
 	      case "recurring_days":
 	        this.updateEventContent("event_type", "recurring");
+	        if (!this.state.event_content.weekDays) {
+	          this.updateEventContent("weekDays", []);
+	        }
 	        return this.setState({
 	          step: "recurring_days",
 	          prior_step: "switch_select",
+	          next_step: "recurring_time",
 	          dialog_title: "Days Select"
+	        });
+
+	      case "recurring_time":
+	        return this.setState({
+	          step: "recurring_time",
+	          prior_step: "recurring_days",
+	          next_step: null,
+	          dialog_title: "Time Select"
 	        });
 
 	    }
@@ -44083,20 +44116,34 @@
 	        });
 
 	      // Recurring event tree
-	      case "recurring":
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(_EventTile2.default, {
-	            event_content: this.state.event_content
-	          }),
-	          _react2.default.createElement('hr', null),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            'Which Days will this repeat on?'
-	          )
-	        );
+	      case "recurring_days":
+	        return _react2.default.createElement(_DialogScreen2.default, {
+	          prompt: "Which days should this event repeat on?",
+	          prior_step: this.state.prior_step,
+	          next_step: this.state.next_step,
+	          event_content: this.state.event_content,
+	          show_event_content: false,
+	          handleStep: this.handleStep,
+	          use_stuff_selector: true,
+	          stuff_to_select: "days",
+	          addToSelectedDays: this.addToSelectedDays,
+	          removeFromSelectedDays: this.removeFromSelectedDays
+	        });
+	      case "recurring_time":
+	        return _react2.default.createElement(_DialogScreen2.default, {
+	          pickerType: 'TimePicker',
+	          default_day: this.state.default_day,
+	          prompt: "Add a time to turn the switches on or off",
+	          prior_step: this.state.prior_step,
+	          next_step: this.state.next_step,
+	          event_content: this.state.event_content,
+	          show_event_content: true,
+	          hide_next_button: true,
+	          handleStartTime: this.handleStartTime,
+	          handleStopTime: this.handleStopTime,
+	          handleStep: this.handleStep,
+	          handleEventSubmit: this.handleEventSubmit
+	        });
 	    }
 	  },
 
@@ -60552,11 +60599,18 @@
 
 	  showStuffSelector: function showStuffSelector() {
 	    if (this.props.use_stuff_selector) {
-	      return _react2.default.createElement(_StuffSelector2.default, {
+	      if (this.props.stuff_to_select === "switches") {
+	        return _react2.default.createElement(_StuffSelector2.default, {
+	          stuff: this.props.stuff_to_select,
+	          event_content: this.props.event_content,
+	          addToSelectedSwitches: this.props.addToSelectedSwitches,
+	          removeFromSelectedSwitches: this.props.removeFromSelectedSwitches
+	        });
+	      } else return _react2.default.createElement(_StuffSelector2.default, {
 	        stuff: this.props.stuff_to_select,
 	        event_content: this.props.event_content,
-	        addToSelectedSwitches: this.props.addToSelectedSwitches,
-	        removeFromSelectedSwitches: this.props.removeFromSelectedSwitches
+	        addToSelectedDays: this.props.addToSelectedDays,
+	        removeFromSelectedDays: this.props.removeFromSelectedDays
 	      });
 	    }
 	  },
@@ -63970,6 +64024,10 @@
 	      if (this.props.event_content.selected_switches.indexOf(label) > -1) {
 	        this.props.removeFromSelectedSwitches(label);
 	      } else this.props.addToSelectedSwitches(label);
+	    } else {
+	      if (this.props.event_content.weekDays.indexOf(label) > -1) {
+	        this.props.removeFromSelectedDays(label);
+	      } else this.props.addToSelectedDays(label);
 	    }
 	  },
 

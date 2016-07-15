@@ -166,6 +166,7 @@ export default React.createClass({
     this.state.event_content.event_type = input;
     
     var next = (input === "single") ? "single_date" : "recurring_days";
+
     this.handleStep(next);
   },
 
@@ -187,6 +188,26 @@ export default React.createClass({
     var updatedSwitches = switchState.splice(switchState.indexOf(removed_switch), 1);
 
     this.updateEventContent('selected_switches', updatedSwitches);
+  },
+
+  addToSelectedDays: function addToSelectedDays(added_day){
+    var dayState = [];
+    for (var i=0;i<this.state.event_content.weekDays.length;i++){
+      dayState.push(this.state.event_content.weekDays[i]);
+    }
+    dayState.push(added_day)
+
+    this.updateEventContent('weekDays', dayState);
+  },
+
+  removeFromSelectedDays: function removeFromSelectedDays(removed_day){
+    var dayState = [];
+    for (var i=0;i<this.state.event_content.weekDays.length;i++){
+      dayState.push(this.state.event_content.weekDays[i]);
+    }
+    var updatedDays = dayState.splice(dayState.indexOf(removed_day), 1);
+
+    this.updateEventContent('weekDays', updatedDays);
   },
 
 
@@ -238,12 +259,24 @@ export default React.createClass({
       // Recurring Event Branch
       case "recurring_days":
         this.updateEventContent("event_type", "recurring")
+        if (!this.state.event_content.weekDays) {
+          this.updateEventContent("weekDays", [])
+        }
         return this.setState({
             step:"recurring_days", 
             prior_step:"switch_select",
+            next_step:"recurring_time",
             dialog_title:"Days Select", 
            }
         );
+
+      case "recurring_time":
+        return this.setState({
+          step:"recurring_time",
+          prior_step:"recurring_days",
+          next_step: null,
+          dialog_title:"Time Select"
+        })
 
       
     }
@@ -321,15 +354,37 @@ export default React.createClass({
         );
 
       // Recurring event tree
-      case "recurring":
+      case "recurring_days":
         return (
-          <div>
-            <EventTile 
-              event_content={this.state.event_content}
-            />
-            <hr/>
-            <p>Which Days will this repeat on?</p>
-          </div>
+          <DialogScreen 
+            prompt={"Which days should this event repeat on?"}
+            prior_step={this.state.prior_step}
+            next_step={this.state.next_step}
+            event_content={this.state.event_content}
+            show_event_content={false}
+            handleStep={this.handleStep}
+            use_stuff_selector={true}
+            stuff_to_select={"days"}
+            addToSelectedDays={this.addToSelectedDays}
+            removeFromSelectedDays={this.removeFromSelectedDays}
+          />
+        );
+      case "recurring_time":
+        return (
+          <DialogScreen 
+            pickerType="TimePicker"
+            default_day={this.state.default_day}
+            prompt={"Add a time to turn the switches on or off"}
+            prior_step={this.state.prior_step}
+            next_step={this.state.next_step}
+            event_content={this.state.event_content}
+            show_event_content={true}
+            hide_next_button={true}
+            handleStartTime={this.handleStartTime}
+            handleStopTime={this.handleStopTime}
+            handleStep={this.handleStep}
+            handleEventSubmit={this.handleEventSubmit}
+          />
         );
     }
   },

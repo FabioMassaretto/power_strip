@@ -15,7 +15,6 @@ import Home from './modules/home.jsx'
 import About from './modules/About.jsx'
 import Schedule from './modules/Schedule.jsx'
 
-
 render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>

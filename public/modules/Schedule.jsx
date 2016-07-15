@@ -144,7 +144,6 @@ export default React.createClass({
   },
 
   handleStartTime: function handleStartTime(event, date){
-    debugger;
     this.updateEventContent("start_time", date);
   },
 

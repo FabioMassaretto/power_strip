@@ -17,12 +17,27 @@ var uniqueEvents = 0;
 // makes sure that name and state are 
 function saveState (){
   var parsed = JSON.parse(data);
+  var verifiedEvents = [];
+  for (i=0;i<eventQueue.length;i++){
+    verifiedEvents.push(eventQueue[i]);
+  }
 
   for (i=0;i<state.length;i++){
     if(parsed.switches[i]) parsed.switches[i].name = state[i].name;
     if(parsed.switches[i]) parsed.switches[i].state = state[i].state;
 
   }
+  
+  var now = new Date()
+  for (i=0;i<verifiedEvents.length;i++){
+    if (verifiedEvents[i].start_date){
+      var checkDate = new Date(verifiedEvents[i].stop_date); 
+      if (checkDate < now){
+        eventQueue.splice(eventQueue.indexOf(verifiedEvents[i]), 1)
+      }
+    }
+  }
+
 
   var formattedState = {
     switches: parsed.switches,

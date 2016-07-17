@@ -17,7 +17,7 @@
     },
     {
       "id": "sw4",
-      "state": "on",
+      "state": "off",
       "name": "Switch #4"
     },
     {
@@ -27,5 +27,5 @@
     }
   ],
   "events": [],
-  "uniqueEvents": 26
+  "uniqueEvents": 54
 }

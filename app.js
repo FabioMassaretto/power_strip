@@ -30,11 +30,20 @@ function saveState (){
   
   var now = new Date()
   for (i=0;i<verifiedEvents.length;i++){
-    if (verifiedEvents[i].start_date){
-      var checkDate = new Date(verifiedEvents[i].stop_date); 
-      if (checkDate < now){
-        eventQueue.splice(eventQueue.indexOf(verifiedEvents[i]), 1)
-      }
+    if (verifiedEvents[i]){
+      if (!verifiedEvents[i].recurring){
+        if (verifiedEvents[i].start_date){
+          var checkDate = new Date(verifiedEvents[i].start_date); 
+          if (checkDate < now){
+            eventQueue.splice(eventQueue.indexOf(verifiedEvents[i]), 1)
+          }
+        } else if (verifiedEvents[i].stop_date){
+          var checkDate = new Date(verifiedEvents[i].stop_date);
+          if (checkDate < now){
+            eventQueue.splice(eventQueue.indexOf(verifiedEvents[i]), 1)
+          }
+        }
+      } 
     }
   }
 
@@ -81,34 +90,29 @@ readableStream.on('end', function() {
   uniqueEvents = parsed.uniqueEvents;
 
   for (i=0; i<parsed.events.length;i++){
-    if (parsed.events[i].start_date){
-      var checkDate = new Date(parsed.events[i].start_date); 
-      var now = new Date();
-      if (checkDate > now){
-        var checkedEvent = new Event(parsed.events[i]);
-        if (checkedEvent.recurring) {
-          scheduleRecurringEvent;
-        }
-        else {
-          scheduleSingleEvent(checkedEvent);
-        }
-
-        eventQueue.push(parsed.events[i]);
+    if (parsed.events[i]){
+      if (parsed.events[i].recurring){
+        scheduleRecurringEvent(checkedEvent)
       }
-    }
-    if (parsed.events[i].stop_date){
-      var checkDate = new Date(parsed.events[i].stop_date); 
-      var now = new Date();
-      if (checkDate > now){
-        var checkedEvent = new Event(parsed.events[i]);
-        if (checkedEvent.recurring) {
-          scheduleRecurringEvent;
+      else {
+        if (parsed.events[i].start_date){
+          var checkDate = new Date(parsed.events[i].start_date); 
+          var now = new Date();
+          if (checkDate > now){
+            var checkedEvent = new Event(parsed.events[i]);
+            scheduleSingleEvent(checkedEvent);
+            eventQueue.push(parsed.events[i]);
+          }
         }
-        else {
-          scheduleSingleEvent(checkedEvent);
+        if (parsed.events[i].stop_date){
+          var checkDate = new Date(parsed.events[i].stop_date); 
+          var now = new Date();
+          if (checkDate > now){
+            var checkedEvent = new Event(parsed.events[i]);
+            scheduleSingleEvent(checkedEvent);
+            eventQueue.push(parsed.events[i]);
+          }
         }
-
-        eventQueue.push(parsed.events[i]);
       }
     }
   }
@@ -243,31 +247,61 @@ function scheduleOff(rule, eventObject){
   }
 }
 
+function getDayNumber(string){
+  switch(string){
+    case "Sunday":
+      return 0;
+    case "Monday":
+      return 1;
+    case "Tuesday":
+      return 2;
+    case "Wednesday":
+      return 3;
+    case "Thursday":
+      return 4;
+    case "Friday":
+      return 5;
+    case "Saturday":
+      return 6;
+  }
+}
+
 
 function scheduleRecurringEvent(eventObject){
-  pendingEvents[eventObject.id] = {};
+  if (eventObject){
+    pendingEvents[eventObject.id] = {};
 
-  if (eventObject.start_date){
-    var start_date = new Date(eventObject.start_date);
+    if (eventObject.start_date){
+      var start_date = new Date(eventObject.start_date);
+        var weekDays = [];
+        for (i=0;i<eventObject.weekDays.length;i++){
+          weekDays.push(getDayNumber(eventObject.weekDays[i]));  
+        }
+        var rule = new schedule.RecurrenceRule();
+        rule.hour = start_date.getHours();
+        rule.minute = start_date.getMinutes();
+        rule.dayOfWeek = weekDays;
 
-    var rule = new Schedule.RecurenceRule(); 
-    rule.hour = start_time.getHours();
-    rule.minute = start_time.getMinutes();
+        scheduleOn(rule, eventObject);
+    }
+    
+    if (eventObject.stop_date){
+      var stop_date = new Date(eventObject.start_date);
+      var weekDays = [];
+      for (i=0;i<eventObject.weekDays.length;i++){
+        weekDays.push(getDayNumber(eventObject.weekDays[i]));
+      }
+        var rule = new schedule.RecurrenceRule();
+        rule.hour = stop_date.getHours();
+        rule.minute = stop_date.getMinutes();
+        rule.dayOfWeek = weekDays;
 
-    scheduleOn(rule, eventObject);
+        scheduleOff(rule, eventObject);
+
+    }
+
+    eventQueue.push(eventObject)
   }
-  
-  if (eventObject.stop_date){
-    var stop_date = new Date(eventObject.start_date);
-
-    var rule = new Schedule.RecurrenceRule();
-    rule.hour = start_time.getHours();
-    rule.minute = start_time.getMinutes();
-
-    scheduleOff(rule, eventObject);
-  }
-
-
 
 }
 
@@ -289,6 +323,7 @@ function scheduleSingleEvent(eventObject){
     scheduleOff(stop_date, eventObject);
 
   }
+  eventQueue.push(eventObject)
 }
 
 

@@ -78,9 +78,9 @@
 
 	var _About2 = _interopRequireDefault(_About);
 
-	var _Schedule = __webpack_require__(398);
+	var _EventView = __webpack_require__(528);
 
-	var _Schedule2 = _interopRequireDefault(_Schedule);
+	var _EventView2 = _interopRequireDefault(_EventView);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -110,7 +110,7 @@
 	    _react2.default.createElement(
 	      _MuiThemeProvider2.default,
 	      { muiTheme: (0, _getMuiTheme2.default)() },
-	      _react2.default.createElement(_reactRouter.Route, { path: 'schedule', component: _Schedule2.default })
+	      _react2.default.createElement(_reactRouter.Route, { path: 'schedule', component: _EventView2.default })
 	    )
 	  )
 	), document.getElementById('app'));
@@ -33432,18 +33432,6 @@
 
 	var _navbar2 = _interopRequireDefault(_navbar);
 
-	var _Schedule = __webpack_require__(398);
-
-	var _Schedule2 = _interopRequireDefault(_Schedule);
-
-	var _getMuiTheme = __webpack_require__(230);
-
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-
-	var _MuiThemeProvider = __webpack_require__(388);
-
-	var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
@@ -33587,14 +33575,7 @@
 	        menuToggle: this.menuToggle,
 	        isMenuOpen: this.state.isMenuOpen
 	      }),
-	      children,
-	      _react2.default.createElement(
-	        _MuiThemeProvider2.default,
-	        { muiTheme: (0, _getMuiTheme2.default)() },
-	        _react2.default.createElement(_Schedule2.default, {
-	          switches: this.state.switches
-	        })
-	      )
+	      children
 	    );
 	  }
 	});
@@ -64890,6 +64871,18 @@
 
 	var _Switch2 = _interopRequireDefault(_Switch);
 
+	var _getMuiTheme = __webpack_require__(230);
+
+	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+	var _MuiThemeProvider = __webpack_require__(388);
+
+	var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
+
+	var _Schedule = __webpack_require__(398);
+
+	var _Schedule2 = _interopRequireDefault(_Schedule);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
@@ -64929,7 +64922,14 @@
 	        null,
 	        'Power Strip'
 	      ),
-	      switchStates
+	      switchStates,
+	      _react2.default.createElement(
+	        _MuiThemeProvider2.default,
+	        { muiTheme: (0, _getMuiTheme2.default)() },
+	        _react2.default.createElement(_Schedule2.default, {
+	          switches: this.props.switches
+	        })
+	      )
 	    );
 	  }
 	});
@@ -65133,6 +65133,41 @@
 	          )
 	        )
 	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 521 */,
+/* 522 */,
+/* 523 */,
+/* 524 */,
+/* 525 */,
+/* 526 */,
+/* 527 */,
+/* 528 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _react2.default.createClass({
+	  displayName: 'EventView',
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      'fuck'
 	    );
 	  }
 	});

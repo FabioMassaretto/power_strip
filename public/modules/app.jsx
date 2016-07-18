@@ -1,9 +1,6 @@
 import React from 'react'
 import $ from 'jquery'
 import NavBar from './navbar.jsx'
-import Schedule from './Schedule.jsx'
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 export default React.createClass({
   displayName: 'App',
@@ -148,11 +145,6 @@ export default React.createClass({
               isMenuOpen={this.state.isMenuOpen}
             />
             { children }
-            <MuiThemeProvider muiTheme={getMuiTheme()}>
-              <Schedule
-                switches={this.state.switches}
-              />
-            </MuiThemeProvider>
       </div>
     )
     

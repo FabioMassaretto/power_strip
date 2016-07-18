@@ -114,8 +114,9 @@ h1 {
 }
 
 .wrapper {
+  position:relative;
+  top:120px;
   height: 100%;
-  margin-top: 10vh;
 }
 
 /*iPhone and tablet*/

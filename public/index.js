@@ -13,7 +13,7 @@ injectTapEventPlugin();
 import App from './modules/app.jsx'
 import Home from './modules/home.jsx'
 import About from './modules/About.jsx'
-import Schedule from './modules/Schedule.jsx'
+import EventView from './modules/EventView.jsx'
 
 render((
   <Router history={browserHistory}>
@@ -25,7 +25,7 @@ render((
         <Route path="about" component={About}/>
       </MuiThemeProvider>
       <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <Route path="schedule" component={Schedule}/>
+        <Route path="schedule" component={EventView}/>
       </MuiThemeProvider>
     </Route>
   </Router>

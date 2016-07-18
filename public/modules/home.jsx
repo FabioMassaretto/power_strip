@@ -1,5 +1,8 @@
 import React from 'react'
 import Switch from './Switch.jsx'
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Schedule from './Schedule.jsx'
 
 export default React.createClass({
 
@@ -30,6 +33,11 @@ export default React.createClass({
       <div className="HomeScreen">
         <h1>Power Strip</h1>
         {switchStates}
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <Schedule
+            switches={this.props.switches}
+          />
+        </MuiThemeProvider>
       </div>
     )
   }

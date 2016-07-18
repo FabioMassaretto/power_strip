@@ -4324,7 +4324,7 @@
 	var ReactVersion = __webpack_require__(36);
 
 	var findDOMNode = __webpack_require__(165);
-	var getNativeComponentFromComposite = __webpack_require__(166);
+	var getNativeComponentFromComposite = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./getNativeComponentFromComposite\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	var renderSubtreeIntoContainer = __webpack_require__(167);
 	var warning = __webpack_require__(10);
 
@@ -14255,7 +14255,7 @@
 
 	var ReactCompositeComponent = __webpack_require__(120);
 	var ReactEmptyComponent = __webpack_require__(125);
-	var ReactNativeComponent = __webpack_require__(126);
+	var ReactNativeComponent = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./ReactNativeComponent\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	var ReactInstrumentation = __webpack_require__(18);
 
 	var invariant = __webpack_require__(7);
@@ -15713,107 +15713,7 @@
 	module.exports = ReactEmptyComponent;
 
 /***/ },
-/* 126 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2014-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactNativeComponent
-	 */
-
-	'use strict';
-
-	var _assign = __webpack_require__(4);
-
-	var invariant = __webpack_require__(7);
-
-	var autoGenerateWrapperClass = null;
-	var genericComponentClass = null;
-	// This registry keeps track of wrapper classes around native tags.
-	var tagToComponentClass = {};
-	var textComponentClass = null;
-
-	var ReactNativeComponentInjection = {
-	  // This accepts a class that receives the tag string. This is a catch all
-	  // that can render any kind of tag.
-	  injectGenericComponentClass: function (componentClass) {
-	    genericComponentClass = componentClass;
-	  },
-	  // This accepts a text component class that takes the text string to be
-	  // rendered as props.
-	  injectTextComponentClass: function (componentClass) {
-	    textComponentClass = componentClass;
-	  },
-	  // This accepts a keyed object with classes as values. Each key represents a
-	  // tag. That particular tag will use this class instead of the generic one.
-	  injectComponentClasses: function (componentClasses) {
-	    _assign(tagToComponentClass, componentClasses);
-	  }
-	};
-
-	/**
-	 * Get a composite component wrapper class for a specific tag.
-	 *
-	 * @param {ReactElement} element The tag for which to get the class.
-	 * @return {function} The React class constructor function.
-	 */
-	function getComponentClassForElement(element) {
-	  if (typeof element.type === 'function') {
-	    return element.type;
-	  }
-	  var tag = element.type;
-	  var componentClass = tagToComponentClass[tag];
-	  if (componentClass == null) {
-	    tagToComponentClass[tag] = componentClass = autoGenerateWrapperClass(tag);
-	  }
-	  return componentClass;
-	}
-
-	/**
-	 * Get a native internal component class for a specific tag.
-	 *
-	 * @param {ReactElement} element The element to create.
-	 * @return {function} The internal class constructor function.
-	 */
-	function createInternalComponent(element) {
-	  !genericComponentClass ? process.env.NODE_ENV !== 'production' ? invariant(false, 'There is no registered component for the tag %s', element.type) : invariant(false) : void 0;
-	  return new genericComponentClass(element);
-	}
-
-	/**
-	 * @param {ReactText} text
-	 * @return {ReactComponent}
-	 */
-	function createInstanceForText(text) {
-	  return new textComponentClass(text);
-	}
-
-	/**
-	 * @param {ReactComponent} component
-	 * @return {boolean}
-	 */
-	function isTextComponent(component) {
-	  return component instanceof textComponentClass;
-	}
-
-	var ReactNativeComponent = {
-	  getComponentClassForElement: getComponentClassForElement,
-	  createInternalComponent: createInternalComponent,
-	  createInstanceForText: createInstanceForText,
-	  isTextComponent: isTextComponent,
-	  injection: ReactNativeComponentInjection
-	};
-
-	module.exports = ReactNativeComponent;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
-
-/***/ },
+/* 126 */,
 /* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -17164,7 +17064,7 @@
 	var ReactClass = __webpack_require__(27);
 	var ReactEmptyComponent = __webpack_require__(125);
 	var ReactBrowserEventEmitter = __webpack_require__(106);
-	var ReactNativeComponent = __webpack_require__(126);
+	var ReactNativeComponent = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./ReactNativeComponent\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	var ReactUpdates = __webpack_require__(59);
 
 	var ReactInjection = {
@@ -20309,7 +20209,7 @@
 	var ReactDOMComponentTree = __webpack_require__(40);
 	var ReactInstanceMap = __webpack_require__(121);
 
-	var getNativeComponentFromComposite = __webpack_require__(166);
+	var getNativeComponentFromComposite = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./getNativeComponentFromComposite\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	var invariant = __webpack_require__(7);
 	var warning = __webpack_require__(10);
 
@@ -20353,41 +20253,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 166 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule getNativeComponentFromComposite
-	 */
-
-	'use strict';
-
-	var ReactNodeTypes = __webpack_require__(122);
-
-	function getNativeComponentFromComposite(inst) {
-	  var type;
-
-	  while ((type = inst._renderedNodeType) === ReactNodeTypes.COMPOSITE) {
-	    inst = inst._renderedComponent;
-	  }
-
-	  if (type === ReactNodeTypes.NATIVE) {
-	    return inst._renderedComponent;
-	  } else if (type === ReactNodeTypes.EMPTY) {
-	    return null;
-	  }
-	}
-
-	module.exports = getNativeComponentFromComposite;
-
-/***/ },
+/* 166 */,
 /* 167 */
 /***/ function(module, exports, __webpack_require__) {
 

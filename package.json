@@ -31,7 +31,7 @@
     "node-schedule": "^1.1.1",
     "path": "^0.12.7",
     "python-shell": "^0.4.0",
-    "react": "^15.1.0",
+    "react": "^15.2.1",
     "react-dom": "^15.1.0",
     "react-router": "^2.5.1",
     "react-tap-event-plugin": "^1.0.0"

@@ -43877,23 +43877,18 @@
 	          }
 	        }
 	      } else {
-	        if (this.state.event_content.start_time || this.state.event_content.stop_time) {
-	          if (this.state.event_content.weekDays.length > 0) {
-	            if (this.state.event_content.start_time || this.state.event_content.stop_time) {
-	              this.setState({ open: false });
+	        this.setState({ open: false });
 
-	              submittedEvent = {
-	                event: {
-	                  start_date: start_time || null,
-	                  stop_date: stop_time || null,
-	                  switches: selected_switches || null,
-	                  weekDays: weekDays
-	                }
-	              };
-	            }
+	        submittedEvent = {
+	          event: {
+	            start_date: start_time || null,
+	            stop_date: stop_time || null,
+	            switches: selected_switches || null,
+	            weekDays: weekDays
 	          }
-	        }
+	        };
 	      }
+
 	      _jquery2.default.post('/api/events', submittedEvent, function (data) {
 	        console.log(data);
 	      });

@@ -282,6 +282,7 @@ function scheduleRecurringEvent(eventObject){
         rule.minute = start_date.getMinutes();
         rule.dayOfWeek = weekDays;
 
+
         scheduleOn(rule, eventObject);
     }
     

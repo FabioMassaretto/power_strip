@@ -18,21 +18,21 @@ export default React.createClass({
   },
 
   checkStart: function checkStart(){
-    if (this.props.event_content.start_time){
       return (
         <div className="eventContent">
-          {"Turn on at: " + this.props.event_content.start_time}
+          {"Turn on at: " + this.props.event_content.start_date}
         </div>
       )
-    }
+    
   },
 
   render: function(){
     return (
       <div>
-        <div className="eventContent">{"Event type: " + this.props.event_content.event_type}</div>
         <div className="eventContent">{"Day for event: " + this.formatDay()}</div>
-        {()=>this.checkStart()}
+        <p>{this.props.event_content.start_date}</p>
+        <p>{this.props.event_content.stop_date}</p>
+        <p>{this.props.event_content.switches[0]}</p>
       </div>
     )
   }

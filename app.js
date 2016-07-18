@@ -17,43 +17,17 @@ var uniqueEvents = 0;
 // makes sure that name and state are 
 function saveState (){
   var parsed = JSON.parse(data);
-  var verifiedEvents = [];
-  for (i=0;i<eventQueue.length;i++){
-    verifiedEvents.push(eventQueue[i]);
-  }
 
   for (i=0;i<state.length;i++){
     if(parsed.switches[i]) parsed.switches[i].name = state[i].name;
     if(parsed.switches[i]) parsed.switches[i].state = state[i].state;
-
   }
-  
-  var now = new Date()
-  for (i=0;i<verifiedEvents.length;i++){
-    if (verifiedEvents[i]){
-      if (!verifiedEvents[i].recurring){
-        if (verifiedEvents[i].start_date){
-          var checkDate = new Date(verifiedEvents[i].start_date); 
-          if (checkDate < now){
-            eventQueue.splice(eventQueue.indexOf(verifiedEvents[i]), 1)
-          }
-        } else if (verifiedEvents[i].stop_date){
-          var checkDate = new Date(verifiedEvents[i].stop_date);
-          if (checkDate < now){
-            eventQueue.splice(eventQueue.indexOf(verifiedEvents[i]), 1)
-          }
-        }
-      } 
-    }
-  }
-
 
   var formattedState = {
     switches: parsed.switches,
     events: eventQueue,
     uniqueEvents: uniqueEvents
   }
-
 
   fs.writeFile('./saveState.json', JSON.stringify(formattedState) )
 }
@@ -90,32 +64,9 @@ readableStream.on('end', function() {
   uniqueEvents = parsed.uniqueEvents;
 
   for (i=0; i<parsed.events.length;i++){
-    if (parsed.events[i]){
-      if (parsed.events[i].recurring){
-        scheduleRecurringEvent(checkedEvent)
-      }
-      else {
-        if (parsed.events[i].start_date){
-          var checkDate = new Date(parsed.events[i].start_date); 
-          var now = new Date();
-          if (checkDate > now){
-            var checkedEvent = new Event(parsed.events[i]);
-            scheduleSingleEvent(checkedEvent);
-            eventQueue.push(parsed.events[i]);
-          }
-        }
-        if (parsed.events[i].stop_date){
-          var checkDate = new Date(parsed.events[i].stop_date); 
-          var now = new Date();
-          if (checkDate > now){
-            var checkedEvent = new Event(parsed.events[i]);
-            scheduleSingleEvent(checkedEvent);
-            eventQueue.push(parsed.events[i]);
-          }
-        }
-      }
-    }
+    scheduleSingleEvent(parsed.events[i])
   }
+  
 
   for (i=0;i<state.length;i++){
     if(parsed.switches[i].name) state[i].name = parsed.switches[i].name;
@@ -189,16 +140,6 @@ function Switch(number){
 function Event(eventObject){
   this.id = uniqueEvents;
   this.switches = eventObject.switches;
-  this.recurring = null;
-
-  if (eventObject.weekDays){
-    this.recurring = true;
-    this.weekDays = [];
-    for (i=0;i<eventObject.weekDays.length;i++){
-      this.weekDays.push(eventObject.weekDays[i]);
-    }
-  } else this.recurring = false;
-
   uniqueEvents ++;
 
   if (eventObject.start_date){
@@ -245,65 +186,6 @@ function scheduleOff(rule, eventObject){
   pendingEvents[eventObject.id].cancelOff = function(){
     pendingEvents[eventObject.id].off.cancel();
   }
-}
-
-function getDayNumber(string){
-  switch(string){
-    case "Sunday":
-      return 0;
-    case "Monday":
-      return 1;
-    case "Tuesday":
-      return 2;
-    case "Wednesday":
-      return 3;
-    case "Thursday":
-      return 4;
-    case "Friday":
-      return 5;
-    case "Saturday":
-      return 6;
-  }
-}
-
-
-function scheduleRecurringEvent(eventObject){
-  if (eventObject){
-    pendingEvents[eventObject.id] = {};
-
-    if (eventObject.start_date){
-      var start_date = new Date(eventObject.start_date);
-        var weekDays = [];
-        for (i=0;i<eventObject.weekDays.length;i++){
-          weekDays.push(getDayNumber(eventObject.weekDays[i]));  
-        }
-        var rule = new schedule.RecurrenceRule();
-        rule.hour = start_date.getHours();
-        rule.minute = start_date.getMinutes();
-        rule.dayOfWeek = weekDays;
-
-
-        scheduleOn(rule, eventObject);
-    }
-    
-    if (eventObject.stop_date){
-      var stop_date = new Date(eventObject.start_date);
-      var weekDays = [];
-      for (i=0;i<eventObject.weekDays.length;i++){
-        weekDays.push(getDayNumber(eventObject.weekDays[i]));
-      }
-        var rule = new schedule.RecurrenceRule();
-        rule.hour = stop_date.getHours();
-        rule.minute = stop_date.getMinutes();
-        rule.dayOfWeek = weekDays;
-
-        scheduleOff(rule, eventObject);
-
-    }
-
-    eventQueue.push(eventObject)
-  }
-
 }
 
 
@@ -367,13 +249,13 @@ app.get('/api/events/:id', function(req,res){
 
 app.post('/api/events', function(req, res){
     var newEvent = new Event(req.body.event);
-    if (newEvent.recurring) scheduleRecurringEvent;
-    else scheduleSingleEvent(newEvent);
+    scheduleSingleEvent(newEvent);
     
     eventQueue.push(newEvent);
 
     saveState();
     res.json(newEvent);
+    console.log(eventQueue)
 })
 
 

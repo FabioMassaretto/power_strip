@@ -16,7 +16,7 @@ export default React.createClass({
       })
     }
     return (
-      <div>
+      <div className="wrapper">
         {eventList || "No Scheduled Events"}
       </div>
     );

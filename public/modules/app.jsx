@@ -132,6 +132,11 @@ export default React.createClass({
               toggleSwitch: this.toggleSwitch
             })
           }
+          else if (child.props.location.pathname.indexOf('schedule') > -1){
+            return React.cloneElement(child, {
+              events: this.state.events
+            })
+          }
           else {
             return React.cloneElement(child, {
               switches: this.state.switches

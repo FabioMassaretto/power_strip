@@ -6,7 +6,7 @@ export default React.createClass ({
     displayName: "Navbar",
     render: function(){
       return (
-        <div className="navbar" fluid>
+        <div className="navbar">
           <ul id="gn-menu" className="gn-menu-main">
             <li className="gn-trigger">
               <a 

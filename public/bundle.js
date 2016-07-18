@@ -33826,6 +33826,10 @@
 	              switches: this.state.switches,
 	              toggleSwitch: this.toggleSwitch
 	            });
+	          } else if (child.props.location.pathname.indexOf('schedule') > -1) {
+	            return _react2.default.cloneElement(child, {
+	              events: this.state.events
+	            });
 	          } else {
 	            return _react2.default.cloneElement(child, {
 	              switches: this.state.switches
@@ -43917,7 +43921,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
-	      { className: 'navbar', fluid: true },
+	      { className: 'navbar' },
 	      _react2.default.createElement(
 	        'ul',
 	        { id: 'gn-menu', className: 'gn-menu-main' },
@@ -44057,14 +44061,14 @@
 	      default_day: default_day,
 	      dialog_title: "Schedule an Event",
 	      step: 'switch_select',
-	      next_step: "decide_recurring",
+	      next_step: "single_date",
 	      prior_step: null,
 	      close_label: 'cancel',
 	      dialog_button_focused: false,
 	      event_content: {
 	        selected_switches: [],
 	        selected_day: default_day,
-	        start_time: null,
+	        start_time: default_day,
 	        stop_time: null
 	      }
 	    };
@@ -44097,14 +44101,14 @@
 	      default_day: default_day,
 	      dialog_title: "Schedule an Event",
 	      step: 'switch_select',
-	      next_step: "decide_recurring",
+	      next_step: "single_date",
 	      prior_step: null,
 	      close_label: 'cancel',
 	      dialog_button_focused: false,
 	      event_content: {
 	        selected_switches: [],
 	        selected_day: default_day,
-	        start_time: null,
+	        start_time: default_day,
 	        stop_time: null
 	      }
 	    });
@@ -44183,14 +44187,6 @@
 	    this.setState({ event_content: updated_event });
 	  },
 
-	  decideRecurring: function decideRecurring(input) {
-	    this.state.event_content.event_type = input;
-
-	    var next = input === "single" ? "single_date" : "recurring_days";
-
-	    this.handleStep(next);
-	  },
-
 	  addToSelectedSwitches: function addToSelectedSwitches(added_switch) {
 	    var switchState = [];
 	    for (var i = 0; i < this.state.event_content.selected_switches.length; i++) {
@@ -44211,26 +44207,6 @@
 	    this.updateEventContent('selected_switches', updatedSwitches);
 	  },
 
-	  addToSelectedDays: function addToSelectedDays(added_day) {
-	    var dayState = [];
-	    for (var i = 0; i < this.state.event_content.weekDays.length; i++) {
-	      dayState.push(this.state.event_content.weekDays[i]);
-	    }
-	    dayState.push(added_day);
-
-	    this.updateEventContent('weekDays', dayState);
-	  },
-
-	  removeFromSelectedDays: function removeFromSelectedDays(removed_day) {
-	    var dayState = [];
-	    for (var i = 0; i < this.state.event_content.weekDays.length; i++) {
-	      dayState.push(this.state.event_content.weekDays[i]);
-	    }
-	    var updatedDays = dayState.splice(dayState.indexOf(removed_day), 1);
-
-	    this.updateEventContent('weekDays', updatedDays);
-	  },
-
 	  handleStep: function handleStep(input) {
 
 	    var prior = this.state.step;
@@ -44242,24 +44218,14 @@
 	          return this.setState({
 	            step: "switch_select",
 	            prior_step: null,
-	            next_step: "decide_recurring",
+	            next_step: "single_date",
 	            dialog_title: "Select Switches"
 	          });
 	        }
 
-	      case "decide_recurring":
-	        return this.setState({
-	          step: "decide_recurring",
-	          prior_step: "switch_select",
-	          next_step: (this.state.event_content.event_type === "single" ? "single" : "recurring") || null,
-	          dialog_title: "Schedule an Event"
-	        });
-
 	      // Single Event Branch
 
 	      case "single_date":
-	        this.updateEventContent("event_type", "single");
-
 	        return this.setState({
 	          step: "single_date",
 	          prior_step: "switch_select",
@@ -44274,28 +44240,6 @@
 	          next_step: null,
 	          dialog_title: "Time Select"
 	        });
-
-	      // Recurring Event Branch
-	      case "recurring_days":
-	        this.updateEventContent("event_type", "recurring");
-	        if (!this.state.event_content.weekDays) {
-	          this.updateEventContent("weekDays", []);
-	        }
-	        return this.setState({
-	          step: "recurring_days",
-	          prior_step: "switch_select",
-	          next_step: "recurring_time",
-	          dialog_title: "Days Select"
-	        });
-
-	      case "recurring_time":
-	        return this.setState({
-	          step: "recurring_time",
-	          prior_step: "recurring_days",
-	          next_step: null,
-	          dialog_title: "Time Select"
-	        });
-
 	    }
 	  },
 
@@ -44313,24 +44257,12 @@
 	          next_step: this.state.next_step,
 	          event_content: this.state.event_content,
 	          show_event_content: false,
-	          decideRecurring: false,
 	          handleStep: this.handleStep,
 	          back_disabled: true,
 	          use_stuff_selector: true,
 	          stuff_to_select: "switches",
 	          addToSelectedSwitches: this.addToSelectedSwitches,
 	          removeFromSelectedSwitches: this.removeFromSelectedSwitches
-	        });
-
-	      case "decide_recurring":
-	        return _react2.default.createElement(_DialogScreen2.default, {
-	          prompt: "Will your event be single, or recurring?",
-	          prior_step: this.state.prior_step,
-	          next_step: this.state.next_step,
-	          nextDiabled: this.state.event_content.event_type,
-	          handleStep: this.handleStep,
-	          event_content: this.state.event_content,
-	          decideRecurring: this.decideRecurring
 	        });
 
 	      // Single Event Tree 
@@ -44351,36 +44283,6 @@
 	          pickerType: 'TimePicker',
 	          default_day: this.state.default_day,
 	          prompt: "Add a time to turn the switch on or off",
-	          prior_step: this.state.prior_step,
-	          next_step: this.state.next_step,
-	          event_content: this.state.event_content,
-	          show_event_content: true,
-	          hide_next_button: true,
-	          handleStartTime: this.handleStartTime,
-	          handleStopTime: this.handleStopTime,
-	          handleStep: this.handleStep,
-	          handleEventSubmit: this.handleEventSubmit
-	        });
-
-	      // Recurring event tree
-	      case "recurring_days":
-	        return _react2.default.createElement(_DialogScreen2.default, {
-	          prompt: "Which days should this event repeat on?",
-	          prior_step: this.state.prior_step,
-	          next_step: this.state.next_step,
-	          event_content: this.state.event_content,
-	          show_event_content: false,
-	          handleStep: this.handleStep,
-	          use_stuff_selector: true,
-	          stuff_to_select: "days",
-	          addToSelectedDays: this.addToSelectedDays,
-	          removeFromSelectedDays: this.removeFromSelectedDays
-	        });
-	      case "recurring_time":
-	        return _react2.default.createElement(_DialogScreen2.default, {
-	          pickerType: 'TimePicker',
-	          default_day: this.state.default_day,
-	          prompt: "Add a time to turn the switches on or off",
 	          prior_step: this.state.prior_step,
 	          next_step: this.state.next_step,
 	          event_content: this.state.event_content,
@@ -56775,34 +56677,37 @@
 	  },
 
 	  checkStart: function checkStart() {
-	    if (this.props.event_content.start_time) {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'eventContent' },
-	        "Turn on at: " + this.props.event_content.start_time
-	      );
-	    }
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'eventContent' },
+	      "Turn on at: " + this.props.event_content.start_date
+	    );
 	  },
 
 	  render: function render() {
-	    var _this = this;
-
 	    return _react2.default.createElement(
 	      'div',
 	      null,
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'eventContent' },
-	        "Event type: " + this.props.event_content.event_type
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'eventContent' },
 	        "Day for event: " + this.formatDay()
 	      ),
-	      function () {
-	        return _this.checkStart();
-	      }
+	      _react2.default.createElement(
+	        'p',
+	        null,
+	        this.props.event_content.start_date
+	      ),
+	      _react2.default.createElement(
+	        'p',
+	        null,
+	        this.props.event_content.stop_date
+	      ),
+	      _react2.default.createElement(
+	        'p',
+	        null,
+	        this.props.event_content.switches[0]
+	      )
 	    );
 	  }
 	});
@@ -65964,7 +65869,7 @@
 	    }
 	    return _react2.default.createElement(
 	      'div',
-	      null,
+	      { className: 'wrapper' },
 	      eventList || "No Scheduled Events"
 	    );
 	  }

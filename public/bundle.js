@@ -33440,6 +33440,7 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      switches: [],
+	      events: [],
 	      isMenuOpen: false
 	    };
 	  },
@@ -33448,6 +33449,12 @@
 	    _jquery2.default.getJSON("/api/switches").then(function (switches) {
 	      this.setState({
 	        switches: switches
+	      });
+	    }.bind(this));
+
+	    _jquery2.default.getJSON("/api/events").then(function (events) {
+	      this.setState({
+	        events: events
 	      });
 	    }.bind(this));
 	  },
@@ -65158,16 +65165,32 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _EventTile = __webpack_require__(487);
+
+	var _EventTile2 = _interopRequireDefault(_EventTile);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _react2.default.createClass({
 	  displayName: 'EventView',
 
+
 	  render: function render() {
+	    if (this.props.events) {
+	      var eventList = this.props.events.map(function (v, i) {
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'switch', key: i },
+	          _react2.default.createElement(_EventTile2.default, {
+	            event_content: v
+	          })
+	        );
+	      });
+	    }
 	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      'fuck'
+	      eventList || "No Scheduled Events"
 	    );
 	  }
 	});

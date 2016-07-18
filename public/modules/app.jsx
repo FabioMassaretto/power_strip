@@ -8,6 +8,7 @@ export default React.createClass({
   getInitialState : function getInitialState() {
       return {
           switches : [],
+          events: [],
           isMenuOpen: false  
       };
   },
@@ -16,6 +17,12 @@ export default React.createClass({
     $.getJSON("/api/switches").then((function (switches) {
       this.setState({
         switches: switches
+      });
+    }.bind(this)));
+
+    $.getJSON("/api/events").then((function (events) {
+      this.setState({
+        events: events
       });
     }.bind(this)));
   },

@@ -7,7 +7,7 @@ const express = require('express');
 const bodyParser= require('body-parser');
 const path = require('path')
 const app = express();
-// const Switch = require('./js/Switch.js');
+const Switch = require('./js/Switch.js');
 const Event = require('./js/Event.js');
 
 // Information held in server memory
@@ -122,14 +122,8 @@ readableStream.on('end', function() {
     if(parsed.switches[i].name) state[i].name = parsed.switches[i].name;
     
     if(parsed.switches[i].state) {
-      state[i].state = parsed.switches[i].state;
+      state[i].setState(parsed.switches[i].state);
       
-      var str = state[i].state === "on" ? onString(i) : offString(i);
-      PythonShell.run(str, function (err) {
-        if (!process.env.DEV){
-          if (err) throw err;
-        } 
-      });
     }
 
   }
@@ -137,13 +131,13 @@ readableStream.on('end', function() {
 
 
 
-// needed due to a quirk with PythonShell
-function onString(number){
-  return './public/python/scripts/sw' + number + '_on.py'
-}
-function offString(number){
-  return './public/python/scripts/sw' + number + '_off.py'
-}
+// // needed due to a quirk with PythonShell
+// function onString(number){
+//   return './public/python/scripts/sw' + number + '_on.py'
+// }
+// function offString(number){
+//   return './public/python/scripts/sw' + number + '_off.py'
+// }
 
 
 
@@ -160,31 +154,31 @@ function getEvent(string){
 
 
 // Switch constructor
-function Switch(number){
-  this.id = 'sw' + number
-  this.state = "off"
-  this.name = "Switch #" + number
-  this.toggle = function(){
-    if (this.state === "off"){
-      var str = onString(this.id[2]);
-      PythonShell.run(str, function (err) {
-        if (!process.env.DEV){
-          if (err) throw err;
-        } 
-      });
-      this.state = "on"
-    }
-    else {
-      var str = offString(this.id[2]);
-      PythonShell.run(str, function (err) {
-        if (!process.env.DEV){
-          if (err) throw err;
-        } 
-      });
-      this.state = "off"
-    }
-  }
-}
+// function Switch(number){
+//   this.id = 'sw' + number
+//   this.state = "off"
+//   this.name = "Switch #" + number
+//   this.toggle = function(){
+//     if (this.state === "off"){
+//       var str = onString(this.id[2]);
+//       PythonShell.run(str, function (err) {
+//         if (!process.env.DEV){
+//           if (err) throw err;
+//         } 
+//       });
+//       this.state = "on"
+//     }
+//     else {
+//       var str = offString(this.id[2]);
+//       PythonShell.run(str, function (err) {
+//         if (!process.env.DEV){
+//           if (err) throw err;
+//         } 
+//       });
+//       this.state = "off"
+//     }
+//   }
+// }
 
 // Event constructor
 // function Event(eventObject){
@@ -353,6 +347,7 @@ app.post('/api/switches/:id', function(req, res){
   var foundSwitch = getSwitch(req.params.id);
   foundSwitch.toggle();
   saveState();
+  console.log("postSwitch "+JSON.stringify(foundSwitch));
   res.json(foundSwitch);
 })
 

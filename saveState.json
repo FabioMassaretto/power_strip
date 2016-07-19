@@ -1,1 +1,1 @@
-{"switches":[{"id":"sw1","state":"off","name":"Lamp"},{"id":"sw2","state":"on","name":"Switch #2"},{"id":"sw3","state":"off","name":"Switch #3"},{"id":"sw4","state":"off","name":"Switch #4"},{"id":"sw5","state":"off","name":"Monitor"}],"events":[],"uniqueEvents":59}
+{"switches":[{"id":"sw1","state":"off","name":"Lamp"},{"id":"sw2","state":"off","name":"Switch #2"},{"id":"sw3","state":"on","name":"Switch #3"},{"id":"sw4","state":"on","name":"Switch #4"},{"id":"sw5","state":"on","name":"Monitor"}],"events":[],"uniqueEvents":59}

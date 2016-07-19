@@ -7,12 +7,13 @@ const express = require('express');
 const bodyParser= require('body-parser');
 const path = require('path')
 const app = express();
+// const Switch = require('./js/Switch.js');
+const Event = require('./js/Event.js');
 
 // Information held in server memory
 const state = [];
 const eventQueue = [];
 const pendingEvents = {};
-var uniqueEvents = 0;
 
 // makes sure that name and state are 
 function saveState (){
@@ -51,7 +52,7 @@ function saveState (){
   var formattedState = {
     switches: parsed.switches,
     events: eventQueue,
-    uniqueEvents: uniqueEvents
+    uniqueEvents: Event.uniqueEvents
   }
 
 
@@ -87,7 +88,7 @@ readableStream.on('data', function(chunk) {
 
 readableStream.on('end', function() {
   var parsed = JSON.parse(data);
-  uniqueEvents = parsed.uniqueEvents;
+  Event.uniqueEvents = parsed.uniqueEvents;
 
   for (i=0; i<parsed.events.length;i++){
     if (parsed.events[i]){
@@ -186,29 +187,29 @@ function Switch(number){
 }
 
 // Event constructor
-function Event(eventObject){
-  this.id = uniqueEvents;
-  this.switches = eventObject.switches;
-  this.recurring = null;
+// function Event(eventObject){
+//   this.id = uniqueEvents;
+//   this.switches = eventObject.switches;
+//   this.recurring = null;
 
-  if (eventObject.weekDays){
-    this.recurring = true;
-    this.weekDays = [];
-    for (i=0;i<eventObject.weekDays.length;i++){
-      this.weekDays.push(eventObject.weekDays[i]);
-    }
-  } else this.recurring = false;
+//   if (eventObject.weekDays){
+//     this.recurring = true;
+//     this.weekDays = [];
+//     for (i=0;i<eventObject.weekDays.length;i++){
+//       this.weekDays.push(eventObject.weekDays[i]);
+//     }
+//   } else this.recurring = false;
 
-  uniqueEvents ++;
+//   uniqueEvents ++;
 
-  if (eventObject.start_date){
-    this.start_date = eventObject.start_date
-  };
+//   if (eventObject.start_date){
+//     this.start_date = eventObject.start_date
+//   };
 
-  if (eventObject.stop_date){
-    this.stop_date = eventObject.stop_date
-  }
-}
+//   if (eventObject.stop_date){
+//     this.stop_date = eventObject.stop_date
+//   }
+// }
 
 function scheduleOn(rule, eventObject){
   var job = schedule.scheduleJob(rule, function(){

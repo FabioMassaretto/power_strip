@@ -1,9 +1,9 @@
 const PythonShell = require('python-shell');
 
-function Switch(number){
-  this.id = 'sw' + number
-  this.state = "off"
-  this.name = "Switch #" + number
+function Switch(switchValues){
+  this.id = switchValues.id || "sw"
+  this.state = switchValues.state || "off"
+  this.name = switchValues.name || "switch"
   this.toggle = function(){
     (this.state === "on") ? this.setState("off") : this.setState("on");
   }
@@ -22,6 +22,7 @@ function Switch(number){
     });
     this.state = state;
   }
+  this.setState(this.state);
 }
 
 

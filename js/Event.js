@@ -1,9 +1,12 @@
-function Event(eventObject){
+const schedule = require('node-schedule');
+
+function Event(eventObject, getSwitch){
   var uniqueEvents = 0;
 
   this.id = uniqueEvents;
   this.switches = eventObject.switches;
   this.recurring = null;
+  this.job = null;
 
   if (eventObject.weekDays){
     this.recurring = true;
@@ -22,6 +25,40 @@ function Event(eventObject){
   if (eventObject.stop_date){
     this.stop_date = eventObject.stop_date
   }
+
+  this.scheduleJob = function scheduleJob(rule, state){
+    this.job = schedule.scheduleJob(rule, function(){
+      for (i=0;i<this.switches.length;i++){
+        var foundSwitch = getSwitch(this.switches[i]);
+        foundSwitch.setState(state);
+      }
+    }.bind(this));
+  }
+
+  this.cancel = function(){
+    this.job.cancel();
+  }
+
+  this.scheduleEvent = function scheduleEvent() {
+    var state = (this.start_date) ? "on" : "off";
+
+    if (this.recurring){
+      var rule = "a very fancy rule";
+      this.scheduleJob(rule, state);
+    }
+    else {
+      if (this.start_date){
+        var start_date = new Date(this.start_date);
+        this.scheduleJob(start_date, state);
+      }
+      if (this.stop_date){
+        var stop_date = new Date(this.stop_date);
+        this.scheduleJob(stop_date, state);
+      }
+
+    }
+  }
+  this.scheduleEvent();
 }
 
 

@@ -2,9 +2,9 @@
   "name": "strip",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server/app.js",
   "scripts": {
-    "start": "webpack-dev-server --inline --content-base ."
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",

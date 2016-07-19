@@ -367,8 +367,10 @@ app.get('/api/events/:id', function(req,res){
 
 app.post('/api/events', function(req, res){
     var newEvent = new Event(req.body.event);
-    if (newEvent.recurring) scheduleRecurringEvent;
-    else scheduleSingleEvent(newEvent);
+    if (newEvent.recurring) 
+      scheduleRecurringEvent(newEvent);
+    else 
+      scheduleSingleEvent(newEvent);
     
     eventQueue.push(newEvent);
 

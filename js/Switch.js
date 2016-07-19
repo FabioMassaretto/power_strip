@@ -8,13 +8,7 @@ function Switch(switchValues){
     (this.state === "on") ? this.setState("off") : this.setState("on");
   }
   this.setState = function(state){
-    var str = ''
-    if (state === "off"){
-      str = '../public/python/scripts/sw' + this.id[2] + '_off.py'
-    }
-    else {
-      str = '../public/python/scripts/sw' + this.id[2] + '_on.py'
-    }
+    var str = state === "on" ? onString(this.id[2]) : offString(this.id[2]);
     PythonShell.run(str, function (err) {
       if (!process.env.DEV){
         if (err) throw err;
@@ -23,7 +17,15 @@ function Switch(switchValues){
     this.state = state;
   }
   this.setState(this.state);
-}
+}    
 
+
+// needed due to a quirk with PythonShell
+function onString(number){
+  return './public/python/scripts/sw' + number + '_on.py'
+}
+function offString(number){
+  return './public/python/scripts/sw' + number + '_off.py'
+}
 
 module.exports = Switch;

@@ -8,12 +8,12 @@ function Switch(switchValues){
     (this.state === "on") ? this.setState("off") : this.setState("on");
   }
   this.setState = function(state){
-    var str = '../public/python/scripts/sw'
+    var str = ''
     if (state === "off"){
-      str += this.id[2] + '_off.py'
+      str = '../public/python/scripts/sw' + this.id[2] + '_off.py'
     }
     else {
-      str += this.id[2] + '_on.py'
+      str = '../public/python/scripts/sw' + this.id[2] + '_on.py'
     }
     PythonShell.run(str, function (err) {
       if (!process.env.DEV){

@@ -69,7 +69,9 @@ readableStream.on('end', function() {
   
 
   for (i=0;i<state.length;i++){
-    if(parsed.switches[i].name) state[i].name = parsed.switches[i].name;
+    if(parsed.switches[i].name) {
+      state[i].name = parsed.switches[i].name;
+    }
     
     if(parsed.switches[i].state) {
       state[i].state = parsed.switches[i].state;

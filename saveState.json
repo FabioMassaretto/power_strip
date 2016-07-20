@@ -3,17 +3,17 @@
     {
       "id": "sw1",
       "state": "on",
-      "name": "Plasma Ball"
+      "name": "HypnoCube"
     },
     {
       "id": "sw2",
       "state": "off",
-      "name": "Fan"
+      "name": "Switch #2"
     },
     {
       "id": "sw3",
       "state": "off",
-      "name": "Alarm Clock"
+      "name": "Switch #3"
     },
     {
       "id": "sw4",
@@ -23,7 +23,7 @@
     {
       "id": "sw5",
       "state": "off",
-      "name": "Laptop Power"
+      "name": "Tape Player"
     }
   ],
   "events": [

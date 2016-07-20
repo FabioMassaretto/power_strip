@@ -15,8 +15,7 @@ export default React.createClass({
              github.com/krpeacock/power_strip
           </a>. 
 
-          I am also working on a hardware guide for people who may be interested 
-          in building their own power strip or using my interface.  
+          For pictures and a description of my build, check out my blog post at <a href="http://www.peacockweb.net/blog/power-strip">peacockweb.net/blog/power-strip</a>!
         </p>
 
         <p className="about"> 

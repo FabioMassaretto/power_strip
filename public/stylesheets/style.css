@@ -118,7 +118,10 @@ h1 {
   top:120px;
   height: 100%;
 }
-
+.aboutWrapper {
+  position: relative;
+  top: 20px;
+}
 /*iPhone and tablet*/
 @media only screen and (max-device-width: 1024px) {
   h1{

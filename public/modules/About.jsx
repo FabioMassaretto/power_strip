@@ -3,7 +3,7 @@ import React from 'react'
 export default React.createClass({
   render(){
     return (
-      <div className="wrapper">
+      <div className="aboutWrapper">
         <h1>About</h1>
         <p>Raspi Smart-Strip is a DIY solution for dumb electronics.</p>
         <p className="about"> 

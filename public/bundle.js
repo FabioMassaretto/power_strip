@@ -65801,7 +65801,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      "div",
-	      { className: "wrapper" },
+	      { className: "aboutWrapper" },
 	      _react2.default.createElement(
 	        "h1",
 	        null,

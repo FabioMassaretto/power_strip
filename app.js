@@ -17,31 +17,6 @@ const events = [];
 // makes sure that name and state are 
 function saveState (){
 
-  // var verifiedEvents = [];
-  // for (i=0;i<eventQueue.length;i++){
-  //   verifiedEvents.push(eventQueue[i]);
-  // }
-  
-  // var now = new Date()
-  // for (i=0;i<verifiedEvents.length;i++){
-  //   if (verifiedEvents[i]){
-  //     if (!verifiedEvents[i].recurring){
-  //       if (verifiedEvents[i].start_date){
-  //         var checkDate = new Date(verifiedEvents[i].start_date); 
-  //         if (checkDate < now){
-  //           eventQueue.splice(eventQueue.indexOf(verifiedEvents[i]), 1)
-  //         }
-  //       } else if (verifiedEvents[i].stop_date){
-  //         var checkDate = new Date(verifiedEvents[i].stop_date);
-  //         if (checkDate < now){
-  //           eventQueue.splice(eventQueue.indexOf(verifiedEvents[i]), 1)
-  //         }
-  //       }
-  //     } 
-  //   }
-  // }
-
-
   var formattedState = {
     switches: switches,
     events: events,
@@ -79,70 +54,12 @@ function getSwitch(string){
     return element.id === string;
   })[0]
 }
+
 function getEvent(string){
   return events.filter(function(event){
     return event.id == string;
   })[0]
 }
-
-// function getDayNumber(string){
-//   switch(string){
-//     case "Sunday":
-//       return 0;
-//     case "Monday":
-//       return 1;
-//     case "Tuesday":
-//       return 2;
-//     case "Wednesday":
-//       return 3;
-//     case "Thursday":
-//       return 4;
-//     case "Friday":
-//       return 5;
-//     case "Saturday":
-//       return 6;
-//   }
-// }
-
-
-// function scheduleRecurringEvent(eventObject){
-//   if (eventObject){
-//     pendingEvents[eventObject.id] = {};
-
-//     if (eventObject.start_date){
-//       var start_date = new Date(eventObject.start_date);
-//         var weekDays = [];
-//         for (i=0;i<eventObject.weekDays.length;i++){
-//           weekDays.push(getDayNumber(eventObject.weekDays[i]));  
-//         }
-//         var rule = new schedule.RecurrenceRule();
-//         rule.hour = start_date.getHours();
-//         rule.minute = start_date.getMinutes();
-//         rule.dayOfWeek = weekDays;
-
-
-//         scheduleOn(rule, eventObject);
-//     }
-    
-//     if (eventObject.stop_date){
-//       var stop_date = new Date(eventObject.start_date);
-//       var weekDays = [];
-//       for (i=0;i<eventObject.weekDays.length;i++){
-//         weekDays.push(getDayNumber(eventObject.weekDays[i]));
-//       }
-//         var rule = new schedule.RecurrenceRule();
-//         rule.hour = stop_date.getHours();
-//         rule.minute = stop_date.getMinutes();
-//         rule.dayOfWeek = weekDays;
-
-//         scheduleOff(rule, eventObject);
-
-//     }
-
-//     eventQueue.push(eventObject)
-//   }
-
-// }
 
 
 // Server Configuration

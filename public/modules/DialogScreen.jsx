@@ -7,8 +7,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import StuffSelector from './StuffSelector.jsx'
 
-/*
-Expected Props:
+/* Expected Props:
 {
   pickerType: "TimePicker" || "DatePicker",
   default_day: Date Object,
@@ -25,8 +24,6 @@ Expected Props:
   },
   
 }
-
-
 */
 
 const IntlPolyfill = require('intl');

@@ -38,12 +38,32 @@ function Event(eventObject, getSwitch){
   this.cancel = function(){
     this.job.cancel();
   }
+  this.formatWeekDays = function formatWeekDays(days){
+    var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var result = [];
+
+    for (i=0;i<days.length;i++){
+      result.push(daysOfWeek.indexOf(days[i]));
+    }
+    return result;
+  }
 
   this.scheduleEvent = function scheduleEvent() {
     var state = (this.start_date) ? "on" : "off";
 
     if (this.recurring){
-      var rule = "a very fancy rule";
+      var rule = new schedule.RecurrenceRule();
+      rule.dayOfWeek = this.formatWeekDays(this.weekDays);
+      if (this.start_date){
+        var date = new Date(this.start_date);
+        rule.hour = date.getHours();
+        rule.minute = date.getMinutes();
+      }
+      if (this.stop_date){
+        var date = new Date(this.stop_date);
+        rule.hour = date.getHours();
+        rule.minute = date.getMinutes();
+      }
       this.scheduleJob(rule, state);
     }
     else {

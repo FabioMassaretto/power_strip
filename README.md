@@ -2,6 +2,8 @@
 
 Hi, and thanks for looking at my project! This is an open source project, so feel free to adapt anything you see for your own applications.
 
+For an explanation of the build, check out my blog post at <a href="http://peacockweb.net/blob/power-strip">www.peacockweb.net/blog/power-strip</a>.
+
 
 <img src="http://i.imgur.com/rFQqPcX.png?1"/>
 
@@ -17,10 +19,7 @@ Furthermore, this readme will document my build process and what it takes to set
 * <a href="https://nodejs.org/en/">Node.js</a>
 * <a href="http://expressjs.com/">Express.js</a>
 * <a href="https://facebook.github.io/react/index.html">React.js</a>
-
 * <a href="https://codepen.io/keithpickering/">Keith Pickering's </a> Toggle Switch
-
 * <a href="https://www.raspbian.org/">Raspbian</a>
 * <a href="https://github.com/">Github</a>
-
 * <a href="https://pypi.python.org/pypi/RPi.GPIO">RPi.GPIO</a>

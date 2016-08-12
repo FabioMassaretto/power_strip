@@ -117,11 +117,9 @@ app.get('*', function (req, res){
 })
 
 
-new Promise(function(resolve,reject){init()})
-  .then(
-    app.listen(process.env.PORT, function(){
-     console.log('Listening on port ' + process.env.PORT);
-    })
-  )
+app.listen(process.env.PORT, function(){
+ console.log('Listening on port ' + process.env.PORT);
+})
+
 
 

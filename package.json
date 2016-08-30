@@ -2,7 +2,7 @@
   "name": "strip",
   "version": "1.0.0",
   "description": "",
-  "main": "server/app.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },

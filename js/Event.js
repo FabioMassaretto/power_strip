@@ -41,9 +41,21 @@ function Event(eventObject, getSwitch){
 
   this.scheduleEvent = function scheduleEvent() {
     var state = (this.start_date) ? "on" : "off";
+    var week = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     if (this.recurring){
-      var rule = "a very fancy rule";
+      var rule = new schedule.RecurrenceRule();
+      rule.dayOfWeek = this.weekDays.map((val)=>{
+        return val.indexOf(week)? val.indexOf(week) : 0;
+      })
+      if (this.start_date){
+
+      }
+      if (this.stop_date){
+        rule.dayOfWeek = []
+        rule.hour = stop_date.getHours();
+        rule.minute = stop_date.getMinutes();
+      }
       this.scheduleJob(rule, state);
     }
     else {

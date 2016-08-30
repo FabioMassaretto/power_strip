@@ -84,8 +84,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// Needed for onTouchTap
-	// http://stackoverflow.com/a/34015469/988941
 	(0, _reactTapEventPlugin2.default)();
 
 	// Modules
@@ -61296,8 +61294,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	/*
-	Expected Props:
+	/* Expected Props:
 	{
 	  pickerType: "TimePicker" || "DatePicker",
 	  default_day: Date Object,
@@ -61314,8 +61311,6 @@
 	  },
 	  
 	}
-
-
 	*/
 
 	var IntlPolyfill = __webpack_require__(494);

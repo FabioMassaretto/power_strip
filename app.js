@@ -9,6 +9,7 @@ const path = require('path')
 const app = express();
 const Switch = require('./js/Switch.js');
 const Event = require('./js/Event.js');
+const http = require('http');
 
 // Information held in server memory
 const switches = [];
@@ -86,7 +87,29 @@ app.get('/api/switches/:id', function(req, res){
 })
 
 app.post('/api/switches/:id', function(req, res){
-  var foundSwitch = getSwitch(req.params.id);
+  var id = req.params.id;
+
+  var options = {
+    host: '10.0.1.5',
+    port: 80,
+    path: `/api/switches/${req.params.id}`,
+    method: 'POST'
+  };
+
+  var req = http.request(options, function(res) {
+    // console.log('STATUS: ' + res.statusCode);
+    // console.log('HEADERS: ' + JSON.stringify(res.headers));
+    res.setEncoding('utf8');
+    // res.on('data', function (chunk) {
+    //   console.log('BODY: ' + chunk);
+    // });
+  });
+  req.on('error', function(e) {
+    console.log('problem with request: ' + e.message);
+  });
+  req.end();
+
+  var foundSwitch = getSwitch(id);
   foundSwitch.toggle();
   saveState();
   console.log("postSwitch "+JSON.stringify(foundSwitch));

@@ -1,1 +1,1 @@
-{"switches":[{"id":"sw1","state":"on","name":"Kyle's Lamp"},{"id":"sw2","state":"on","name":"Sound Machine"},{"id":"sw3","state":"off","name":"Switch #3"},{"id":"sw4","state":"off","name":"Switch #4"},{"id":"sw5","state":"off","name":"Switch #5"}],"events":[],"uniqueEvents":59}
+{"switches":[{"id":"sw1","state":"on","name":"Kyle's Lamp"},{"id":"sw2","state":"off","name":"Sound Machine"},{"id":"sw3","state":"on","name":"Switch #3"},{"id":"sw4","state":"on","name":"Switch #4"},{"id":"sw5","state":"on","name":"Switch #5"}],"events":[],"uniqueEvents":59}

@@ -92,7 +92,7 @@ app.post('/api/switches/:id', function(req, res){
   var options = {
     host: '10.0.1.5',
     port: 80,
-    path: `/api/switches/${req.params.id}`,
+    path: '/api/switches/' + req.params.id,
     method: 'POST'
   };
 

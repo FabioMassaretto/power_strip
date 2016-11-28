@@ -69,10 +69,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'));
 
 
-// Serves the React view
-app.get('/', function(req, res){
-  res.sendFile('index');
-})
 
 
 // Switch Routes for API

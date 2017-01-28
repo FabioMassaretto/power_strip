@@ -87,33 +87,39 @@ app.get('/api/switches/:id', function(req, res){
 })
 
 app.post('/api/switches/:id', function(req, res){
-  var id = req.params.id;
+  if (req.query.password === process.env.PASS){
+    var id = req.params.id;
 
-  var options = {
-    host: '10.0.1.5',
-    port: 80,
-    path: '/api/switches/' + req.params.id,
-    method: 'POST'
-  };
+    var options = {
+      host: '10.0.1.5',
+      port: 80,
+      path: '/api/switches/' + req.params.id,
+      method: 'POST'
+    };
 
-  var req = http.request(options, function(res) {
-    // console.log('STATUS: ' + res.statusCode);
-    // console.log('HEADERS: ' + JSON.stringify(res.headers));
-    res.setEncoding('utf8');
-    // res.on('data', function (chunk) {
-    //   console.log('BODY: ' + chunk);
-    // });
-  });
-  req.on('error', function(e) {
-    console.log('problem with request: ' + e.message);
-  });
-  req.end();
+    var req = http.request(options, function(res) {
+      // console.log('STATUS: ' + res.statusCode);
+      // console.log('HEADERS: ' + JSON.stringify(res.headers));
+      res.setEncoding('utf8');
+      // res.on('data', function (chunk) {
+      //   console.log('BODY: ' + chunk);
+      // });
+    });
+    req.on('error', function(e) {
+      console.log('problem with request: ' + e.message);
+    });
+    req.end();
 
-  var foundSwitch = getSwitch(id);
-  foundSwitch.toggle();
-  saveState();
-  console.log("postSwitch "+JSON.stringify(foundSwitch));
-  res.json(foundSwitch);
+    var foundSwitch = getSwitch(id);
+    foundSwitch.toggle();
+    saveState();
+    console.log("postSwitch "+JSON.stringify(foundSwitch));
+    res.json(foundSwitch);
+  }
+  else {
+    console.log("invalid password")
+    res.send("try again")
+  }
 })
 
 // Event Routes

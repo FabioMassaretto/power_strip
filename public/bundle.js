@@ -34178,7 +34178,8 @@
 	    return {
 	      switches: [],
 	      events: [],
-	      isMenuOpen: false
+	      isMenuOpen: false,
+	      password: undefined
 	    };
 	  },
 
@@ -34199,11 +34200,26 @@
 	  componentDidMount: function componentDidMount() {
 	    var _this = this;
 
+	    this.checkPassword();
 	    setInterval(function () {
 	      if (document.hasFocus()) {
 	        _this.checkServerState();
 	      }
 	    }, 1000);
+	  },
+
+	  checkPassword: function checkPassword() {
+	    if (localStorage.switchPass) {
+	      this.setState({
+	        password: localStorage.switchPass
+	      });
+	    } else {
+	      var password = prompt("Please enter password");
+	      this.setState({
+	        password: password
+	      });
+	      localStorage.setItem('switchPass', password);
+	    }
 	  },
 
 	  checkServerState: function checkServerState() {
@@ -34216,7 +34232,7 @@
 
 	  //ID is formatted as "sw1"
 	  toggleSwitch: function toggleSwitch(id) {
-	    var route = "/api/switches/" + id;
+	    var route = "/api/switches/" + id + "?password=" + this.state.password;
 	    _jquery2.default.post(route).then(function (data) {
 	      this.state.switches[id[2] - 1] = data;
 	      this.setState({

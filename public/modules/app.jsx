@@ -9,7 +9,8 @@ export default React.createClass({
       return {
           switches : [],
           events: [],
-          isMenuOpen: false  
+          isMenuOpen: false,
+          password: undefined,  
       };
   },
 
@@ -28,11 +29,27 @@ export default React.createClass({
   },
 
   componentDidMount: function componentDidMount(){
+    this.checkPassword();
     setInterval(()=>{
       if (document.hasFocus()){
         this.checkServerState();
       }
     }, 1000)
+  },
+
+  checkPassword: function checkPassword(){
+    if(localStorage.switchPass){
+      this.setState({
+        password: localStorage.switchPass
+      })
+    }
+    else {
+      var password = prompt("Please enter password");
+      this.setState({
+        password: password
+      })
+      localStorage.setItem('switchPass', password);
+    }
   },
 
   checkServerState: function checkServerState(){
@@ -45,7 +62,7 @@ export default React.createClass({
 
 //ID is formatted as "sw1"
   toggleSwitch: function toggleSwitch(id) {
-    var route = "/api/switches/" + id;
+    var route = "/api/switches/" + id + "?password=" + this.state.password;
     $.post(route).then(function (data){
       this.state.switches[id[2] - 1] = data;
       this.setState({

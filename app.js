@@ -118,7 +118,7 @@ app.post('/api/switches/:id', function(req, res){
   }
   else {
     console.log("invalid password")
-    res.send("try again")
+    res.json(req.query.password)
   }
 })
 

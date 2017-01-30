@@ -90,21 +90,40 @@ app.post('/api/switches/:id', function(req, res){
   if (req.query.password === process.env.PASS){
     var id = req.params.id;
 
-    var options = {
+    var options1 = {
       host: '10.0.1.5',
       port: 80,
       path: '/api/switches/' + req.params.id,
       method: 'POST'
     };
+     var options2 = {
+      host: '10.0.1.4',
+      port: 80,
+      path: '/api/switches/' + req.params.id - 5,
+      method: 'POST'
+    };
 
-    var req = http.request(options, function(res) {
-      // console.log('STATUS: ' + res.statusCode);
-      // console.log('HEADERS: ' + JSON.stringify(res.headers));
-      res.setEncoding('utf8');
-      // res.on('data', function (chunk) {
-      //   console.log('BODY: ' + chunk);
-      // });
-    });
+    if (Number(id[2])<=5){
+      var req = http.request(options1, function(res) {
+        // console.log('STATUS: ' + res.statusCode);
+        // console.log('HEADERS: ' + JSON.stringify(res.headers));
+        res.setEncoding('utf8');
+        // res.on('data', function (chunk) {
+        //   console.log('BODY: ' + chunk);
+        // });
+      });
+    }
+    else if (Number(id[2])>5){
+      var req = http.request(options2, function(res) {
+        // console.log('STATUS: ' + res.statusCode);
+        // console.log('HEADERS: ' + JSON.stringify(res.headers));
+        res.setEncoding('utf8');
+        // res.on('data', function (chunk) {
+        //   console.log('BODY: ' + chunk);
+        // });
+      });
+    }
+    
     req.on('error', function(e) {
       console.log('problem with request: ' + e.message);
     });

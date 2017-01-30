@@ -89,7 +89,7 @@ app.get('/api/switches/:id', function(req, res){
 app.post('/api/switches/:id', function(req, res){
   if (req.query.password === process.env.PASS){
     var id = req.params.id;
-    var reducedId = 'sw' + Number(id.substring(2)) - 5;
+    var reducedId = "sw" + (Number(id.substring(2)) - 5)
 
     var options1 = {
       host: '10.0.1.5',
@@ -100,7 +100,7 @@ app.post('/api/switches/:id', function(req, res){
      var options2 = {
       host: '10.0.1.4',
       port: 80,
-      path: '/api/switches/' + reducedId + "/" + process.env.PASS,
+      path: '/api/switches/' + reducedId + "?password=" + process.env.PASS,
       method: 'POST'
     };
 

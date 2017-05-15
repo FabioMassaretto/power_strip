@@ -82,8 +82,19 @@ app.get('/api/switches/:id', function(req, res){
 })
 
 app.post('/api/switches/:id', function(req, res){
+  var command = req.query.command;
   var foundSwitch = getSwitch(req.params.id);
-  foundSwitch.toggle();
+
+  if (command === "on"){
+      foundSwitch.setState(command);
+  }
+  else if (command === "off"){
+      foundSwitch.setState(command);
+  }
+  else {
+      foundSwitch.toggle();
+  }
+
   saveState();
   console.log("postSwitch "+JSON.stringify(foundSwitch));
   res.json(foundSwitch);

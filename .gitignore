@@ -7,3 +7,4 @@ node_modules
 !.elasticbeanstalk/*.global.yml
 >>>>>>> work
 saveState.json
+node_modules

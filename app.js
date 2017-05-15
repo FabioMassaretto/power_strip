@@ -14,7 +14,7 @@ const http = require('http');
 // Information held in server memory
 const switches = [];
 const events = [];
-
+const messages = [];
 // makes sure that name and state are 
 function saveState (){
 
@@ -87,6 +87,8 @@ app.get('/api/switches/:id', function(req, res){
 })
 
 app.post('/api/switches/:id', function(req, res){
+  var command = req.query.command;
+
   if (req.query.password === process.env.PASS){
     var id = req.params.id;
     var reducedId = "sw" + (Number(id.substring(2)) - 5)
@@ -94,13 +96,13 @@ app.post('/api/switches/:id', function(req, res){
     var options1 = {
       host: '10.0.1.5',
       port: 80,
-      path: '/api/switches/' + req.params.id,
+      path: '/api/switches/' + id + "?password=" + process.env.PASS + "&&command=" + command,
       method: 'POST'
     };
      var options2 = {
       host: '10.0.1.4',
       port: 80,
-      path: '/api/switches/' + reducedId + "?password=" + process.env.PASS,
+      path: '/api/switches/' + reducedId + "?password=" + process.env.PASS + "&&command=" + command,
       method: 'POST'
     };
 
@@ -131,7 +133,15 @@ app.post('/api/switches/:id', function(req, res){
     req.end();
 
     var foundSwitch = getSwitch(id);
-    foundSwitch.toggle();
+    if (command === "on"){
+      foundSwitch.setState(command);
+    }
+    else if (command === "off"){
+      foundSwitch.setState(command);
+    }
+    else {
+      foundSwitch.toggle();
+    }
     saveState();
     console.log("postSwitch "+JSON.stringify(foundSwitch));
     res.json(foundSwitch);
@@ -160,6 +170,15 @@ app.post('/api/events', function(req, res){
     res.json(newEvent);
 })
 
+
+// Message Routes
+app.get('/api/messages', function(req,res){
+  res.send(messages);
+})
+
+app.post('/api/messages', function(req,res){
+  messages.push(req.body.message);
+})
 
 app.get('*', function (req, res){
   res.redirect('/');

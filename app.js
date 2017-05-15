@@ -177,7 +177,14 @@ app.get('/api/messages', function(req,res){
 })
 
 app.post('/api/messages', function(req,res){
-  messages.push(req.body.message);
+  if (req.body.message){
+    messages.push(req.body.message);
+    res.send(messages);
+    console.log(req.body);
+  }
+  else {
+    res.send("No message recieved.");
+  }
 })
 
 app.get('*', function (req, res){

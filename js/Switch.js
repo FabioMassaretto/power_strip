@@ -9,11 +9,13 @@ function Switch(switchValues){
   }
   this.setState = function(state){
     var str = state === "on" ? onString(this.id[2]) : offString(this.id[2]);
-    PythonShell.run(str, function (err) {
-      if (!process.env.DEV){
-        if (err) throw err;
-      } 
-    });
+    try{
+      PythonShell.run(str, function (err) {
+      });
+    }
+    catch(err){
+      console.log(err)
+    }
     this.state = state;
   }
   this.setState(this.state);

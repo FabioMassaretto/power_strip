@@ -88,6 +88,16 @@ app.get('/api/switches/:id', function(req, res){
 
 app.post('/api/switches/:id', function(req, res){
   var command = req.query.command;
+  var foundSwitch = getSwitch(id);
+
+  if (!command){
+    if (foundSwitch.state === "on"){
+      command = "off"
+    }
+    else if (foundSwitch.state === "off"){
+      command = "on"
+    }
+  }
 
   if (req.query.password === process.env.PASS){
     var id = req.params.id;
@@ -132,7 +142,6 @@ app.post('/api/switches/:id', function(req, res){
     });
     req.end();
 
-    var foundSwitch = getSwitch(id);
     if (command === "on"){
       foundSwitch.setState(command);
     }

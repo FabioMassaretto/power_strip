@@ -4,7 +4,7 @@ const PythonShell = require('python-shell');
 const fs = require('fs');
 const schedule = require('node-schedule');
 const express = require('express');
-const bodyParser= require('body-parser');
+const bodyParser = require('body-parser');
 const path = require('path')
 const app = express();
 const Switch = require('./js/Switch.js');
@@ -15,8 +15,8 @@ const http = require('http');
 const switches = [];
 const events = [];
 const messages = [];
-// makes sure that name and state are 
-function saveState (){
+// makes sure that name and state are
+function saveState() {
 
   var formattedState = {
     switches: switches,
@@ -24,83 +24,75 @@ function saveState (){
     uniqueEvents: Event.uniqueEvents
   }
 
-
-  fs.writeFile('./saveState.json', JSON.stringify(formattedState) )
+  fs.writeFile('./saveState.json', JSON.stringify(formattedState))
 }
 
 // Update switch objects in state with saved data
 var readableStream = fs.createReadStream('saveState.json');
 var data = ''
 
-readableStream.on('data', function(chunk) {
-    data+=chunk;
+readableStream.on('data', function (chunk) {
+  data += chunk;
 });
 
-
-readableStream.on('end', function() {
+readableStream.on('end', function () {
   var parsed = JSON.parse(data);
   Event.uniqueEvents = parsed.uniqueEvents;
 
-  for (i=0;i<parsed.switches.length;i++){
+  for (i = 0; i < parsed.switches.length; i++) {
     switches.push(new Switch(parsed.switches[i]))
   }
 
-  for (i=0;i<parsed.events.length;i++){
+  for (i = 0; i < parsed.events.length; i++) {
     events.push(new Event(parsed.events[i]))
   }
 });
 
-function getSwitch(string){
-  return switches.filter(function(element){
+function getSwitch(string) {
+  return switches.filter(function (element) {
     return element.id === string;
   })[0]
 }
 
-function getEvent(string){
-  return events.filter(function(event){
+function getEvent(string) {
+  return events.filter(function (event) {
     return event.id == string;
   })[0]
 }
 
-
 // Server Configuration
-app.use(bodyParser.urlencoded({ extended: true }))
-
+app.use(bodyParser.urlencoded({extended: true}))
 
 app.use(express.static(__dirname + '/public'));
 
-
 // Serves the React view
-app.get('/', function(req, res){
+app.get('/', function (req, res) {
   res.sendFile('index');
 })
 
-
 // Switch Routes for API
-app.get('/api/switches', function(req, res){
+app.get('/api/switches', function (req, res) {
   res.send(switches);
 })
 
-app.get('/api/switches/:id', function(req, res){
+app.get('/api/switches/:id', function (req, res) {
   var found = getSwitch(req.params.id);
   res.json(found);
 })
 
-app.post('/api/switches/:id', function(req, res){
+app.post('/api/switches/:id', function (req, res) {
   var command = req.query.command;
+  var id = req.params.id;
   var foundSwitch = getSwitch(id);
-
-  if (!command){
-    if (foundSwitch.state === "on"){
+  if (!command) {
+    if (foundSwitch.state === "on") {
       command = "off"
-    }
-    else if (foundSwitch.state === "off"){
+    } else if (foundSwitch.state === "off") {
       command = "on"
     }
   }
 
-  if (req.query.password === process.env.PASS){
-    var id = req.params.id;
+  if (req.query.password === process.env.PASS) {
     var reducedId = "sw" + (Number(id.substring(2)) - 5)
 
     var options1 = {
@@ -109,101 +101,88 @@ app.post('/api/switches/:id', function(req, res){
       path: '/api/switches/' + id + "?password=" + process.env.PASS + "&&command=" + command,
       method: 'POST'
     };
-     var options2 = {
+    var options2 = {
       host: '10.0.1.4',
       port: 80,
       path: '/api/switches/' + reducedId + "?password=" + process.env.PASS + "&&command=" + command,
       method: 'POST'
     };
 
-    if (Number(id[2])<=5){
-      var req = http.request(options1, function(res) {
-        // console.log('STATUS: ' + res.statusCode);
-        // console.log('HEADERS: ' + JSON.stringify(res.headers));
+    if (Number(id[2]) <= 5) {
+      var req = http.request(options1, function (res) {
+        // console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' +
+        // JSON.stringify(res.headers));
         res.setEncoding('utf8');
-        // res.on('data', function (chunk) {
-        //   console.log('BODY: ' + chunk);
-        // });
+        // res.on('data', function (chunk) {   console.log('BODY: ' + chunk); });
+      });
+    } else if (Number(id[2]) > 5) {
+      var req = http.request(options2, function (res) {
+        // console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' +
+        // JSON.stringify(res.headers));
+        res.setEncoding('utf8');
+        // res.on('data', function (chunk) {   console.log('BODY: ' + chunk); });
       });
     }
-    else if (Number(id[2])>5){
-      var req = http.request(options2, function(res) {
-        // console.log('STATUS: ' + res.statusCode);
-        // console.log('HEADERS: ' + JSON.stringify(res.headers));
-        res.setEncoding('utf8');
-        // res.on('data', function (chunk) {
-        //   console.log('BODY: ' + chunk);
-        // });
+
+    req
+      .on('error', function (e) {
+        console.log('problem with request: ' + e.message);
       });
-    }
-    
-    req.on('error', function(e) {
-      console.log('problem with request: ' + e.message);
-    });
     req.end();
 
-    if (command === "on"){
+    if (command === "on") {
       foundSwitch.setState(command);
-    }
-    else if (command === "off"){
+    } else if (command === "off") {
       foundSwitch.setState(command);
-    }
-    else {
+    } else {
       foundSwitch.toggle();
     }
     saveState();
-    console.log("postSwitch "+JSON.stringify(foundSwitch));
+    console.log("postSwitch " + JSON.stringify(foundSwitch));
     res.json(foundSwitch);
-  }
-  else {
+  } else {
     console.log("invalid password")
     res.json(req.query.password)
   }
 })
 
 // Event Routes
-app.get('/api/events', function(req, res){
+app.get('/api/events', function (req, res) {
   res.send(events);
 })
 
-app.get('/api/events/:id', function(req,res){
+app.get('/api/events/:id', function (req, res) {
   var foundEvent = getEvent(req.params.id);
   res.json(foundEvent);
 })
 
-app.post('/api/events', function(req, res){
-    var newEvent = new Event(req.body.event, getSwitch);
-    
-    events.push(newEvent);
-    saveState();
-    res.json(newEvent);
+app.post('/api/events', function (req, res) {
+  var newEvent = new Event(req.body.event, getSwitch);
+
+  events.push(newEvent);
+  saveState();
+  res.json(newEvent);
 })
 
-
 // Message Routes
-app.get('/api/messages', function(req,res){
+app.get('/api/messages', function (req, res) {
   res.send(messages);
 })
 
-app.post('/api/messages', function(req,res){
-  if (req.body.message){
+app.post('/api/messages', function (req, res) {
+  if (req.body.message) {
     messages.push(req.body.message);
     res.send(messages);
     console.log(req.body);
-  }
-  else {
+  } else {
     res.send("No message recieved.");
   }
 })
 
-app.get('*', function (req, res){
+app.get('*', function (req, res) {
   res.redirect('/');
 })
 
-
-app.listen(process.env.PORT, function(){
- console.log('Listening on port ' + process.env.PORT);
+app.listen(process.env.PORT, function () {
+  console.log('Listening on port ' + process.env.PORT);
 })
-
-
-

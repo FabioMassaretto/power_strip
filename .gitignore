@@ -7,3 +7,4 @@ node_modules
 !.elasticbeanstalk/*.global.yml
 saveState.json
 node_modules
+public/bundle.js

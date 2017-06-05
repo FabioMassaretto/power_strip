@@ -60,39 +60,10 @@ function getEvent(string) {
   })[0]
 }
 
-// Server Configuration
-app.use(bodyParser.urlencoded({extended: true}))
-
-app.use(express.static(__dirname + '/public'));
-
-// Serves the React view
-app.get('/', function (req, res) {
-  res.sendFile('index');
-})
-
-// Switch Routes for API
-app.get('/api/switches', function (req, res) {
-  res.send(switches);
-})
-
-app.get('/api/switches/:id', function (req, res) {
-  var found = getSwitch(req.params.id);
-  res.json(found);
-})
-
-app.post('/api/switches/:id', function (req, res) {
-  var command = req.query.command;
-  var id = req.params.id;
-  var foundSwitch = getSwitch(id);
-  if (!command) {
-    if (foundSwitch.state === "on") {
-      command = "off"
-    } else if (foundSwitch.state === "off") {
-      command = "on"
-    }
-  }
-
-  if (req.query.password === process.env.PASS) {
+function passRequest(command, password, switches, req){
+  for (i=0; i<switches.length; i++){
+    var currSwitch = switches[i];
+    var id = currSwitch["id"];
     var reducedId = "sw" + (Number(id.substring(2)) - 5)
 
     var options1 = {
@@ -131,20 +102,59 @@ app.post('/api/switches/:id', function (req, res) {
     req.end();
 
     if (command === "on") {
-      foundSwitch.setState(command);
+      currSwitch.setState(command);
     } else if (command === "off") {
-      foundSwitch.setState(command);
+      currSwitch.setState(command);
     } else {
-      foundSwitch.toggle();
+      currSwitch.toggle();
     }
-    saveState();
-    console.log("postSwitch " + JSON.stringify(foundSwitch));
-    res.json(foundSwitch);
-  } else {
-    console.log("invalid password")
-    res.json(req.query.password)
+    console.log("postSwitch " + JSON.stringify(currSwitch));
   }
+}
+
+
+
+// Server Configuration
+app.use(bodyParser.urlencoded({extended: true}))
+
+app.use(express.static(__dirname + '/public'));
+
+// Serves the React view
+app.get('/', function (req, res) {
+  res.sendFile('index');
 })
+
+// Switch Routes for API
+app.get('/api/switches', function (req, res) {
+  res.send(switches);
+})
+
+app.get('/api/switches/:id', function (req, res) {
+  var found = getSwitch(req.params.id);
+  res.json(found);
+})
+
+app.post('/api/switches/all', function (req, res) {
+  var command = req.query.command;
+  var password = req.query.password;
+  passRequest(command, password, switches, req);
+  res.json(switches);
+   saveState();
+})
+
+app.post('/api/switches/:id', function (req, res) {
+  var command = req.query.command;
+  var id = req.params.id;
+  var foundSwitch = getSwitch(id);
+  var password = req.query.password;
+  if (!command) {
+    command = foundSwitch.state === "off" ? "on" : "off";
+  }
+  passRequest(command, password, [foundSwitch], req);
+  res.json(foundSwitch);
+   saveState();
+})
+
 
 // Event Routes
 app.get('/api/events', function (req, res) {

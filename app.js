@@ -142,6 +142,19 @@ app.post('/api/switches/all', function (req, res) {
    saveState();
 })
 
+app.post('/api/switches/lights', function (req, res) {
+  var lightIds = ["sw1", "sw7"];
+  var lightSwitches = switches.filter((light)=>{
+    return lightIds.indexOf(light.id) > -1;
+  })
+  var command = req.query.command;
+  var password = req.query.password;
+  passRequest(command, password, lightSwitches, req);
+  res.json(switches);
+   saveState();
+})
+
+
 app.post('/api/switches/:id', function (req, res) {
   var command = req.query.command;
   var id = req.params.id;

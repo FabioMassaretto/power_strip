@@ -10,49 +10,72 @@ const app = express();
 const Switch = require('./js/Switch.js');
 const Event = require('./js/Event.js');
 const http = require('http');
+const MongoClient = require('mongodb').MongoClient;
 
 // Information held in server memory
-const switches = [];
 const events = [];
 const messages = [];
+var switches;
 // makes sure that name and state are
-function saveState() {
 
-  var formattedState = {
-    switches: switches,
-    events: events,
-    uniqueEvents: Event.uniqueEvents
-  }
+var uri = process.env.DB_URI
 
-  fs.writeFile('./saveState.json', JSON.stringify(formattedState))
+var fetchSwitches = new Promise((resolve,reject) =>{
+  if (switches) resolve (switches);
+
+  MongoClient.connect(uri, function(err, db) {
+    var switchCollection = db.collection('Switches');
+    switchCollection.find().toArray(function(err, switchArray) {
+      db.close();
+      if(err) reject(err)
+      else {
+        switches = switchArray;
+        resolve(switchArray);
+      }
+    })
+  });
+})
+
+function saveState() {}
+
+//   var formattedState = {
+//     switches: switches,
+//     events: events,
+//     uniqueEvents: Event.uniqueEvents
+//   }
+
+//   fs.writeFile('./saveState.json', JSON.stringify(formattedState))
+// }
+
+// // Update switch objects in state with saved data
+// var readableStream = fs.createReadStream('saveState.json');
+// var data = ''
+
+// readableStream.on('data', function (chunk) {
+//   data += chunk;
+// });
+
+// readableStream.on('end', function () {
+//   var parsed = JSON.parse(data);
+//   Event.uniqueEvents = parsed.uniqueEvents;
+
+//   for (i = 0; i < parsed.switches.length; i++) {
+//     switches.push(new Switch(parsed.switches[i]))
+//   }
+
+//   for (i = 0; i < parsed.events.length; i++) {
+//     events.push(new Event(parsed.events[i]))
+//   }
+// });
+
+async function getSwitch(string) {
+  let switchArray = await fetchSwitches;
+  return switches.filter((item)=>{
+    return item['switch_num'] === string;
+  })
 }
-
-// Update switch objects in state with saved data
-var readableStream = fs.createReadStream('saveState.json');
-var data = ''
-
-readableStream.on('data', function (chunk) {
-  data += chunk;
-});
-
-readableStream.on('end', function () {
-  var parsed = JSON.parse(data);
-  Event.uniqueEvents = parsed.uniqueEvents;
-
-  for (i = 0; i < parsed.switches.length; i++) {
-    switches.push(new Switch(parsed.switches[i]))
-  }
-
-  for (i = 0; i < parsed.events.length; i++) {
-    events.push(new Event(parsed.events[i]))
-  }
-});
-
-function getSwitch(string) {
-  return switches.filter(function (element) {
-    return element.id === string;
-  })[0]
-}
+var test = getSwitch('sw1');
+eval(require('locus'))
 
 function getEvent(string) {
   return events.filter(function (event) {

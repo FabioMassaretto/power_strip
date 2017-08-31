@@ -29,8 +29,10 @@ var fetchSwitches = new Promise((resolve,reject) =>{
       db.close();
       if(err) reject(err)
       else {
-        switches = switchArray;
-        resolve(switchArray);
+        switches = switchArray.map(each =>{
+          return new Switch(each);
+        });
+        resolve(switches);
       }
     })
   });
@@ -72,10 +74,8 @@ async function getSwitch(string) {
   let switchArray = await fetchSwitches;
   return switches.filter((item)=>{
     return item['switch_num'] === string;
-  })
+  })[0]
 }
-var test = getSwitch('sw1');
-eval(require('locus'))
 
 function getEvent(string) {
   return events.filter(function (event) {
@@ -83,11 +83,11 @@ function getEvent(string) {
   })[0]
 }
 
-function passRequest(command, password, switches, req){
-  for (i=0; i<switches.length; i++){
-    var currSwitch = switches[i];
-    var id = currSwitch["id"];
-    var reducedId = "sw" + (Number(id.substring(2)) - 5)
+function passRequest(command, password, targetSwitches, req){
+  for (let i=0; i<targetSwitches.length; i++){
+    var currSwitch = targetSwitches[i];
+    var id = currSwitch["switch_num"];
+    var reducedId = "sw" + (Number(id.replace(/\D/g, '')) - 5)
 
     var options1 = {
       host: '10.0.1.5',
@@ -149,12 +149,15 @@ app.get('/', function (req, res) {
 
 // Switch Routes for API
 app.get('/api/switches', function (req, res) {
-  res.send(switches);
+  fetchSwitches.then(switches=>{
+    res.send(switches);
+  })
 })
 
 app.get('/api/switches/:id', function (req, res) {
-  var found = getSwitch(req.params.id);
-  res.json(found);
+  getSwitch(req.params.id).then(foundSwitch=>{
+    res.send(foundSwitch);
+  })
 })
 
 app.post('/api/switches/all', function (req, res) {
@@ -174,56 +177,27 @@ app.post('/api/switches/lights', function (req, res) {
   var password = req.query.password;
   passRequest(command, password, lightSwitches, req);
   res.json(switches);
-   saveState();
+  saveState();
 })
 
 
-app.post('/api/switches/:id', function (req, res) {
+app.post('/api/switches/:id', async function (req, res) {
   var command = req.query.command;
   var id = req.params.id;
-  var foundSwitch = getSwitch(id);
   var password = req.query.password;
-  if (!command) {
-    command = foundSwitch.state === "off" ? "on" : "off";
-  }
-  passRequest(command, password, [foundSwitch], req);
-  res.json(foundSwitch);
-   saveState();
+  var foundSwitch;
+  await getSwitch(req.params.id).then(response=>{
+    if (!command) {
+      command = response.state === "off" ? "on" : "off";
+    }
+    foundSwitch = response;
+  })
+  await foundSwitch.setState(command).then(state=>{
+    res.json(state);
+  })
 })
 
 
-// Event Routes
-app.get('/api/events', function (req, res) {
-  res.send(events);
-})
-
-app.get('/api/events/:id', function (req, res) {
-  var foundEvent = getEvent(req.params.id);
-  res.json(foundEvent);
-})
-
-app.post('/api/events', function (req, res) {
-  var newEvent = new Event(req.body.event, getSwitch);
-
-  events.push(newEvent);
-  saveState();
-  res.json(newEvent);
-})
-
-// Message Routes
-app.get('/api/messages', function (req, res) {
-  res.send(messages);
-})
-
-app.post('/api/messages', function (req, res) {
-  if (req.body.message) {
-    messages.push(req.body.message);
-    res.send(messages);
-    console.log(req.body);
-  } else {
-    res.send("No message recieved.");
-  }
-})
 
 app.get('*', function (req, res) {
   res.redirect('/');

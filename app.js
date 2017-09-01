@@ -20,21 +20,40 @@ var switches;
 
 var uri = process.env.DB_URI
 
+var switchCollection;
+
+function refreshSwitches(switchCollection){
+  switchCollection.find().toArray(function(err, switchArray) {
+    if(err) reject(err)
+    else {
+      switches = switchArray.map(each =>{
+        return new Switch(each);
+      });
+      return switches;
+    }
+  })
+}
+
+
+function listen (db){
+  var cursor = db.collection('messages').find({}, { tailable: true, awaitdata: true }),
+    cursorStream = cursor.stream();
+
+  
+  cursorStream.on('data', function (data) {
+    refreshSwitches(switchCollection);
+  })
+}
+
+
 var fetchSwitches = new Promise((resolve,reject) =>{
   if (switches) resolve (switches);
 
   MongoClient.connect(uri, function(err, db) {
-    var switchCollection = db.collection('Switches');
-    switchCollection.find().toArray(function(err, switchArray) {
-      db.close();
-      if(err) reject(err)
-      else {
-        switches = switchArray.map(each =>{
-          return new Switch(each);
-        });
-        resolve(switches);
-      }
-    })
+    switchCollection = db.collection('Switches');
+    listen(db);
+    resolve(refreshSwitches(switchCollection));
+
   });
 })
 

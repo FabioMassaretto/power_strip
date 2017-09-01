@@ -29,9 +29,11 @@ function Switch(switchObj){
     var id = this._id;
     await MongoClient.connect(uri, function(err, db) {
       var switchCollection = db.collection('Switches');
+      var messageCollection = db.collection('messages');
       switchCollection.updateOne({_id: id}, {$set:{
         state: state
       }}).then(value=>{
+        messageCollection.insert({text: "switch updated"})
       })
       .catch(err =>{
         console.log(err)
